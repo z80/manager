@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<%= render( 'parts/show' ) %>
+
+<%= form_tag( add_subparts_path, method: :post ) do %>
+    <div class="field">
+        <%= label_tag 'Total subparts number' %><br>
+        <%= number_field_tag :cnt, 1 %>
+    </div>
+
+    <p>
+        Choose part type form the list.
+    </p>
+
+    <div class="parts_list">
+        <%if @paginate then%>
+            <%=will_paginate%>
+        <%end%>
+        <table>
+            <% @parts.each do |part| %>
+                <%if part.id != params[ :id ] then%>
+                    <tr>
+                      <td>
+                        <%= label_tag 'Selected' %>
+                        <%= radio_button_tag :part_id, part.id %>
+                      </td>
+                      <td>
+                          <%@part = part%>
+                          <%=render 'parts/show'%>
+                      </td>
+                    </tr>
+                <%end%>
+            <% end %>
+        </table>        
+    </div>
+
+  <div class="actions">
+    <%= submit_tag "Add subparts to current design" %>
+  </div>
+
+<% end %>
+
+<%= link_to 'Edit', edit_part_path(@part) %>
+<%= link_to 'Back', parts_path %>

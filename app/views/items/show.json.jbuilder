@@ -1,0 +1,1 @@
+json.extract! @item, :supplierId, :internalId, :desc, :orderLink, :contractId, :integer, :deliverAddr, :status, :userPlaced, :userResp, :setSz, :setsCnt, :unitPrice, :unitPrice, :comment, :created_at, :updated_at

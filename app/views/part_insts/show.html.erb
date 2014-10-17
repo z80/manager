@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Part:</strong>
+  <%= @part_inst.part_id %>
+</p>
+
+<p>
+  <strong>Box:</strong>
+  <%= @part_inst.box_id %>
+</p>
+
+<p>
+  <strong>Cnt:</strong>
+  <%= @part_inst.cnt %>
+</p>
+
+<%= link_to 'Edit', edit_part_inst_path(@part_inst) %> |
+<%= link_to 'Back', part_insts_path %>

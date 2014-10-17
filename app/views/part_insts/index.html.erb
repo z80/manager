@@ -1,0 +1,64 @@
+<h1>Listing part_insts</h1>
+
+<% if @paginate || (@paginate == nil) then %>
+  <%= will_paginate %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Part</th>
+      <th>Box</th>
+      <th>Cnt</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @part_insts.each do |part_inst| %>
+      <tr>
+        <%if Part.exists?( part_inst.part_id ) then%>
+            <%part = Part.find( part_inst.part_id )%>
+        <%end%>
+        <%if Box.exists?( part_inst.box_id ) then%>
+            <%box  = @boxes.find( part_inst.box_id )%>
+        <%end%>
+        <%if part then%>
+            <td>
+                <a href="<%=part.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+                    <%=image_tag( part.image.url(:thumb) )%>
+                </a>
+            </td>
+            <td>
+                <%= part.own_id %>
+            </td>
+            <td>
+              <%if box then%>
+                  <%= link_to( box.box_id, inspect_content_path( box.id ) ) %>
+              <%else%>
+                  Unspecified
+              <%end%>
+            </td>
+            <td><%= part_inst.cnt %></td>
+            <td><%= link_to 'Show', part_path(part) %></td>
+            <% if false then %>
+                <td><%= link_to 'Edit', edit_part_inst_path(part_inst) %></td>
+                <td><%= link_to 'Destroy', part_inst, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <% end %>
+        <%end%>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Part inst', new_part_inst_path %>
+
+
+
+
+

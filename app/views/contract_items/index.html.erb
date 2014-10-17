@@ -1,0 +1,31 @@
+<h1>Listing contract_items</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Contract</th>
+      <th>Prod type</th>
+      <th>Product</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @contract_items.each do |contract_item| %>
+      <tr>
+        <td><%= contract_item.contract_id %></td>
+        <td><%= contract_item.prod_type_id %></td>
+        <td><%= contract_item.product_id %></td>
+        <td><%= link_to 'Show', contract_item %></td>
+        <td><%= link_to 'Edit', edit_contract_item_path(contract_item) %></td>
+        <td><%= link_to 'Destroy', contract_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Contract item', new_contract_item_path %>

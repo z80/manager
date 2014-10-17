@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Belongs:</strong>
+  <%= @prod_subtype.belongs_id %>
+</p>
+
+<p>
+  <strong>Contains:</strong>
+  <%= @prod_subtype.contains_id %>
+</p>
+
+<%= link_to 'Edit', edit_prod_subtype_path(@prod_subtype) %> |
+<%= link_to 'Back', prod_subtypes_path %>

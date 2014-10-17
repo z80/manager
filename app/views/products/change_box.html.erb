@@ -1,0 +1,91 @@
+
+<h2>Select product location</h2>
+
+<% if @product.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+    <ul>
+    <% @product.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+
+<p>
+  <strong>Part number:</strong>
+  <%= @product.part_number %>
+</p>
+
+<p>
+  <strong>Serial number:</strong>
+  <%= @product.serial_number %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @product.desc %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @product.status_stri %>
+</p>
+
+<%if @paginate%>
+  <%=will_paginate( @boxes )%>
+<%end%>
+
+<table>
+  <thead>
+    <tr>
+      <th>Warehouse</th>
+      <th>Box</th>
+      <th>Desc</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<tr>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>
+        <%= form_tag( change_product_box_apply_path( @product.id ), method: 'post' ) do %>
+          <%=submit_tag 'Not in a box, somewhere in the office'%>
+          <%=hidden_field_tag( :box_id, -1 )%>
+        <%end%>
+      </td>
+  	</tr>
+    <% @boxes.each do |box| %>
+      <tr>
+        <td>
+            <%if box.warehouse then %>
+              <%=box.warehouse.w_id%>
+            <%else%>
+              Unspecified
+            <%end%>
+        </td>
+        <td><%= box.box_id %></td>
+        <td><%= box.desc %></td>
+        <td><%= link_to 'Show', box %></td>
+        <td>
+          <%= form_tag( change_product_box_apply_path( @product.id ), method: 'post' ) do %>
+            <%=submit_tag 'Put it here'%>
+            <%=hidden_field_tag( :box_id, box.id )%>
+          <%end%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Show', @product %> |
+<%= link_to 'Back', prod_type_path( @product.prod_type_id ) %>
+
+

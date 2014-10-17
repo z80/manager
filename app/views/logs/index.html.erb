@@ -1,0 +1,26 @@
+<h1>Logs</h1>
+
+<%if @paginate%>
+  <%=will_paginate( @logs )%>
+<%end%>
+
+<table>
+  <thead>
+    <tr>
+      <th>User rrr</th>
+      <th>Message</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @logs.each do |log| %>
+      <tr>
+        <td><%= log.user %></td>
+        <td><%= log.log_stri %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+

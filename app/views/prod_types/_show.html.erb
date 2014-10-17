@@ -1,0 +1,90 @@
+
+<%assembly = (@prod_type.subproducts.size() > 0)%>
+<%if assembly%>
+  This is an assembly product type consisting of one or several subproducts.
+<%else%>
+  <%= link_to 'Add new product to the list', new_product_path( @prod_type, prod_type_id: @prod_type.id ) %>
+<%end%>
+<br>
+<br>
+
+<p>
+    <a href="<%=@prod_type.image_ex.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+        <%=image_tag( @prod_type.image_ex.url(:thumb) )%>
+    </a>
+</p>
+
+<p>
+  <strong>Part number:</strong>
+  <br>
+  <%= @prod_type.own_id %>
+</p>
+
+<p>
+  <strong>Total cnt in stock:</strong>
+  <br>
+  <%= @prod_type.cnt %>
+</p>
+
+<p>
+  <strong>Product description:</strong>
+  <br>
+  <%= @prod_type.desc %>
+</p>
+
+<%if @prod_type.part%>
+  <p>
+    <strong>Product id based on this part:</strong>
+    <br>
+    <a href="<%=@prod_type.part.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+      <%=image_tag( @prod_type.part.image.url(:thumb) )%>
+    </a>
+    <%= link_to( @prod_type.part.own_id, part_path( @prod_type.part.id ) ) %>
+  </p>
+<%else%>
+  <p>
+    <%if assembly%>
+      This product type is an assembly.
+    <%else%>
+      <h3 = class="critical_cnt">
+        Warning: this product type is neither based on any part nor is an assembly. Due to this it has no information about assembling, pricing or parts included. It will not be taken into account when calculating contract statuses.
+      </h3>
+    <%end%>
+  </p> 
+<%end%>
+
+<p>
+  <strong>User introduced this product:</strong>
+  <br>
+  <%= @prod_type.user_name %>
+</p>
+
+
+<%if @subproducts && (@subproducts.size > 0)%>
+  <strong>Subtypes list</strong>
+  <table>
+    <%@subproducts.each do |pair|%>
+      <%spt = pair[:type]%>
+      <%pt  = pair[:subtype]%>
+      <tr>
+        <td>
+          <a href="<%=spt.image_ex.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+              <%=image_tag( spt.image_ex.url(:thumb) )%>
+          </a>
+        </td>
+        <td>
+          <%=link_to( spt.own_id, prod_type_path( spt.id ) )%>
+        </td>
+        <td>
+          <%= spt.cnt %>
+        </td>
+        <td>
+          <%= spt.desc %>
+        </td>
+      </tr>
+    <%end%>
+  </table>
+<%end%>
+<br>
+
+

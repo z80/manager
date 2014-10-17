@@ -1,0 +1,16 @@
+<h1><%= @add_or_take %> the following part(s) to/from the box <b><%= @box.box_id %></b></h1>
+<p id="notice"><%= notice %></p>
+
+<% func = ( @add ) ? add_part_insts_path : take_part_insts_path%>
+<%= form_tag( func ) do%>
+    <%= render 'part_insts/show' %>
+	<div class="field">
+	    <%= label_tag :cnt %><br>
+	    <%= number_field_tag :cnt, 1 %>
+	</div>
+	<div class="actions">
+	    <%= submit_tag "Submit" %>
+	</div>
+<% end %>
+
+

@@ -1,0 +1,38 @@
+
+<p id="notice"><%= notice %></p>
+
+<%= render( 'parts/show' ) %>
+
+<%= form_tag( remove_subparts_path, method: :post ) do %>
+    <p>
+        Choose part type form the list to remove from current part assembly.
+    </p>
+
+    <div class="parts_list">
+        <table>
+            <% @subparts.each do |sp| %>
+                <% part = Part.find( sp.contains_id ) %>
+                <tr>
+                  <td>
+                    <%= label_tag 'Selected' %>
+                    <%= radio_button_tag "subpart_id", sp.id %>
+                  </td>
+                  <td>
+                      <%@part = part%>
+                      <%=render 'parts/show'%>
+                  </td>
+                </tr>
+            <% end %>
+        </table>        
+    </div>
+
+  <div class="actions">
+    <%= submit_tag "Remove subpart from current design" %>
+  </div>
+
+
+<% end %>
+
+<%= link_to 'Edit', edit_part_path(@part) %> 
+<%= link_to 'Back', parts_path %>
+

@@ -1,0 +1,41 @@
+<h1>Editing order</h1>
+
+<% if false %>
+  <%= render 'form' %>
+<% end %>
+
+<%= form_tag orders_update_path, multipart: true do %>
+  <% if @order && @order.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@order.errors.count, "error") %> prohibited this order from being saved:</h2>
+
+      <ul>
+      <% @order.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% if @user.admin? %>
+    <div>
+      <%= label_tag "Attachment" %>
+      <%= link_to @order.attachment.url, "attachment" %>
+    </div>
+
+    <div>
+      <%= label_tag "Change order status to " %>
+      <%= select_tag :status, options_for_select( [ "new", "accepted", "rejected", "in production", "ready", "pending" ], @order.status ) %>
+    </div>
+
+    <%= hidden_field_tag :id, :value => @order.id %>
+
+    <div>
+      <%= submit_tag "Submit changes" %>
+    </div>
+  <% end %>
+
+<% end %>
+
+<%= link_to 'Show', @order %> |
+<%= link_to 'Back', orders_path %>

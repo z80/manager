@@ -1,0 +1,39 @@
+<h1>Users list</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Name</th>
+      <th>Surname</th>
+      <th>Avatar</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.email %></td>
+        <td><%= user.name %></td>
+        <td><%= user.surname %></td>
+        <td>
+          <a href="<%=link_to user.avatar.url(:big)%>">
+            <%=image_tag user.avatar.url(:thumb)%>
+          </a>
+        </td>
+        <td><%= link_to 'Show', users_show_url( id: user.id ) %></td>
+        <td><%= link_to 'Edit', users_edit_url( id: user.id ) %></td>
+        <%if false%>
+          <td><%= link_to 'Destroy', users_destroy_path( id: user.id ), data: { confirm: 'Are you sure?' } %></td>
+        <%end%>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New User', new_user_path %>

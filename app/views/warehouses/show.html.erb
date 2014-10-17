@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <a href="<%=@warehouse.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+      <%=image_tag( @warehouse.image.url(:thumb) )%>
+  </a>
+</p>
+
+<p>
+  <strong>Id:</strong>
+  <%= @warehouse.w_id %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @warehouse.w_desc %>
+</p>
+
+<%= link_to 'Edit', edit_warehouse_path(@warehouse) %> |
+<%= link_to 'Back', warehouses_path %>
+
+<% @boxes.each do |box| %>
+    <% @box = box %>
+    <%=render 'boxes/show'%>
+<%end%>

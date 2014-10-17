@@ -1,0 +1,28 @@
+
+<p>
+    <strong>"Warehouse id"</strong>
+    <%if @box.warehouse then%>
+        <%= @box.warehouse.w_id %>
+    <%else%>
+        Unavailable
+    <%end%>
+</p>
+<p>
+    <strong>"Warehouse image"</strong>
+    <%if @box.warehouse then%>
+        <a href="<%=@box.warehouse.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+            <%=image_tag( @box.warehouse.image.url(:thumb) )%>
+        </a>
+    <%else%>
+      Unspecified
+  <%end%>
+</p>
+<p>
+  <strong>Box:</strong>
+  <%= @box.box_id %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @box.desc %>
+</p>

@@ -1,0 +1,176 @@
+<p id="notice"><%= notice %></p>
+
+<h3>
+<%if false%>
+  <%= link_to 'Collapse subparts', part_path( @part, expand: false ) %> | 
+  <%= link_to 'Expand subparts', part_path( @part, expand: true ) %> | 
+<%end%>
+<%= link_to 'Estimate assembly', estimate_path( @part ) %> | 
+<%= link_to 'Part production', show_production_path( @part ) %>
+</h3>
+
+<%=form_tag( copy_part_path( @part.id ), method: 'post' ) do%>
+  Make a copy of this part type <%=submit_tag( "Copy" )%>
+<%end%>
+<br>
+
+
+<%= render( 'parts/show' ) %>
+<br>
+
+<%boxes = @part.boxes%>
+<%if boxes.size > 0%>
+  <h2>
+    Boxes list this part presents in
+  </h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Box</th>
+        <th>Cnt</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%boxes.each do |box_cnt|%>
+        <%box       = box_cnt[:box]%>
+        <%part_inst = box_cnt[:inst]%>
+        <%cnt       = part_inst.cnt%>
+        <tr>
+          <td>
+            <%=link_to( box.box_id, box_path( box.id ) )%>
+          </td>
+          <td>
+            <%=cnt.to_s%>
+          </td>
+
+          <td>
+            <%= link_to 'Add items', add_part_insts_path( box.id, part_inst.id ) %>
+          </td>
+          <td>
+            <%= link_to 'Take items', take_part_insts_path( box.id, part_inst.id ) %>
+          </td>
+
+        </tr>
+      <%end%>
+    </tbody>
+  </table>
+  <br>
+<%end%>
+
+
+<h2>Subparts list</h2>
+<%= render( 'parts/index' ) %>
+<br>
+
+<h2>Superparts list</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>How part look like (image)</th>
+      <th>Aist-NT internal Id</th>
+      <th>Third party's part type Id</th>
+      <th>Containing cnt</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <%if @expand then%>
+        <th></th>
+      <%end%> 
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @superparts.each do |pp| %>
+      <%part = pp[ :part ]%>
+      <%cnt  = pp[ :cnt ]%>
+      <%if part.critical_cnt? then%>
+        <tr class="critical_cnt">
+      <%else%>
+        <tr>
+      <%end%>
+        <td>
+            <a href="<%=part.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+              <%=image_tag( part.image.url(:thumb) )%>
+            </a>
+        </td>
+        <td><%= part.own_id %></td>
+        <td><%= part.third_id %></td>
+        <td><%= cnt %></td>
+        <td><%= link_to 'Show', part %></td>
+        <td><%= link_to 'Est.', estimate_path(part) %></td>
+        <td><%= link_to 'Edit', edit_part_path(part) %></td>
+      </tr>
+      <%if false and @expand then%>
+        <td></td>
+        <%parts_save=@parts%>
+        <%@parts = part.all_subparts%>
+        <%=render 'parts/index'%>
+        <%@parts = parts_save%>
+      <%end%> 
+
+    <% end %>
+  </tbody>
+</table>
+<br>
+
+<h2>Images list</h2>
+<table>
+  <%@part.images.each do |image|%>
+    <tr>
+      <td>
+        <a href="<%=image.avatar.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+            <%=image_tag( image.avatar.url(:thumb) )%>
+        </a>
+      </td>
+      <td>
+        <%= image.desc %>
+      </td>
+    </tr>
+  <%end%>
+</table>
+<br>
+
+<h2>Add new image</h2>
+<%= form_tag( part_add_image_path( @part.id ), multipart: true ) do %>
+  <%= file_field_tag :image %>
+  <%= text_area_tag  :desc %>
+  <%= submit_tag 'Append image and/or description', class: 'button large' %>
+<%end%>
+
+
+<h2>Attachments list</h2>
+<table>
+  <%@part.attachments.each do |att|%>
+    <tr>
+      <td>
+        <%=link_to att.file_file_name, att.file.url%>
+      </td>
+      <td>
+        <%= att.desc %>
+      </td>
+    </tr>
+  <%end%>
+</table>
+
+<h2>Add another attachment</h2>
+<%= form_tag( part_add_attachment_path( @part.id ), multipart: true ) do %>
+  <%= file_field_tag :file %>
+  <%= text_area_tag  :desc %>
+  <%= submit_tag 'Append attachment and/or description', class: 'button large' %>
+<%end%>
+
+
+<%= link_to 'Edit',              edit_part_path(@part) %> |
+<%= link_to 'Back',              parts_path %> | 
+<%= link_to 'Estimate assembly', estimate_path( @part ) %> | 
+<%= link_to 'Part production',   show_production_path( @part ) %> | 
+<%= link_to 'Add subparts',      add_subparts_path(@part) %> | 
+<%= link_to 'Remove subparts',   remove_subparts_path(@part) %>
+
+
+

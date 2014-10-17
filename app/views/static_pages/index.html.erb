@@ -1,0 +1,62 @@
+<script>
+  $(function() {
+                $( "input[type=submit], a, button" )
+                      .button()
+                       .click(function( event ) {
+                            event.preventDefault();
+                                                });
+</script>
+
+
+  <section class="purchase_section">
+    <%=render 'items/all'%>
+  </section>
+
+
+
+
+
+
+<% if false then %>
+  <section class="img_sect">
+    <ul>
+      <%if !@images.empty? %>
+        <%@images.each do |img|%>
+          <li>
+            <% if false %>
+              <%=image_tag img.avatar.url :thumb%>
+            <% end %>
+            <%if false%>
+              <%=link_to image_tag(img.avatar.url(:thumb)), img.avatar.url(:original), :popup=>['Image', 'height=700,width=900'] %>
+            <%end%>
+            <a href="<%=img.avatar.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+              <%=image_tag( img.avatar.url(:thumb) )%>
+            </a>
+          </li>
+        <%end%>
+      <%end%>
+    </ul>
+
+    <%if @user && @user.admin? %>
+      <%= form_tag '/static_pages/submit', :method => 'post' do %>
+        <%= text_area_tag 'my_text', 'write your text here' %>
+        <%= submit_tag 'Submit text', class: 'button' %>
+      <%end%>
+    <%end%>
+
+    <% if @user && @user.admin? %>
+      <p>Загрузка примеров выполненных работ</p>
+      <section class="image_form">
+        <%= form_tag '/static_pages/submitImage', multipart: true do %>
+          <%=file_field_tag "avatar" %>
+          <%= submit_tag 'Submit image', class: 'button large'%>
+        <%end%>
+      </section>
+    <%end%>
+
+  </section>
+<%end%>
+
+
+
+

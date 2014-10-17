@@ -1,0 +1,21 @@
+# == Schema Information
+#
+# Table name: boxes
+#
+#  id           :integer          not null, primary key
+#  box_id       :string(255)
+#  desc         :text
+#  created_at   :datetime
+#  updated_at   :datetime
+#  warehouse_id :integer
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  box_id: MyString
+  desc: MyText
+
+two:
+  box_id: MyString
+  desc: MyText

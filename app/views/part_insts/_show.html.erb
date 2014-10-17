@@ -1,0 +1,21 @@
+
+<p>
+  <strong>Cnt: <%= @part_inst.cnt %></strong>
+</p>
+
+<p>
+  <strong>Part: "<%= @part.own_id %>", "<%= @part.third_id %>"</strong>
+</p>
+
+<p>
+    <a href="<%=@part.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+        <%=image_tag( @part.image.url(:thumb) )%>
+    </a>
+</p>
+
+<p>
+  <strong>Box:</strong>
+  <%= @part_inst.box_id %>
+</p>
+
+

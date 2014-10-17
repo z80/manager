@@ -1,0 +1,25 @@
+<%= form_for(@subpart) do |f| %>
+  <% if @subpart.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@subpart.errors.count, "error") %> prohibited this subpart from being saved:</h2>
+
+      <ul>
+      <% @subpart.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :contains_id %><br>
+    <%= f.number_field :contains_id %>
+  </div>
+  <div class="field">
+    <%= f.label :belongs_id %><br>
+    <%= f.number_field :belongs_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

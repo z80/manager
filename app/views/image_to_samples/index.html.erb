@@ -1,0 +1,29 @@
+<h1>Listing image_to_samples</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Sample</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @image_to_samples.each do |image_to_sample| %>
+      <tr>
+        <td><%= image_to_sample.image_id %></td>
+        <td><%= image_to_sample.sample_id %></td>
+        <td><%= link_to 'Show', image_to_sample %></td>
+        <td><%= link_to 'Edit', edit_image_to_sample_path(image_to_sample) %></td>
+        <td><%= link_to 'Destroy', image_to_sample, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Image to sample', new_image_to_sample_path %>

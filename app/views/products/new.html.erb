@@ -1,0 +1,17 @@
+<h1>Add new product of <b><%=@prod_type.own_id%></b> type</h1>
+
+<% if @product.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+    <ul>
+    <% @product.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= render 'form' %>
+
+<%= link_to 'Back', prod_type_path( @prod_type_id ) %>

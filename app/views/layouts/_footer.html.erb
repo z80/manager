@@ -1,0 +1,38 @@
+
+    <div id="content_bottom">
+      <div class="content_bottom_container_box">
+        <div class="readmore">
+          <%= link_to "Root menu", root_path %>
+        </div><!--close readmore-->
+      </div><!--close content_bottom_container_box-->
+      <div class="content_bottom_container_boxl">
+        <div class="readmore">
+          <%= link_to "FAQ",  "#" %>
+        </div><!--close readmore-->   
+      </div><!--close content_bottom_container_box1-->      
+      <br style="clear:both"/>
+    </div><!--close content_bottom-->   
+ 
+  </div><!--close main-->
+  
+  <div id="footer">
+      <%= link_to "Root menu", root_path %> | 
+      <%= link_to "FAQ",  "#" %> | 
+      <%if @user then%>
+        <%= link_to "Logout",     static_pages_user_sign_out_path, method: :post %> | 
+        <%= link_to "User details", users_show_url( id: @user.id )%> | 
+        <%if ( @user.admin ) then%>
+          <%= link_to "User list",      users_all_path %> | 
+        <% end %>
+      <%else%>
+        Please 
+        <%= link_to "Sign in",  static_pages_user_sign_in_form_path %> 
+        or
+      <%end%>
+      <%= link_to "Register", static_pages_new_user_form_path %>
+
+  </div><!--close footer-->  
+
+
+
+

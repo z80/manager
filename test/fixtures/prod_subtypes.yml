@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: prod_subtypes
+#
+#  id          :integer          not null, primary key
+#  belongs_id  :integer
+#  contains_id :integer
+#  created_at  :datetime
+#  updated_at  :datetime
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  belongs_id: 1
+  contains_id: 1
+
+two:
+  belongs_id: 1
+  contains_id: 1

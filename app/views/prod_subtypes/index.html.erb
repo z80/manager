@@ -1,0 +1,29 @@
+<h1>Listing prod_subtypes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Belongs</th>
+      <th>Contains</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @prod_subtypes.each do |prod_subtype| %>
+      <tr>
+        <td><%= prod_subtype.belongs_id %></td>
+        <td><%= prod_subtype.contains_id %></td>
+        <td><%= link_to 'Show', prod_subtype %></td>
+        <td><%= link_to 'Edit', edit_prod_subtype_path(prod_subtype) %></td>
+        <td><%= link_to 'Destroy', prod_subtype, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Prod subtype', new_prod_subtype_path %>

@@ -1,0 +1,83 @@
+
+<p>
+    <a href="<%=@part.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+        <%=image_tag( @part.image.url(:thumb) )%>
+    </a>
+</p>
+
+<%if @part.critical_cnt? then%>
+  <p class="critical_cnt">
+<%else%>
+  <p>
+<%end%>
+  <strong>Total number of parts at all warehouses:</strong>
+  <%= @part.cnt %>
+</p>
+
+
+<p>
+  <strong>Own:</strong>
+  <%= @part.own_id %>
+</p>
+
+<p>
+  <strong>Third:</strong>
+  <%= @part.third_id %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <% if ( @part.user ) then %>
+      <%= @part.user.name + ' ' + @part.user.surname %>
+  <% else %>
+      User can't be specified
+  <% end %>
+</p>
+
+<p>
+    <strong>Description</strong>
+    <%if @part.desc then%>
+        <%=@part.desc%>
+    <%else%>
+        Unspecified
+    <%end%>
+</p>
+
+<%if @part.order_link%>
+  <p>
+    <strong>Order link(s)</strong>
+    <%=@part.order_link%>
+  </p>
+<%end%>
+
+<%if @part.order_price%>
+  <p>
+    <strong>Approximate unit price USD</strong>
+    <%=@part.order_price%>
+  </p>
+<%end%>
+
+<%if @part.order_desc%>
+  <p>
+    <strong>Instruction how to order if there is any specifics</strong>
+    <%=@part.order_desc%>
+  </p>
+<%end%>
+
+<%if @part.min_cnt%>
+  <p>
+    <strong>Minimum quantity that always should be available</strong>
+    <%=@part.min_cnt%>
+  </p>
+<%end%>
+
+<p>
+  <strong>Part type</strong>
+  <%=@part.type_name %>
+</p>
+
+<p>
+  <strong>Part ordering time (days)</strong>
+  <%=@part.order_days %>
+</p>
+

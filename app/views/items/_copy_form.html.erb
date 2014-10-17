@@ -1,0 +1,77 @@
+
+<%= form_tag( copy_item_path, {method: :post, multipart: true} ) do%>
+  <% if @item && @item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@item.errors.count, "error") %> prohibited this item from being saved:</h2>
+
+      <ul>
+      <% @item.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+      <%= hidden_field_tag :orig_id, @item.id %>
+  </div>
+  <div class="field">
+    <%= label_tag 'Item picture (like from a website)'%>
+    <a href="<%=@item.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+        <%=image_tag( @item.image.url(:thumb) )%>
+    </a>
+    <%= file_field_tag :image %>
+  </div>
+  <div class="field">
+    <%= label_tag 'Product Id by supplier' %><br>
+    <%= text_field_tag :supplier_id, @item.supplier_id %>
+  </div>
+  <div class="field">
+    <%= label_tag 'Our internal product Id' %><br>
+    <%= text_field_tag :internal_id, @item.internal_id %>
+  </div>
+  <div class="field">
+    <%= label_tag 'Description' %><br>
+    <%= text_area_tag :desc, @item.desc %>
+  </div>
+  <div class="field">
+    <%= label_tag 'Ordering link' %><br>
+    <%= text_field_tag :order_link, @item.order_link %>
+  </div>
+  <div class="field">
+    <%= label_tag 'Contract Id' %><br>
+    <%= text_field_tag :contract_id, @item.contract_id %>
+  </div>
+  <div class="field">
+    <%= label_tag 'Deliver address' %><br>
+    <%= text_field_tag :deliver_addr, @item.deliver_addr %>
+  </div>
+  <div class="field">
+    <%= label_tag 'Current status' %><br>
+    <%= select_tag :status_i, options_for_select( @statuses, @item.status_i || 0 ) %>
+  </div>
+  <div class="field">
+    <%= label_tag 'Select person in charge for' %><br>
+    <%= select_tag( :user_resp, options_for_select( @users, @user ) ) %>
+  </div>
+  <div class="field">
+    <%= label_tag 'Set size' %><br>
+    <%= number_field_tag :set_sz, @item.set_sz %>
+  </div>
+  <div class="field">
+    <%= label_tag 'Number of sets' %><br>
+    <%= number_field_tag :sets_cnt, @item.sets_cnt %>
+  </div>
+  <div class="field">
+    <%= label_tag 'Unit price' %><br>
+    <%= text_field_tag :unit_price, @item.unit_price %>
+  </div>
+  <div class="field">
+    <%= label_tag 'Comment' %><br>
+    <%= text_area_tag :comment, @item.comment %>
+  </div>
+
+  <div class="actions">
+    <%= submit_tag "Create item" %>
+  </div>
+<% end %>

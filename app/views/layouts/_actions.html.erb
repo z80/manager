@@ -1,0 +1,94 @@
+
+  <% if @user then%>
+      <div class="sidebar_container">       
+        <div class="sidebar">
+          <div class="sidebar_item">
+            <%= link_to "Contracts", contracts_path%>
+          </div><!--close sidebar_item--> 
+        </div><!--close sidebar-->
+        <div class="sidebar">
+          <div class="sidebar_item">
+            <%= link_to "Products", prod_types_path%>
+          </div><!--close sidebar_item--> 
+        </div><!--close sidebar-->
+        <div class="sidebar">
+          <div class="sidebar_item">
+            
+          </div><!--close sidebar_item--> 
+        </div><!--close sidebar-->
+
+
+        <%if false%>
+          <div class="sidebar">
+            <div class="sidebar_item">
+              <%= link_to "All purchases list", items_path %>
+            </div><!--close sidebar_item--> 
+          </div><!--close sidebar-->          
+          <div class="sidebar">
+            <div class="sidebar_item">
+              <%= link_to "Only my purchases (I'm responsible for)",   my_items_path%>
+            </div><!--close sidebar_item--> 
+          </div><!--close sidebar-->
+          <div class="sidebar">
+            <div class="sidebar_item">
+              <%= link_to "New purchase",   new_item_path %>
+            </div><!--close sidebar_item--> 
+          </div><!--close sidebar-->
+        <%end%>
+
+        
+        <div class="sidebar">
+          <div class="sidebar_item">
+            <%= link_to "Samples",   samples_path %>
+          </div><!--close sidebar_item--> 
+        </div><!--close sidebar-->  
+
+        <div class="sidebar">
+          <div class="sidebar_item">
+            <%= link_to "All part types", parts_path%>
+          </div><!--close sidebar_item--> 
+        </div><!--close sidebar-->
+
+        <%if false%>
+          <div class="sidebar">
+            <div class="sidebar_item">
+              <%= link_to "New part type", new_part_path%>
+            </div><!--close sidebar_item--> 
+          </div><!--close sidebar-->
+          <div class="sidebar">
+            <div class="sidebar_item">
+              <%= link_to "New storage box in warehouse", new_box_path%>
+            </div><!--close sidebar_item--> 
+          </div><!--close sidebar-->
+        <%end%>
+
+        <div class="sidebar">
+          <div class="sidebar_item">
+            <%= link_to "Boxes list in warehouse",      boxes_path%>
+          </div><!--close sidebar_item--> 
+        </div><!--close sidebar-->
+        <div class="sidebar">
+          <div class="sidebar_item">
+            <%= link_to "All parts in warehouse", part_insts_path %>
+          </div><!--close sidebar_item--> 
+        </div><!--close sidebar-->
+
+        <%if false%>
+          <div class="sidebar">
+            <div class="sidebar_item">
+              <%= link_to "Add new parts to warehouse", new_part_inst_path%>
+            </div><!--close sidebar_item--> 
+          </div><!--close sidebar-->
+        <%end%>
+
+        <div class="sidebar">
+          <div class="sidebar_item">
+            <%= link_to "Event logs...", logs_path%>
+          </div><!--close sidebar_item--> 
+        </div><!--close sidebar-->
+      </div><!--close sidebar_container--> 
+  <% end %>
+
+
+
+

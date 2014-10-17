@@ -1,0 +1,86 @@
+
+<%= form_for(@item, :html => { :multipart => true }) do |f| %>
+  <% if @item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@item.errors.count, "error") %> prohibited this item from being saved:</h2>
+
+      <ul>
+      <% @item.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label 'Item picture (like from a website)'%>
+    <%= f.file_field :image %>
+  </div>
+  <div class="field">
+    <%= f.label 'Product Id by supplier' %><br>
+    <%= f.text_field :supplier_id %>
+  </div>
+  <div class="field">
+    <%= f.label 'Outr internal product Id' %><br>
+    <%= f.text_field :internal_id %>
+  </div>
+  <div class="field">
+    <%= f.label 'Description' %><br>
+    <%= f.text_area :desc %>
+  </div>
+  <div class="field">
+    <%= f.label 'Ordering link' %><br>
+    <%= f.text_field :order_link %>
+  </div>
+  <div class="field">
+    <%= f.label 'Contract Id' %><br>
+    <%= f.text_field :contract_id %>
+  </div>
+  <div class="field">
+    <%= f.label 'Deliver address' %><br>
+    <%= f.text_field :deliver_addr %>
+  </div>
+  <div class="field">
+    <%= f.label 'Current status' %><br>
+    <%= f.select :status_i, @statuses %>
+  </div>
+
+          <% if false then%>
+            <div class="field">
+              <%= f.label 'User placed' %><br>
+              <%= f.number_field :user_placed %>
+            </div>
+
+          <div class="field">
+            <%= f.label 'Person in charge for' %><br>
+            <%= f.number_field :user_resp %>
+          </div>
+          <% end %>
+
+  <div class="field">
+    <%= f.label 'Select person in charge for' %><br>
+    <%= f.select( :user_resp, @users ) %>
+  </div>
+
+
+  <div class="field">
+    <%= f.label 'Set size' %><br>
+    <%= f.number_field :set_sz %>
+  </div>
+  <div class="field">
+    <%= f.label 'Number of sets' %><br>
+    <%= f.number_field :sets_cnt %>
+  </div>
+  <div class="field">
+    <%= f.label 'Unit price' %><br>
+    <%= f.text_field :unit_price %>
+  </div>
+  <div class="field">
+    <%= f.label 'Comment' %><br>
+    <%= f.text_area :comment %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

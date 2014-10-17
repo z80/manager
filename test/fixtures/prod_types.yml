@@ -1,0 +1,28 @@
+# == Schema Information
+#
+# Table name: prod_types
+#
+#  id                 :integer          not null, primary key
+#  part_id            :integer
+#  own_id             :string(255)
+#  desc               :text
+#  created_at         :datetime
+#  updated_at         :datetime
+#  image_file_name    :string(255)
+#  image_content_type :string(255)
+#  image_file_size    :integer
+#  image_updated_at   :datetime
+#  user_id            :integer
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  part_id: 1
+  own_id: MyString
+  desc: MyText
+
+two:
+  part_id: 1
+  own_id: MyString
+  desc: MyText

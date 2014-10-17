@@ -1,0 +1,66 @@
+<h1>
+  Add part(s) to box "<%= @box.box_id %>"
+</h1>
+
+<h2>
+  <%= @box.desc %>
+</h2>
+
+<%= form_tag( add_new_part_to_box_path ) do |f| %>
+  <% if @part_inst && @part_inst.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@part_inst.errors.count, "error") %> prohibited this part_inst from being saved:</h2>
+
+      <ul>
+      <% @part_inst.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= label_tag :cnt %><br>
+    <%= number_field_tag :cnt, 1 %>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Parts</th>
+        <th>Boxes</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>
+            <%if @paginate then%>
+                <%=will_paginate @parts %>
+            <%end%>
+            <ul>
+                <% @parts.each do |part| %>
+                  <li>
+                      <%= radio_button_tag :part_id, part.id, "#{part.own_id}" %>
+                      <% @part = part %>
+                      <%= render 'parts/show' %>
+                  </li>
+                <%end%>
+            </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="actions">
+    <%= submit_tag "Add new part" %>
+  </div>
+
+
+<% end %>
+
+
+
+
+
+

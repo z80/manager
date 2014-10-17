@@ -1,0 +1,169 @@
+
+<%=render 'parts/show' %>
+
+<%= form_tag estimate_path( @part.id ), :method => 'get' do %>
+  <p>
+    <%= number_field_tag :cnt, @cnt %>
+    <%= submit_tag "Estimate", :name => nil %>
+  </p>
+<% end %>
+
+<%if @needed then%>
+  <h2>Total subparts list needed to assemble <%= params[:cnt]%> part(s)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Part</th>
+        <th>Cnt</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @needed.each do |n| %>
+        <tr>
+          <%if Part.exists?( n[:id] ) then%>
+              <%part = Part.find( n[:id] )%>
+          <%end%>
+          <%if part then%>
+              <td>
+                  <a href="<%=part.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+                      <%=image_tag( part.image.url(:thumb) )%>
+                  </a>
+              </td>
+              <td>
+                  <%= part.own_id %>
+              </td>
+              <td><%= n[:cnt] %></td>
+              <td><%= link_to 'Show', part %></td>
+              <td><%= link_to 'Est.', estimate_path(part) %></td>
+              <td><%= link_to 'Edit', edit_part_path(part) %></td>
+          <%end%>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+<%end%>
+
+
+
+
+
+<%if @available then%>
+  <h2>Places to take subparts from to assemble <%= params[:cnt]%> part(s)</h2>
+  <%= form_tag( estimate_path( @part.id ), method: :post ) do %>
+    <%= hidden_field_tag :take_id, "all" %>
+    <%= hidden_field_tag :cnt,  @cnt %>
+    <%= submit_tag 'Take all parts', class: 'button large'%>
+  <%end%>
+
+
+  <table>
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Part</th>
+        <th>Box</th>
+        <th>Parts in box</th>
+        <th>Take from box</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @available.each do |pi_cnt| %>
+        <tr>
+          <%if Part.exists?( pi_cnt[:pi].part_id ) then%>
+              <%part = Part.find( pi_cnt[:pi].part_id )%>
+          <%end%>
+          <%if Box.exists?( pi_cnt[:pi].box_id ) then%>
+              <%box  = Box.find( pi_cnt[:pi].box_id )%>
+          <%end%>
+          <%if part then%>
+              <td>
+                  <a href="<%=part.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+                      <%=image_tag( part.image.url(:thumb) )%>
+                  </a>
+              </td>
+              <td>
+                  <%= part.own_id %>
+              </td>
+              <td>
+                <%if box then%>
+                    <%= link_to( box.box_id, inspect_content_path( box.id ) ) %>
+                <%else%>
+                    Unspecified
+                <%end%>
+              </td>
+              <td><%= pi_cnt[:pi].cnt %></td>
+              <td><%= pi_cnt[:cnt] %></td>
+              <td><%= link_to 'Show', part_path(part) %></td>
+              <% if false then %>
+                  <td><%= link_to 'Edit', edit_part_inst_path(part_inst) %></td>
+                  <td><%= link_to 'Destroy', part_inst, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              <% end %>
+              <td>
+                <%= form_tag( estimate_path( @part.id ), method: :post ) do %>
+                  <%= hidden_field_tag :take_id, pi_cnt[:pi].id %>
+                  <%= hidden_field_tag :take_cnt, pi_cnt[:cnt] %>
+                  <%= hidden_field_tag :cnt,  @cnt %>
+                  <%= submit_tag 'Take these parts', class: 'button large'%>
+                <%end%>
+              </td>
+          <%end%>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>  
+<%end%>
+
+
+<%if @missing then%>
+  <h2>There are subparts missing to assemble <%=params[:cnt]%> part(s)</h2>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Part image</th>
+        <th>Aist-NT Id</th>
+        <th>Cnt</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @missing.each do |m| %>
+        <%part = Part.find( m[:id] )%>
+        <tr>
+          <td>
+              <a href="<%=part.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+                <%=image_tag( part.image.url(:thumb) )%>
+              </a>
+          </td>
+          <td><%= part.own_id %></td>
+          <td><h2><%= m[:cnt] %></h2></td>
+          <td><%= link_to 'Show', part %></td>
+          <td><%= link_to 'Edit', edit_part_path(part) %></td>
+        </tr>
+        
+      <% end %>
+    </tbody>
+  </table>
+
+<%end%>
+
+
+
+
+
+
+

@@ -1,0 +1,43 @@
+<h1>Listing boxes</h1>
+
+<%if @paginate%>
+  <%=will_paginate( @boxes )%>
+<%end%>
+
+<table>
+  <thead>
+    <tr>
+      <th>Warehouse</th>
+      <th>Box</th>
+      <th>Desc</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @boxes.each do |box| %>
+      <tr>
+        <td>
+            <%if box.warehouse then %>
+                <%=box.warehouse.w_id%>
+            <%else%>
+                Unspecified
+            <%end%>
+        </td>
+        <td><%= box.box_id %></td>
+        <td><%= box.desc %></td>
+        <td><%= link_to 'Show', box %></td>
+        <td><%= link_to 'Edit', edit_box_path(box) %></td>
+        <% if false then %>
+            <td><%= link_to 'Destroy', box, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Box', new_box_path %>

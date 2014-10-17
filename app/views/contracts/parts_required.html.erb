@@ -1,0 +1,186 @@
+
+<%if true%>
+  <%if @summary.size > 0%>
+  	<h2>
+    	The following product types are required by <%=@date.to_s%>
+	</h2>
+    <table>
+      <thead>
+        <tr>
+          <td>
+          	Image
+          </td>
+
+          <td>
+          	Part number
+          </td>
+
+          <td>
+            Desc
+          </td>
+
+          <td>
+          	Total in all contracts
+          </td>
+
+          <td>
+          	In stock cnt
+          </td>
+
+          <td>
+          	Cnt in production
+          </td>          
+
+          <td>
+            Needed cnt
+          </td>          
+        </tr>
+      </thead>
+      <tbody>
+	    <%@summary.each do |prod_type, cnt|%>
+        <%import_cnt = prod_type.cnt_for_import%>
+        <%prod_cnt = prod_type.cnt%>
+        <%have_cnt = prod_cnt + import_cnt %>
+        <%total_needed_cnt = cnt %>
+        <%missing_cnt = total_needed_cnt - have_cnt%>
+        <tr>
+	        <td>
+	          <a href="<%=prod_type.image_ex.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+	            <%=image_tag( prod_type.image_ex.url(:thumb) )%>
+	          </a>
+	        </td>
+
+          <td>
+	          <%=link_to( prod_type.own_id, prod_type_path( prod_type.id ) )%>
+	        </td>
+
+          <td>
+            <%=prod_type.desc%>          
+          </td>
+
+          <td>
+	          <%=cnt.to_s%>          
+	        </td>
+
+	        <td>
+	          <%=prod_type.cnt%>
+	        </td>
+
+	        <td>
+	          <%=prod_type.cnt_for_import%>
+	        </td>
+
+          <%if missing_cnt > 0 then%>
+            <td class="critical_cnt">
+              <%=missing_cnt.to_s%>
+            </td>
+          <%else%>
+            <td class="assigned_item">
+              OK
+            </td>
+          <%end%>
+	      </tr>
+	    <%end%>
+	  </tbody>
+    </table>
+    <br>
+  <%end%>
+
+  <%if @could.size > 0%>
+    The following positions for this project are unavailable in stock. But these 
+    products can be assembled from parts available.
+    <table>
+      <%@could.each do |part, cnt|%>
+        <tr>
+          <td>
+            <a href="<%=part.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+              <%=image_tag( part.image.url(:thumb) )%>
+            </a>
+          </td>
+
+          <td>
+            <%=link_to( part.own_id, part_path( part.id ) )%>
+          </td>
+
+          <td>
+            <%=part.desc%>
+          </td>
+
+          <td>
+            <%=cnt.to_s%>          
+          </td>
+        </tr>
+      <%end%>
+    </table>
+    <br>
+  <%end%>
+
+  <%if @couldnt.size > 0%>
+    The following position(s) for this project are unavailable and can <strong>not</strong> be assembled.
+    <table>
+      <%@couldnt.each do |part, cnt|%>
+        <tr>
+          <td>
+            <a href="<%=part.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+              <%=image_tag( part.image.url(:thumb) )%>
+            </a>
+          </td>
+
+          <td>
+            <%=link_to( part.own_id, part_path( part.id ) )%>
+          </td>
+
+          <td>
+            <%=part.desc%>
+          </td>
+
+          <td>
+            <%=cnt.to_s%>          
+          </td>
+        </tr>
+      <%end%>
+    </table>
+    <br>
+
+    <%if @parts_to_purchase.size > 0 %>
+      To assemble missing part(s) this project requires <b><%=@parts_to_purchase.size.to_s%></b> positions 
+      to be ordered. 
+      <% if @days_to_assemble > 0%>
+        According to shipment information for all individual parts if ordered today there will be <b><%=@days_to_assemble.to_s%></b> days 
+        for assembling and testing before shipping.
+      <% else %>
+        <div class="contract_level_<%=@level.to_s%>">
+          According to shipment information for all individual parts even if all parts are ordered today they will arrive 
+          <%=-@days_to_assemble%> days after ship date.
+        </div>
+      <% end %>
+      <br>
+    <%end%>
+    <table>
+      <%@parts_to_purchase.each do |part, cnt|%>
+        <tr>
+          <td>
+            <a href="<%=part.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+              <%=image_tag( part.image.url(:thumb) )%>
+            </a>
+          </td>
+
+          <td>
+            <%=link_to( part.own_id, part_path( part.id ) )%>
+          </td>
+
+          <td>
+            <%=cnt.to_s%>          
+          </td>
+        </tr>
+      <%end%>
+    </table>
+
+  <%end%>
+
+<%end%>
+
+<%= link_to 'All contracts', contracts_path %>
+
+
+

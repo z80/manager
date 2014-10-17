@@ -1,0 +1,111 @@
+<p id="notice"><%= notice %></p>
+
+<h3>
+<%= link_to 'Exclude parts in stock', show_production_path( @part.id, only_missing: true, cnt: @cnt ) %> | 
+<%= link_to 'Include all parts', show_production_path( @part.id, only_missing: false, cnt: @cnt ) %>
+<%= link_to 'Estimate assembly', estimate_path( @part ) %>
+</h3>
+
+
+<%=render 'parts/show' %>
+
+<%= form_tag show_production_path( @part.id ), :method => 'get' do %>
+  <%=hidden_field_tag :only_missing, @only_missing || "false" %>
+  <table>
+    <tr>
+      <td>
+        <%= label_tag "Parts cnt:" %>
+        <%= number_field_tag :cnt, @cnt %><br>
+
+        <%= label_tag "Only parts of type:" %>
+        <%= select_tag :type, options_for_select( @part_types, @type || -1 ) %>
+      </td>
+      <td>
+        <%= submit_tag "Estimate", name: 'todo' %>
+        <%= submit_tag "Order", name: 'todo' %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= label_tag 'Deliver address' %>
+      </td>
+      <td>
+        <%= text_field_tag :deliver_addr, 'USA' %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= label_tag 'Contract identifier' %>
+      </td>
+      <td>
+        <%= text_field_tag :contract_id, 'unspecified' %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= label_tag 'Default status' %>
+      </td>
+      <td>
+        <%= select_tag( :status_i, options_for_select( @statuses ) ) %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= label_tag 'User responsible' %>
+      </td>
+      <td>
+        <%= select_tag :user_resp, options_for_select( @users ) %>
+      </td>
+    </tr>
+  </table>
+<% end %>
+
+<h2>Total order price is estimated as <h1><%=@price%>$</h1></h2>
+<h2>Subparts list needed to assemble <%= params[:cnt]%> part(s)</h2>
+<table>
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Part</th>
+        <th>Cnt</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @parts.each do | id, cnt| %>
+        <tr>
+          <%if Part.exists?( id ) then%>
+              <%part = Part.find( id )%>
+          <%end%>
+          <%if part then%>
+              <td>
+                  <a href="<%=part.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+                      <%=image_tag( part.image.url(:thumb) )%>
+                  </a>
+              </td>
+              <td>
+                  <%= part.own_id %>
+              </td>
+              <td><%= cnt %></td>
+              <td><%= link_to 'Show', part %></td>
+              <td><%= link_to 'Est.', estimate_path(part) %></td>
+              <td><%= link_to 'Edit', edit_part_path(part) %></td>
+          <%end%>
+        </tr>
+      <% end %>
+    </tbody>
+</table>
+
+
+
+
+<%= link_to 'Back',              part_path( @part.id) %> | 
+<%= link_to 'Exclude parts in stock', show_production_path( @part.id, only_missing: true, cnt: @cnt ) %> | 
+<%= link_to 'Include all parts', show_production_path( @part.id, only_missing: false, cnt: @cnt ) %> | 
+<%= link_to 'Estimate assembly', estimate_path( @part ) %> | 
+
+
+

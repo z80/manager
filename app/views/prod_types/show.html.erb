@@ -1,0 +1,48 @@
+<p id="notice"><%= notice %></p>
+<%= link_to 'Only in scock', prod_type_path( @prod_type.id, only_avail: true ) %>
+<br> 
+<%= link_to 'All products',  prod_type_path( @prod_type.id, only_avail: false ) %>
+<br>
+
+<%=render( 'prod_types/show' )%>
+
+<%= render( 'products/index' ) %>
+<br>
+
+<%contracts = @prod_type.contracts()%>
+<%if contracts.size > 0%>
+  <h2>List of pending contracts this product type is included in.</h2>
+  <table>
+    <thead>
+      <tr>
+        <td>
+          Contract name
+        </td>
+        <td>
+          Cnt
+        </td>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%contracts.each do |c, cnt|%>
+        <tr>
+          <td>
+            <%=link_to( c.name, contract_path( c.id ) )%>
+          </td>
+          <td>
+            <%=cnt.to_s%>
+          </td>
+        </tr>
+      <%end%>
+    </tbody>
+  </table>
+  <br>
+<%end%>
+
+<% if @prod_type.part_id %>
+  <%= link_to 'Part', part_path( @prod_type.part_id ) %> | 
+<% end %>
+<%= link_to 'All product types', prod_types_path %> | 
+<%= link_to 'Edit',              edit_prod_type_path(@prod_type) %>
+

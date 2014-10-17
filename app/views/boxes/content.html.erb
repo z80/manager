@@ -1,0 +1,45 @@
+<h1>Box <b><%= @box.box_id %></b> content</h1>
+
+<%= link_to 'Add new part(s)', add_new_part_to_box_path( @box.id )%>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Own id</th>
+      <th>Third id</th>
+      <th>Cnt</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @parts.each do |a| %>
+      <tr>
+        <td>
+            <a href="<%=a[:part].image.url( :original ).sub( /\?\d+/i, "" )%>" rel="facebox" >
+                <%=image_tag( a[:part].image.url( :thumb ) )%>
+            </a>
+        </td>
+        <td><%= a[:part].own_id %></td>
+        <td><%= a[:part].third_id %></td>
+        <td><%= a[:inst].cnt %></td>
+        <td><%= link_to 'Show part', part_path( a[:part].id ) %>
+        <td><%= link_to 'Add items', add_part_insts_path( @box.id, a[:inst].id ) %></td>
+        <td><%= link_to 'Take items', take_part_insts_path( @box.id, a[:inst].id ) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= form_for(@box, :html => { :multipart => true }) do |f| %>
+  <div class="actions">
+    <%= f.submit "Merge identical parts in this box" %>
+  </div>
+<% end %>
+
+
+

@@ -1,0 +1,27 @@
+# == Schema Information
+#
+# Table name: contracts
+#
+#  id         :integer          not null, primary key
+#  name       :string(255)
+#  desc       :text
+#  ship_date  :date
+#  shipped    :boolean
+#  created_at :datetime
+#  updated_at :datetime
+#  warning    :integer
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  desc: MyText
+  ship_date: 2014-09-20
+  shipped: false
+
+two:
+  name: MyString
+  desc: MyText
+  ship_date: 2014-09-20
+  shipped: false

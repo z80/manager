@@ -1,0 +1,104 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <a href="<%=@item.image_ex.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+    <%=image_tag( @item.image_ex.url(:thumb) )%>
+  </a>
+</p>
+
+<p>
+  <strong>Supplier Id:</strong>
+  <br>
+  <%= @item.supplier_id %>
+</p>
+
+<p>
+  <strong>Internal Id:</strong>
+  <br>
+  <%= @item.internal_id %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <br>
+  <%= @item.desc %>
+</p>
+
+<p>
+  <strong>Order link:</strong>
+  <br>
+  <%= @item.order_link %>
+</p>
+
+<p>
+  <strong>Contract Id:</strong>
+  <br>
+  <%= @item.contract_id %>
+</p>
+
+<p>
+  <strong>Deliver address:</strong>
+  <br>
+  <%= @item.deliver_addr %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <br>
+  <%= @item.status_name %>
+</p>
+
+<p>
+  <strong>User placed:</strong>
+  <br>
+  <%= @item.user_placed_name %>
+</p>
+
+<p>
+  <strong>User responsible:</strong>
+  <br>
+  <%= @item.user_resp_name %>
+</p>
+
+<p>
+  <strong>Set size:</strong>
+  <br>
+  <%= @item.set_sz %>
+</p>
+
+<p>
+  <strong>Sets cnt:</strong>
+  <br>
+  <%= @item.sets_cnt %>
+</p>
+
+<p>
+  <strong>Unit price:</strong>
+  <br>
+  <%= @item.unit_price %>
+</p>
+
+<p>
+  <strong>Comment:</strong>
+  <br>
+  <%= @item.comment %>
+</p>
+
+<%if @item.part%>
+<p>
+  <strong>Part this purchase is based on:</strong>
+  <br>
+    <a href="<%=@prod_type.part.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+      <%=image_tag( @item.part.image.url(:thumb) )%>
+    </a>
+    <%= link_to( @item.part.own_id, part_path( @item.part_id ) ) %>
+  </p>
+
+<%end%>
+
+<%= link_to 'Edit', edit_item_path(@item) %> |
+<%= link_to 'Back', items_path %> |
+<%= link_to 'Copy', copy_item_path(@item) %> |
+<%= link_to 'Convert to parts in a warehouse', convert_form_path(@item) %>
+
+

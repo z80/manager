@@ -1,0 +1,164 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <a href="<%=@item.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+    <%=image_tag( @item.image.url(:thumb) )%>
+  </a>
+</p>
+
+<p>
+  <strong>Supplier Id:</strong>
+  <%= @item.supplier_id %>
+</p>
+
+<p>
+  <strong>Internal Id:</strong>
+  <%= @item.internal_id %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @item.desc %>
+</p>
+
+<p>
+  <strong>Order link:</strong>
+  <%= @item.order_link %>
+</p>
+
+<p>
+  <strong>Contract Id:</strong>
+  <%= @item.contract_id %>
+</p>
+
+<p>
+  <strong>Deliver address:</strong>
+  <%= @item.deliver_addr %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @item.status %>
+</p>
+
+<p>
+  <strong>User placed:</strong>
+  <% u = User.find_by_id( @item.user_placed ) %>
+  <% if u then %>
+      <%= u.name + ' ' + u.surname %>
+  <% else %>
+      Can't be specified
+  <% end %>
+</p>
+
+<p>
+  <strong>User responsible:</strong>
+  <% u = User.find_by_id( @item.user_resp ) %>
+  <% if u then %>
+      <%= u.name + ' ' + u.surname %>
+  <% else %>
+      Can't be specified
+  <% end %>
+</p>
+
+<p>
+  <strong>Set size:</strong>
+  <%= @item.set_sz %>
+</p>
+
+<p>
+  <strong>Sets cnt:</strong>
+  <%= @item.sets_cnt %>
+</p>
+
+<p>
+  <strong>Unit price:</strong>
+  <%= @item.unit_price %>
+</p>
+
+<p>
+  <strong>Comment:</strong>
+  <%= @item.comment %>
+</p>
+
+<%if false then%>
+  <%= link_to 'Edit', edit_item_path(@item) %> |
+<%end%>
+<%= link_to 'Back', items_path %>
+
+
+
+
+
+
+
+
+<%= form_tag( 'convert_form', method: :post ) do %>
+  <% if @item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@item.errors.count, "error") %> prohibited this item from being saved:</h2>
+
+      <ul>
+      <% @item.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="convert_items_to_parts_list">
+    <h1>parts cnt = <%= @parts.size %></h1>
+    <%if @paginate_parts then%>
+        <%=will_paginate @parts, param_name: :part_page %>
+    <%end%>
+    <table>
+        <% @parts.each do |part| %>
+            <tr>
+              <td>
+                <%= label_tag 'Selected' %>
+                <%= radio_button_tag "part_id", part.id %>
+              </td>
+              <td>
+                  <%@part = part%>
+                  <%=render 'parts/show'%>
+              </td>
+            </tr>
+        <% end %>
+    </table>
+  </div>
+
+  <div class="convert_items_to_parts_list">
+    <h1>boxes cnt = <%= @boxes.size %></h1>
+    <%if @paginate_boxes then%>
+        <%will_paginate @boxes, param_name: :box_page %>
+    <%end%>
+    <table>
+        <% @boxes.each do |box| %>
+            <tr>
+              <td>
+                <%= label_tag 'Selected' %>
+                <%= radio_button_tag "box_id", box.id %>
+              </td>
+              <td>
+                  <%@box = box%>
+                  <%=render 'boxes/show'%>
+              </td>
+            </tr>
+        <% end %>
+    </table>
+  </div>
+
+  <div class="field">
+    <%= label_tag 'Total new parts number' %><br>
+    <%= number_field_tag :cnt, @item.set_sz*@item.sets_cnt %>
+  </div>
+  <div class="field">
+    <%= label_tag 'Comment' %><br>
+    <%= text_area_tag :comment, "Purchased items are converted into these part instances which are placed to warehouse in a specified box.." %>
+  </div>
+
+  <div class="actions">
+    <%= submit_tag 'Convert' %>
+  </div>
+<% end %>
+

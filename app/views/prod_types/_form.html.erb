@@ -1,0 +1,68 @@
+<%= form_for(@prod_type, :html => { :multipart => true }) do |f| %>
+  <% if @prod_type.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@prod_type.errors.count, "error") %> prohibited this prod_type from being saved:</h2>
+
+      <ul>
+      <% @prod_type.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <div class="actions">
+    <%= f.submit "Create/update product type" %>
+  </div>
+  <div class="field">
+    <%= f.label 'Product image (if left blank part image is taken instead)'%>
+    <%= f.file_field :image %>
+  </div>
+  <div class="field">
+    <%= f.label "Part catalog Id" %><br>
+    <%= f.text_field :own_id %>
+  </div>
+  <div class="field">
+    <%= f.label "Description" %><br>
+    <%= f.text_area :desc %>
+  </div>
+<% end %>
+<br>
+
+<%if ( @prod_type && @prod_type.id )%>
+  <%if ( not (@prod_type.subproducts.size > 0) )%>
+    <%=form_tag( adjust_prod_type_path( @prod_type.id ), :method => "post" ) do%>
+      <%= submit_tag "No base part, this is pure assembly" %>
+      <%= hidden_field_tag :part_id, -1 %>
+    <%end%>
+    <br>
+
+    <%if @paginate then%>
+      <%=will_paginate @parts, param_name: :page %>
+    <%end%>
+    <table>
+      <% @parts.each do |part| %>
+        <tr>
+          <td>
+            <% @part = part %>
+            <%= render 'parts/show' %>
+          </td>
+
+          <td>
+            <%=form_tag( adjust_prod_type_path( @prod_type.id ), :method => "post" ) do%>
+              <%= submit_tag "Base on this part" %>
+              <%= hidden_field_tag :part_id, part.id %>
+            <%end%>
+          </td>
+        </tr>
+      <%end%>
+    </table>
+  <%else%>
+    This product type contrains subproducts and can't be based on a part. To base this product type on a particular part type remove all subproducts first.
+  <%end%>
+<%else%>
+  Assigning part type to this product will be available after creation.
+<%end%>
+<br>
+

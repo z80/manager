@@ -1,0 +1,31 @@
+<%= form_for(@product) do |f| %>
+  <% if @product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+      <ul>
+      <% @product.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= hidden_field_tag "product[prod_type_id]".to_s, @prod_type_id %>
+  <%= hidden_field_tag "prod_type_id".to_s, @prod_type_id %>
+  <div class="field">
+    <%= f.label "Serial number" %><br>
+    <%= f.text_field :serial_number %>
+  </div>
+  <div class="field">
+    <%= f.label "Description" %><br>
+    <%= f.text_area :desc %>
+  </div>
+  <div class="field">
+    <%= f.label "Product current status" %><br>
+    <%= f.select( :status, @statuses, selected: @current_status ) %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

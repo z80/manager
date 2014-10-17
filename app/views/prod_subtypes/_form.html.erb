@@ -1,0 +1,25 @@
+<%= form_for(@prod_subtype) do |f| %>
+  <% if @prod_subtype.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@prod_subtype.errors.count, "error") %> prohibited this prod_subtype from being saved:</h2>
+
+      <ul>
+      <% @prod_subtype.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :belongs_id %><br>
+    <%= f.number_field :belongs_id %>
+  </div>
+  <div class="field">
+    <%= f.label :contains_id %><br>
+    <%= f.number_field :contains_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

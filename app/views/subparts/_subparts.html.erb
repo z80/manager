@@ -1,0 +1,24 @@
+
+<table>
+  <thead>
+    <tr>
+      <th>Contains</th>
+      <th>Cnt</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @subparts.each do |subpart| %>
+      <tr>
+        <td><%= subpart.contains_id %></td>
+        <td><%= subpart.cnt %></td>
+        <td><%= link_to 'Show', subpart %></td>
+        <td><%= link_to 'Edit', edit_subpart_path(subpart) %></td>
+        <td><%= link_to 'Destroy', subpart, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

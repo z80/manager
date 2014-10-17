@@ -1,0 +1,18 @@
+# == Schema Information
+#
+# Table name: product_statuses
+#
+#  id         :integer          not null, primary key
+#  status     :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#  avail      :boolean
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  status: MyString
+
+two:
+  status: MyString

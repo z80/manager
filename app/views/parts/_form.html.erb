@@ -1,0 +1,68 @@
+<%= form_for(@part, :html => { :multipart => true }) do |f| %>
+  <% if @part.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@part.errors.count, "error") %> prohibited this part from being saved:</h2>
+
+      <ul>
+      <% @part.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit "Create/update part type" %>
+  </div>
+
+  <div class="field">
+    <%= f.label 'Part type picture (like SolidWorks screenshot)'%>
+    <%= f.file_field :image %>
+  </div>
+  <div class="field">
+    <%= f.label "Aist-NT internal Id" %><br>
+    <%= f.text_field :own_id %>
+  </div>
+  <div class="field">
+    <%= f.label 'External supplier part Id' %><br>
+    <%= f.text_field :third_id %>
+  </div>
+  <div class="field">
+    <%= f.label 'description' %><br>
+    <%= f.text_area :desc %>
+  </div>
+
+  <div>
+    <%= f.label 'Order link(s)' %><br>
+    <%= f.text_area :order_link %>
+  </div>
+  <div>
+    <%= f.label 'Approximate unit price in USD' %><br>
+    <%= f.number_field :order_price, :class => 'text_field', :step => 0.01 %>
+  </div>
+  <div>
+    <%= f.label 'How to order description if there is any specifics.' %><br>
+    <%= f.text_area :order_desc %>
+  </div>
+  <div>
+    <%= f.label 'Minimum number of this parts at warehouse. For lower numbers warning is displayed.' %><br>
+    <%= f.number_field :min_cnt %>
+  </div>
+  <div>
+    <%= f.label 'Part type' %><br>
+    <%= f.select( :part_type, @part_types, selected: @part.part_type ) %>
+  </div>
+  <div>
+    <%= f.label 'Ordering time in days.' %><br>
+    <%= f.number_field :order_time %>
+  </div>
+    
+
+
+  <% if false then%>
+      <div class="field">
+          <%= f.label :user_id %><br>
+          <%= f.number_field :user_id %>
+      </div>
+  <% end %>
+<% end %>

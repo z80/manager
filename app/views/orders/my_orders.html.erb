@@ -1,0 +1,28 @@
+<h1>Listing orders</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Desc</th>
+      <th>Status</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @orders  %>
+      <% @orders.each do |order| %>
+        <tr>
+          <td><%= order.desc %></td>
+          <td><%= order.status %></td>
+          <td><%= link_to 'Show', order %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+

@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Image:</strong>
+  <%= @image_to_sample.image_id %>
+</p>
+
+<p>
+  <strong>Sample:</strong>
+  <%= @image_to_sample.sample_id %>
+</p>
+
+<%= link_to 'Edit', edit_image_to_sample_path(@image_to_sample) %> |
+<%= link_to 'Back', image_to_samples_path %>

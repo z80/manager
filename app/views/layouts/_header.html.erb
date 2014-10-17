@@ -1,0 +1,38 @@
+
+    <div id="header">
+      <div id="banner">
+        <div id="welcome">
+          <h1>Purchase management</h1>
+        </div><!--close welcome-->
+        <div id="welcome_slogan">
+          <h1>This is a purchase management software</h1>
+        </div><!--close welcome_slogan-->
+      </div><!--close banner-->
+    </div><!--close header-->
+
+    <div id="menubar">
+      <ul id="menu">
+          <li><%= link_to "Root menu", root_path %></li>
+          <li><%= link_to "FAQ",  "#" %></li>
+          <%if @user%>
+            <li><%= link_to "Logout",     static_pages_user_sign_out_path, method: :post %></li>
+            <li><%= link_to "User details", users_show_url( id: @user.id )%></li>
+            <% if ( @user.admin ) %>
+              <li> <%= link_to "User list",      users_all_path %> </li>
+            <% end %>
+          <%else%>
+            <li><%= link_to "Log in",  static_pages_user_sign_in_form_path %></li>
+          <%end%>
+          <li><%= link_to "Register new", static_pages_new_user_form_path %></li>
+          <li>
+                <%= form_tag request.env['PATH_INFO'], :method => 'get' do %>
+                  <p>
+                    <%= text_field_tag :search, params[:search] %>
+                    <%= submit_tag "Search", :name => nil %>
+                  </p>
+                <% end %>              
+          </li>
+      </ul>
+    </div><!--close menubar-->  
+
+

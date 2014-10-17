@@ -1,0 +1,119 @@
+
+<h2>Select Sample location</h2>
+
+<% if @sample.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@sample.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+    <ul>
+    <% @sample.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+
+<p>
+  <strong>From:</strong>
+  <%= @sample.from %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @sample.desc %>
+</p>
+
+<p>
+  <strong>Sample location:</strong>
+  <%= @sample.location %>
+</p>
+
+<p>
+  <strong>Received:</strong>
+  <%= @sample.received %>
+</p>
+
+<% if not @sample.still_valid? %>
+  <p class="critical_cnt">
+<% else %>
+  <% if @sample.completed?%>
+    <p class="completed">
+  <%else%>
+    <p>
+  <% end %>
+<% end %>
+  <strong>Due:</strong>
+  <%= @sample.due %>
+</p>
+
+<p>
+  <strong>User placed:</strong>
+  <%= @sample.user_placed_name %>
+</p>
+
+<p>
+  <strong>User resp:</strong>
+  <%= @sample.user_resp_name %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @sample.status_stri %>
+</p>
+
+<%if @paginate%>
+  <%=will_paginate( @boxes )%>
+<%end%>
+
+<table>
+  <thead>
+    <tr>
+      <th>Warehouse</th>
+      <th>Box</th>
+      <th>Desc</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<tr>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>
+        <%= form_tag( change_sample_box_apply_path( @sample.id ), method: 'post' ) do %>
+          <%=submit_tag 'Not in a box, somewhere in the office'%>
+          <%=hidden_field_tag( :box_id, -1 )%>
+        <%end%>
+      </td>
+  	</tr>
+    <% @boxes.each do |box| %>
+      <tr>
+        <td>
+            <%if box.warehouse then %>
+              <%=box.warehouse.w_id%>
+            <%else%>
+              Unspecified
+            <%end%>
+        </td>
+        <td><%= box.box_id %></td>
+        <td><%= box.desc %></td>
+        <td><%= link_to 'Show', box %></td>
+        <td>
+          <%= form_tag( change_sample_box_apply_path( @sample.id ), method: 'post' ) do %>
+            <%=submit_tag 'Put it here'%>
+            <%=hidden_field_tag( :box_id, box.id )%>
+          <%end%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Show sample', @sample %> |
+<%= link_to 'All samples', samples_path() %>
+
+

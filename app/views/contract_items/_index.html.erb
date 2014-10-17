@@ -1,0 +1,23 @@
+
+<table>
+  <thead>
+    <tr>
+      <th>Prod type</th>
+      <th>Product</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @contract_items.each do |contract_item| %>
+      <tr>
+        <td><%= contract_item.prod_type_id %></td>
+        <td><%= contract_item.product_id %></td>
+        <td><%= link_to 'Show', contract_item %></td>
+        <td><%= link_to 'Edit', edit_contract_item_path(contract_item) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

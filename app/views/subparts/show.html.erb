@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Contains:</strong>
+  <%= @subpart.contains_id %>
+</p>
+
+<p>
+  <strong>Belongs:</strong>
+  <%= @subpart.belongs_id %>
+</p>
+
+<%= link_to 'Edit', edit_subpart_path(@subpart) %> |
+<%= link_to 'Back', subparts_path %>

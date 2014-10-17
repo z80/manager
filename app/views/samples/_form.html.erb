@@ -1,0 +1,53 @@
+<%= form_for(@sample) do |f| %>
+  <% if @sample.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@sample.errors.count, "error") %> prohibited this sample from being saved:</h2>
+
+      <ul>
+      <% @sample.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label 'Received from' %><br>
+    <%= f.text_area :from %>
+  </div>
+  <div class="field">
+    <%= f.label 'Sample description' %><br>
+    <%= f.text_area :desc %>
+  </div>
+  <div class="field">
+    <%= f.label 'Where this sample is located' %><br>
+    <%= f.text_area :location %>
+  </div>
+  <div class="field">
+    <%= f.label 'Received date' %><br>
+    <%= f.datetime_select :received %>
+  </div>
+  <div class="field">
+    <%= f.label 'Due date' %><br>
+    <%= f.datetime_select :due %>
+  </div>
+  <div class="field">
+    <%= f.label 'Person responsible' %><br>
+    <%= f.select :user_resp, @users %>
+  </div>
+  <div class="field">
+    <%= f.label 'Current status' %><br>
+    <%= f.select :status, @status, selected: (@sample.status || 0) %>
+  </div>
+  <div class="field">
+    <%= f.label 'Warn application scientist in [x] days' %><br>
+    <%= f.number_field :warn_days, value: 7 %>
+  </div>
+  <div class="actions">
+    <%= f.submit 'Add sample' %>
+  </div>
+<% end %>
+
+
+
+

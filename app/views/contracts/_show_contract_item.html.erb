@@ -1,0 +1,72 @@
+    
+
+    <%prod_type = @contract_item.prod_type%>
+    <tr>
+      <td>
+        <a href="<%=prod_type.image_ex.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+          <%=image_tag( prod_type.image_ex.url(:thumb) )%>
+        </a>
+      </td>
+
+      <td>
+        <%= link_to prod_type.own_id.to_s, prod_type_path( prod_type.id ) %>
+      </td>
+
+        <%prod = @contract_item.product%>
+        <%if prod%>
+          <td class="assigned_item">
+            <%= link_to prod.serial_number, product_path( prod.id ) %>
+          </td>
+        <%else%>
+          <%if ( not @contract_item.has_subitems?() )%>
+            <td class="unassigned_item">
+              Unassigned!
+            </td>
+          <%end%>
+        <%end%>
+      </td>
+
+      <td>
+        <%if @contract_item.superitem()%>
+          <%prod_type = @contract_item.superitem.prod_type%>
+          Part of <%=link_to( prod_type.own_id, prod_type_path( prod_type.id ) )%>
+        <%else%>
+            <%if @contract_item.has_subitems?()%>
+              Root of an assembly, see subitems below
+            <%else%>
+              Standalone item
+            <%end%>
+        <%end%>
+      </td>
+
+      <td>
+        <%=prod_type.desc%>
+      </td>
+
+      <td>
+        <%=prod_type.cnt%>
+      </td>
+
+      <td>
+        <%=prod_type.cnt_for_import%>
+      </td>
+
+      <% if ( (not @contract.shipped) && (@editable) ) %>
+        <td>
+          <%if ( not @contract_item.has_subitems?() )%>
+            <%= link_to "Assign product", assign_contract_item_product_path( @contract.id, @contract_item.id ) %>
+          <%end%>
+        </td>
+
+        <td>
+          <%if ( @contract_item.has_subitems?() )%>
+            Warning, this is a root of complex product. It it is removed all subproducts also will be removed.
+          <%end%>
+          <%=form_tag( adjust_contract_path( @contract.id ), :method => 'post' ) do%>
+            <%= hidden_field_tag :remove_item_id, @contract_item.id %>
+            <%= submit_tag "Remove this postion"%>
+          <%end%>
+        </td>
+      <% end %>
+    </tr>
+

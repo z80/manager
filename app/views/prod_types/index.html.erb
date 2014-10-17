@@ -1,0 +1,50 @@
+<h1>Product types</h1>
+
+<%if @paginate%>
+  <%=will_paginate( @prod_types )%>
+<%end%>
+
+<table>
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Part number</th>
+      <th>Description</th>
+      <th>Cnt in stock</th>
+      <th>Cnt in production</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @prod_types.each do |prod_type| %>
+      <%valid = prod_type.valid_product?%>
+      <%if valid%>
+        <%cl = ""%>
+      <%else%>
+        <%cl = "critical_cnt"%>
+      <%end%>
+      <tr>
+        <td>
+          <a href="<%=prod_type.image_ex.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+            <%=image_tag( prod_type.image_ex.url(:thumb) )%>
+          </a>
+        </td>
+        <td class="<%=cl%>"><%= prod_type.own_id %></td>
+        <td class="<%=cl%>"><%= prod_type.desc %></td>
+        <td class="<%=cl%>"><%= prod_type.cnt %></td>
+        <td class="<%=cl%>"><%= prod_type.cnt_for_import %></td>
+        <td><%= link_to 'Show', prod_type %></td>
+        <td><%= link_to 'Edit', edit_prod_type_path(prod_type) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Prod type', new_prod_type_path %>
+
+
+

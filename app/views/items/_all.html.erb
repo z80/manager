@@ -1,0 +1,53 @@
+<h1>Items list</h1>
+
+<%= link_to 'New Item', new_item_path %>
+
+<% if @paginate || (@paginate == nil) then %>
+  <%= will_paginate %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Supplier Id</th>
+      <th>Internal Id</th>
+      <th>Contract</th>
+      <th>Deliver address</th>
+      <th>Status</th>
+      <th>User responsible</th>
+      <th>Total price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @items.each do |item| %>
+      <tr>
+        <td>
+            <a href="<%=item.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+              <%=image_tag( item.image.url(:thumb) )%>
+            </a>
+        </td>
+        <td><%= item.supplier_id %></td>
+        <td><%= item.internal_id %></td>
+        <td><%= item.contract_id %></td>
+        <td><%= item.deliver_addr %></td>
+        <td><%= item.status_name %></td>
+        <td><%= item.user_resp_name %></td>
+        <td><%= item.total_price %></td>
+        <td><%= link_to 'View', item %></td>
+        <td><%= link_to 'Edit', edit_item_path( item ) %></td>
+        <td><%= link_to 'Copy', copy_item_path( item ) %></td>
+        <%if false then%>
+          <td><%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <%end%>
+      </tr>
+    <% end %>
+  </tbody>  
+</table>
+
+<% if @paginate || (@paginate == nil) then %>
+  <%= will_paginate %>
+<% end %>
+
+<br>
+

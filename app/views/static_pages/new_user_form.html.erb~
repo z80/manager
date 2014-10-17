@@ -1,0 +1,11 @@
+
+<h1>Register new user</h1>
+<h2>
+  Add captcha here to prevent automatic registration....
+</h2>
+<%= render 'static_pages/user/form' %>
+
+
+
+
+

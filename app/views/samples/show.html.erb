@@ -1,0 +1,88 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>From:</strong>
+  <%= @sample.from %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @sample.desc %>
+</p>
+
+<p>
+  <strong>Sample location:</strong>
+  <%= @sample.location %>
+</p>
+
+<p>
+  <strong>Received:</strong>
+  <%= @sample.received %>
+</p>
+
+<% if not @sample.still_valid? %>
+  <p class="critical_cnt">
+<% else %>
+  <% if @sample.completed?%>
+    <p class="completed">
+  <%else%>
+    <p>
+  <% end %>
+<% end %>
+  <strong>Due:</strong>
+  <%= @sample.due %>
+</p>
+
+<p>
+  <strong>User placed:</strong>
+  <%= @sample.user_placed_name %>
+</p>
+
+<p>
+  <strong>User resp:</strong>
+  <%= @sample.user_resp_name %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @sample.status_stri %>
+</p>
+
+<p>
+  <%@box = @sample.box()%>
+  <%if @box%>
+    <strong>This sample is in this <%=link_to( 'box', box_path( @box.id ) )%>:</strong>
+    <%=render( 'boxes/show' )%>
+  <%else%>
+    This sample is not in a box, try find it somewhere in the office.
+  <%end%>
+</p>
+
+
+<table>
+  <%@sample.images.each do |image|%>
+    <tr>
+      <td>
+        <a href="<%=image.avatar.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+            <%=image_tag( image.avatar.url(:thumb) )%>
+        </a>
+      </td>
+      <td>
+        <%= image.desc %>
+      </td>
+    </tr>
+  <%end%>
+</table>
+
+<%= form_tag( sample_path( @sample.id ), multipart: true ) do %>
+  <%= file_field_tag "image" %>
+  <%= text_area_tag :desc %>
+  <%= submit_tag 'Append image', class: 'button large' %>
+<%end%>
+
+<%= link_to 'Edit', edit_sample_path(@sample) %> |
+<%= link_to 'All Samples', samples_path %> | 
+<%= link_to 'Change location', change_sample_box_path( @sample.id )%>
+
+
+

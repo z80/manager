@@ -1,0 +1,53 @@
+<%= form_tag user_register_path, multipart: true do %>
+  <% if @user && @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize( @user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%flash.each do |k, v|%>
+      <id="error_explanation"><%= k %> = <%= v%></p>
+  <%end%>
+
+  <div class="field">
+    <%= label_tag :email %><br>
+    <%= text_field_tag :email %>
+  </div>
+  <div class="field">
+    <%= label_tag :name %><br>
+    <%= text_field_tag :name %>
+  </div>
+  <div class="field">
+    <%= label_tag :surname %><br>
+    <%= text_field_tag :surname %>
+  </div>
+  <div class="field">
+    <%= label_tag :password %><br>
+    <%= text_field_tag :password %>
+  </div>
+  <div class="field">
+    <%= label_tag :confirmation %><br>
+    <%= text_field_tag :password_confirmation %>
+  </div>
+
+  <%if current_user && current_user.admin?%>
+    <div class="field">
+      <%= label_tag "Is new user admin?" %>
+      <%= check_box_tag :admin, "Yes/No?" %>
+    </div>
+  <%end%>
+
+  <div class="field">
+    <%= label_tag :avatar %>
+    <%= file_field_tag :avatar %>
+  </div>
+  <div class="actions">
+    <%= submit_tag "Register" %>
+  </div>
+<% end %>

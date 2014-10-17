@@ -1,0 +1,67 @@
+<h1>Contracts</h1>
+<%=form_tag( date_parts_required_path(), method: 'get' ) do%>
+    Get parts forecast for the date 
+    <%= date_select( :date, 'date', default: 30.days.from_now ) %>
+    <%= submit_tag( "Products summary") %>
+<%end%>
+<%=form_tag( contracts_update_path(), method: 'post' ) do%>
+    Recalculate statuses 
+    <%= submit_tag( "Recalculate") %>
+    (This procedure takes some time!!!)
+<%end%>
+
+
+<%= link_to 'All contracts', contracts_path( all: true ) %>
+<br> 
+<%= link_to 'Only pending',  contracts_path( all: false ) %>
+<br>
+<br>
+
+<%if @paginate%>
+  <%=will_paginate( @contracts )%>
+<%end%>
+
+<table>
+  <thead>
+    <tr>
+      <th>Warning</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Ship date</th>
+      <th>Shipped</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @contracts.each do |contract| %>
+      <%if (not contract.shipped)%>
+        <% level = contract.warning || 4 %>
+        <tr>
+      <%else%>
+        <%level=-1%>
+        <tr>
+      <%end%>
+        <td class="contract_level_<%=level.to_s%>">
+          <%if level>0%>
+            Level <%=level.to_s%>
+          <%end%>
+        </td>
+        <td class="contract_level_<%=level.to_s%>"><%= contract.name %></td>
+        <td class="contract_level_<%=level.to_s%>"><%= contract.desc %></td>
+        <td class="contract_level_<%=level.to_s%>"><%= contract.ship_date %></td>
+        <td class="contract_level_<%=level.to_s%>"><%= contract.shipped ? "yes" : "no" %></td>
+        <td class="contract_level_<%=level.to_s%>"><%= link_to 'Show', contract %></td>
+        <td class="contract_level_<%=level.to_s%>"><%= link_to 'Edit', edit_contract_path(contract) %></td>
+        <%if false%>
+          <td><%= link_to 'Destroy', contract, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <%end%>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Contract', new_contract_path %>

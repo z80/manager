@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: image_to_samples
+#
+#  id         :integer          not null, primary key
+#  image_id   :integer
+#  sample_id  :integer
+#  created_at :datetime
+#  updated_at :datetime
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  image_id: 1
+  sample_id: 1
+
+two:
+  image_id: 1
+  sample_id: 1

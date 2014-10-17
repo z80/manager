@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Contract:</strong>
+  <%= @contract_item.contract_id %>
+</p>
+
+<p>
+  <strong>Prod type:</strong>
+  <%= @contract_item.prod_type_id %>
+</p>
+
+<p>
+  <strong>Product:</strong>
+  <%= @contract_item.product_id %>
+</p>
+
+<%= link_to 'Edit', edit_contract_item_path(@contract_item) %> |
+<%= link_to 'Back', contract_items_path %>

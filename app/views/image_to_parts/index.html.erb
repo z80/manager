@@ -1,0 +1,29 @@
+<h1>Listing image_to_parts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Part</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @image_to_parts.each do |image_to_part| %>
+      <tr>
+        <td><%= image_to_part.image_id %></td>
+        <td><%= image_to_part.part_id %></td>
+        <td><%= link_to 'Show', image_to_part %></td>
+        <td><%= link_to 'Edit', edit_image_to_part_path(image_to_part) %></td>
+        <td><%= link_to 'Destroy', image_to_part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Image to part', new_image_to_part_path %>

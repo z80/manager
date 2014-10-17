@@ -1,0 +1,65 @@
+<h1>Add product to contract <b><%=@contract.name%></b></h1>
+
+<% if @contract && @contract.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@contract.errors.count, "error") %> prohibited this product from being added:</h2>
+    <ul>
+    <% @contract.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+
+
+  <%if @paginate%>
+    <%=will_paginate( @prod_types )%>
+  <%end%>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Part number</th>
+        <th>Description</th>
+        <th>Cnt in stock</th>
+        <th>Cnt just after assembly</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @prod_types.each do |prod_type| %>
+        <tr>
+          <td>
+            <a href="<%=prod_type.image_ex.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+              <%=image_tag( prod_type.image_ex.url(:thumb) )%>
+            </a>
+          </td>
+          <td><%= prod_type.own_id %></td>
+          <td><%= prod_type.desc %></td>
+          <td><%= prod_type.cnt %></td>
+          <td><%= prod_type.cnt_for_import %></td>
+          <td><%= link_to 'Show', prod_type %></td>
+          <td><%= link_to 'Edit', edit_prod_type_path(prod_type) %></td>
+          <td>
+            <%=form_tag( adjust_contract_path( @contract.id ), :method => "post" ) do%>
+                <%= submit_tag "Add it to contract" %>
+                <%= hidden_field_tag :add_prod_type_id, prod_type.id %>
+            <%end%>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+
+<%= link_to 'Back to contract', contract_path( @contract ) %>
+
+
+
+
+

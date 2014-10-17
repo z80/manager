@@ -1,0 +1,78 @@
+<p id="notice"><%= notice %></p>
+
+<%= link_to 'Add new part(s)', add_new_part_to_box_path( @box.id )%>
+
+<%= render 'boxes/show' %>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Own id</th>
+      <th>Third id</th>
+      <th>Cnt</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @parts.each do |a| %>
+      <tr>
+        <td>
+            <a href="<%=a[:part].image.url( :original ).sub( /\?\d+/i, "" )%>" rel="facebox" >
+                <%=image_tag( a[:part].image.url( :thumb ) )%>
+            </a>
+        </td>
+        <td><%= a[:part].own_id %></td>
+        <td><%= a[:part].third_id %></td>
+        <td><%= a[:inst].cnt %></td>
+        <td><%= link_to 'Show part', part_path( a[:part].id ) %>
+        <td><%= link_to 'Add items', add_part_insts_path( @box.id, a[:inst].id ) %></td>
+        <td><%= link_to 'Take items', take_part_insts_path( @box.id, a[:inst].id ) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= form_tag( merge_identical_path( @box.id ), :method => 'post' ) do %>
+  <div class="actions">
+    <%= submit_tag "Merge identical parts in this box" %>
+  </div>
+<% end %>
+<br>
+<br>
+
+<%@products = @box.products%>
+<%if @products.size > 0%>
+  <h2>Products list</h2>
+  <%=render( 'products/index' )%>
+  <br>
+<%end%>
+
+<%@samples = @box.samples%>
+<%if @samples.size > 0%>
+  <h2>Samples list</h2>
+  <table>
+    <%@samples.each do |sample|%>
+      <tr>
+        <td>
+          <%=link_to( sample.from, sample_path( sample.id ) )%>
+        </td>
+        <td>
+          <%=sample.desc%>
+        </td>
+      </tr>
+    <%end%>
+  </table>
+  <br>
+<%end%>
+
+<%= link_to 'Edit', edit_box_path(@box) %> |
+<%= link_to 'Back', boxes_path %>
+<%= link_to 'Add items', add_new_part_to_box_path( @box.id ) %>
+<% if false then %>
+  <%= link_to 'Inspect content', inspect_content_path( @box.id ) %>
+<% end %>

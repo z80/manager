@@ -1,0 +1,21 @@
+# == Schema Information
+#
+# Table name: subparts
+#
+#  id          :integer          not null, primary key
+#  contains_id :integer
+#  belongs_id  :integer
+#  created_at  :datetime
+#  updated_at  :datetime
+#  cnt         :integer
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  contains_id: 1
+  belongs_id: 1
+
+two:
+  contains_id: 1
+  belongs_id: 1

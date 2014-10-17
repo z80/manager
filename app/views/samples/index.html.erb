@@ -1,0 +1,48 @@
+<h1>Listing samples</h1>
+
+<%= link_to 'Add sample received', new_sample_path %>
+
+<% if (@paginate == nil) || @paginate %>
+  <%= will_paginate %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Received from</th>
+      <th>Location</th>
+      <th>Due date</th>
+      <th>User responsible</th>
+      <th>Status</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @samples.each do |sample| %>
+      <%if not sample.still_valid? then%>
+        <%cl="critical_cnt"%>
+      <%else%>
+        <%if sample.completed?%>
+          <%cl="completed"%>
+        <%else%>
+          <%cl=""%>
+        <%end%>
+      <%end%>
+      <tr>
+        <td class="<%=cl%>"><%= sample.from %></td>
+        <td class="<%=cl%>"><%= sample.location %></td>
+        <td class="<%=cl%>"><%= sample.due %></td>
+        <td class="<%=cl%>"><%= sample.user_resp_name %></td>
+        <td class="<%=cl%>"><%= sample.status_stri %></td>
+        <td><%= link_to 'Show', sample %></td>
+        <td><%= link_to 'Edit', edit_sample_path(sample) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+

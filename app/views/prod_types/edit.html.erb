@@ -1,0 +1,50 @@
+<h1>Editing this product type</h1>
+<%= link_to 'View product type', @prod_type %>
+<br>
+
+<%if not @prod_type.part%>
+<%=link_to( "Add subproduct to this assembly (or make assembly from this single product type)", add_prod_subtype_path( @prod_type.id ) )%>
+<br>
+<%else%>
+  This product type can't contain subproducts, because it is based on a part. To make product assembly remove part it is based on.
+<%end%>
+
+<%if @subproducts && (@subproducts.size > 0)%>
+  <strong>Subtypes list</strong>
+  <table>
+    <%@subproducts.each do |pair|%>
+      <%spt = pair[:type]%>
+      <%pt  = pair[:subtype]%>
+      <tr>
+        <td>
+          <a href="<%=spt.image_ex.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+              <%=image_tag( spt.image_ex.url(:thumb) )%>
+          </a>
+        </td>
+        <td>
+          <%=link_to( spt.own_id, prod_type_path( spt.id ) )%>
+        </td>
+        <td>
+          <%= spt.cnt %>
+        </td>
+        <td>
+          <%= spt.desc %>
+        </td>
+        <td>
+          <%if pt.belongs_id == @prod_type.id%>
+            <%=form_tag( remove_prod_subtype_path( @prod_type.id ), :method => 'post' ) do%>
+              <%= hidden_field_tag :subtype_id, pt.id %>
+              <%= submit_tag "Remove this postion"%>
+            <%end%>
+          <%end%>
+        </td>
+      </tr>
+    <%end%>
+  </table>
+<%end%>
+<br>
+
+<%= render 'form' %>
+<br>
+
+<%= link_to 'View product type', @prod_type %>

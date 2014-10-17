@@ -1,0 +1,55 @@
+
+
+
+<%= form_tag orders_path, multipart: true do %>
+  <% if @order && @order.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@order.errors.count, "error") %> prohibited this order from being saved:</h2>
+
+      <ul>
+      <% @order.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <p>
+    Please, specify order details and upload project file. We expect it to be ZIP packed archive with your model in STL format. We treat units as millimeters if other isn't specified in order description.
+  </p>
+
+  <p>
+    Adter manager examination and if everything is right your order status will be changed to 'accepted'. Please, check your order's status from time to time to stay up to date.
+  </p>
+
+  <%if false%>
+    <div class="field">
+      <%= label_tag :user_id %><br>
+      <%= text_field_tag :user_id %>
+    </div>
+  <%end%>
+
+  <div class="fiels">
+    <%= label_tag "Project file"%>
+    <%= file_field_tag :file %>
+  </div>
+
+  <div class="field">
+    <%= label_tag :desc %><br>
+    <%= text_area_tag :desc %>
+  </div>
+
+  <%if false%>
+    <div class="field">
+      <%= label_tag :status %><br>
+      <%= text_field_tag :status %>
+    </div>
+  <%end%>
+
+  <div class="actions">
+    <%= submit_tag "Submit order" %>
+  </div>
+
+
+<% end %>

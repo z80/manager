@@ -1,0 +1,36 @@
+# == Schema Information
+#
+# Table name: samples
+#
+#  id          :integer          not null, primary key
+#  from        :text
+#  desc        :text
+#  received    :datetime
+#  due         :datetime
+#  user_placed :integer
+#  user_resp   :integer
+#  created_at  :datetime
+#  updated_at  :datetime
+#  location    :text
+#  status      :integer
+#  warn_days   :integer
+#  box_id      :integer
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  from: MyText
+  desc: MyText
+  received: 2014-08-09 11:11:48
+  due: 2014-08-09 11:11:48
+  user_placed: 1
+  user_resp: 1
+
+two:
+  from: MyText
+  desc: MyText
+  received: 2014-08-09 11:11:48
+  due: 2014-08-09 11:11:48
+  user_placed: 1
+  user_resp: 1
