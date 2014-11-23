@@ -1,5 +1,5 @@
 <h1>Editing this product type</h1>
-<%= link_to 'View product type', @prod_type %>
+<%= link_to 'View product type', @prod_type, class: "btn btn-success" %>
 <br>
 
 <%if not @prod_type.part%>
@@ -47,4 +47,4 @@
 <%= render 'form' %>
 <br>
 
-<%= link_to 'View product type', @prod_type %>
+<%= link_to 'View product type', @prod_type, class: "btn btn-success" %>

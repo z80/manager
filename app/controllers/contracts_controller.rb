@@ -14,7 +14,7 @@ class ContractsController < ApplicationController
     all = ( params[ :all ] || "false" ).to_bool
     if ( params[ :search ] ) then
       @paginate = false
-      conts = search( Contract, params[ :search ], [ 'name', 'desc', 'date' ] )
+      conts = search( Contract, params[ :search ], [ 'name', 'desc', 'ship_date' ] )
       if ( all )
         @contracts = conts
       else
@@ -129,10 +129,10 @@ class ContractsController < ApplicationController
     respond_to do |format|
       if @contract.update(contract_params)
         log( "Contract " + @contract.name + " parameters are updated", @user )
-        if ( @contract.shipped && (not shipped) )
-          mark_all_parts_shipped( @contract )
-          log( "Contract " + @contract.name + " is marked as \'shipped\'", @user )
-        end
+        #if ( @contract.shipped && (not shipped) )
+        #  mark_all_parts_shipped( @contract )
+        #  log( "Contract " + @contract.name + " is marked as \'shipped\'", @user )
+        #end
         format.html { redirect_to @contract, notice: 'Contract was successfully updated.' }
         format.json { head :no_content }
       else
@@ -155,7 +155,15 @@ class ContractsController < ApplicationController
   def add_item
     @user = current_user
     @contract   = Contract.find( params[ :id ] )
-    @prod_types = ProdType.all    
+    #@prod_types = ProdType.all
+
+    if ( params[ :search ] && (params[ :search ].size > 0) ) then
+      @paginate   = false
+      @prod_types = search( ProdType, params[ :search ], [ 'own_id', 'desc' ] )
+    else
+      @paginate   = true
+      @prod_types = ProdType.paginate( page: params[:page], per_page: 10, order: "id DESC" )
+    end
   end
 
   def assign_item
@@ -166,6 +174,15 @@ class ContractsController < ApplicationController
     @prod_type = @contract_item.prod_type
 
     @products, @paginate = @prod_type.products( true, params[ :search ], params[ :page ] )
+  end
+
+  def unassign_item()
+    @user = current_user
+    @contract = Contract.find( params[ :id ] )
+    @contract_item = ContractItem.find( params[ :contract_item_id ] )
+    @contract_item.product_id = nil
+    @contract_item.save
+    redirect_to( edit_contract_path( @contract.id ), notice: 'Product was unassigned.' )
   end
 
   def parts_required
@@ -221,6 +238,43 @@ class ContractsController < ApplicationController
 
     redirect_to( contract_path( dest.id ), notice: 'Succeeded to copy this contract!' )
   end  
+
+  def packing_list()
+    @user = current_user
+    @contract = Contract.find( params[ :id ] )
+
+    @contract_items = ContractItem.where( contract_id: params[ :id ] ) || []
+  end
+
+  def user_packing_list()
+    @user = current_user
+    @contract = Contract.find( params[ :id ] )
+
+    @contract_items = ContractItem.where( contract_id: params[ :id ] ) || []
+  end
+
+  def ship_assigned_items()
+    @user = current_user
+    contract = Contract.find( params[ :id ] )
+    res, comment = create_shipment( contract )
+    if ( not res )
+      redirect_to edit_contract_path( contract.id ), notice: comment
+      return
+    end
+    redirect_to contract_path( contract.id ), notice: "New shipment is created"
+  end
+
+  def add_attachment
+    show()
+    file = params[ :file ]
+    desc = params[ :desc ]
+    if ( @contract.add_attachment( file, desc ) )
+      redirect_to( contract_path( @contract.id ), notice: "File has been added!" )
+    else
+      redirect_to( contract_path( @contract.id ), notice: "ERROR: Failed to add file!" )
+    end
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

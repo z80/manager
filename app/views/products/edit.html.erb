@@ -14,8 +14,13 @@
 
 <%= render 'form' %>
 
+<br>
+<br>
+<%= link_to 'Change location', change_product_box_path( @product.id ), class: "btn btn-warning" %>
+<br>
+<br>
+
 <%= link_to 'Show', @product %> |
-<%= link_to 'Back', prod_type_path( @product.prod_type_id ) %> | 
-<%= link_to 'Change location', change_product_box_path( @product.id )%>
+<%= link_to 'Back', prod_type_path( @product.prod_type_id ) %>
 
 

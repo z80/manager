@@ -304,5 +304,42 @@ class Contract < ActiveRecord::Base
     return total_summary, could, couldnt, parts_to_purchase, days_to_assemble
   end
 
+  def shipments()
+    ss = Shipment.where( contract_id: self.id ).order( "created_at ASC" )
+    return ss
+  end
+
+
+
+  def add_attachment( file, desc )
+    att = Attachment.new
+    att.file = file
+    att.desc = desc
+    if not att.save then
+      return nil
+    end
+
+    att2clazz = AttachmentToContract.new
+    att2clazz.attachment_id = att.id
+    att2clazz.contract_id   = self.id
+    if ( not att2clazz.save ) then
+      att.delete
+      return nil
+    end
+
+    return att
+  end
+
+
+  def attachments()
+    att2clazzs = AttachmentToContract.where( contract_id: self.id )
+    atts = []
+    att2clazzs.each do |att2clazz|
+      if ( Attachment.exists?( att2clazz.attachment_id ) ) then
+        atts.append( Attachment.find( att2clazz.attachment_id ) )
+      end
+    end
+    return atts
+  end
 
 end

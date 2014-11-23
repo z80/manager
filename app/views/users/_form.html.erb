@@ -11,39 +11,39 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :email %><br>
-    <%= f.text_field :email %>
+    <%= f.text_field :email, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label :name %><br>
-    <%= f.text_field :name %>
+    <%= f.text_field :name, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label :surname %><br>
-    <%= f.text_field :surname %>
+    <%= f.text_field :surname, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label :password %><br>
-    <%= f.text_field :password %>
+    <%= f.text_field :password, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label :password_confirmation %><br>
-    <%= f.text_field :password_confirmation %>
+    <%= f.text_field :password_confirmation, class: "form-control" %>
   </div>
 
   <% if current_user.admin? || f.admin? %>
-    <div class="field">
+    <div class="form-group">
       <%= f.label "Admin" %><br>
-      <%= f.check_box_field :admin, "Yes/No" %>
+      <%= f.check_box_field :admin, "Yes/No", class: "form-control" %>
     </div>
   <%end%>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label "Avatar" %><br>
-    <%= f.file_input_field :avatar %>
+    <%= f.file_input_field :avatar, class: "form-control" %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit class: 'btn btn-warning' %>
   </div>
 <% end %>

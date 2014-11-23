@@ -1,18 +1,67 @@
 <p id="notice"><%= notice %></p>
-<%= link_to 'Only in scock', prod_type_path( @prod_type.id, only_avail: true ) %>
-<br> 
-<%= link_to 'All products',  prod_type_path( @prod_type.id, only_avail: false ) %>
+<%= link_to 'Only in stock',   prod_type_path( @prod_type.id, only_avail: true ), class: "btn btn-info" %>
+<%= link_to 'Only unassigned', prod_type_path( @prod_type.id, only_avail: true, only_unassigned: true ), class: "btn btn-info" %>
+<%= link_to 'All products',  prod_type_path( @prod_type.id, only_avail: false ), class: "btn btn-info" %>
 <br>
+<br>
+
+<%part = @prod_type.part%>
+<%if part%>
+  <%= link_to 'Part ordering', show_production_path( part.id ) %>
+  <br>
+  <br>
+<%end%>
 
 <%=render( 'prod_types/show' )%>
 
 <%= render( 'products/index' ) %>
 <br>
 
+<%if part%>
+  <%ordered_cnt, items = part.ordered_cnt%>
+  <%if ordered_cnt && (ordered_cnt > 0) %>
+    <h2>
+      Part corresponding to this product type is in orderer. Order(s) are placed for <%=ordered_cnt.to_s%> pieces totally.
+    </h2>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <td>
+            Cnt
+          </td>
+          <td>
+            Contract
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <%items.each do |item|%>
+          <tr>
+            <td>
+              <%=lint_to( item.cnt, item_path( item.id ) )%>
+            </td>
+            <td>
+              <%c = item.contract()%>
+              <%if c%>
+                link_to( c.name, contract_path( c.id ) )
+              <%else%>
+                <%=c.name%>
+              <%end%>
+            </td>
+
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+    <br>
+  <%end%>
+<%end%>
+
+
 <%contracts = @prod_type.contracts()%>
 <%if contracts.size > 0%>
   <h2>List of pending contracts this product type is included in.</h2>
-  <table>
+  <table class="table table-bordered table-hover">
     <thead>
       <tr>
         <td>
@@ -39,6 +88,30 @@
   </table>
   <br>
 <%end%>
+
+
+
+<h2>Attachments list</h2>
+<table class="table table-bordered table-hover">
+  <%@prod_type.attachments.each do |att|%>
+    <tr>
+      <td>
+        <%=link_to att.file_file_name, att.file.url%>
+      </td>
+      <td>
+        <%= att.desc %>
+      </td>
+    </tr>
+  <%end%>
+</table>
+
+<h2>Add another attachment</h2>
+<%= form_tag( prod_type_add_attachment_path( @prod_type.id ), multipart: true ) do %>
+  <%= file_field_tag :file %>
+  <%= text_area_tag  :desc %>
+  <%= submit_tag 'Append attachment and/or description', class: 'btn btn-warning' %>
+<%end%>
+
 
 <% if @prod_type.part_id %>
   <%= link_to 'Part', part_path( @prod_type.part_id ) %> | 

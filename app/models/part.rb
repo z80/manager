@@ -237,7 +237,7 @@ class Part < ActiveRecord::Base
     return (self.order_time || 7)
   end
 
-  def place_order( cnt, user_placed_id, user_resp_id, contract_desc="AUTO ORDER", addr="USA", status_id=1 )
+  def place_order( cnt, params = {} )
     item = Item.new
     item.part_id = self.id
     #item.image   = self.image
@@ -246,17 +246,44 @@ class Part < ActiveRecord::Base
     item.internal_id  = self.own_id
     item.desc         = self.order_desc
     item.order_link   = self.order_link
-    item.contract_id  = self.contract_desc
-    item.deliver_addr = addr
-    item.user_placed  = user_placed_id
-    item.user_resp    = user_resp_id
+    item.contract_id  = params[:contract_desc] || "AUTO ORDER"
+    item.deliver_addr = params[:addr] || "USA"
+    item.user_placed  = params[:user_placed_id]
+    item.user_resp    = params[:user_resp_id]
     item.set_sz       = 1
     item.sets_cnt     = cnt
     item.unit_price   = self.order_price
     item.comment      = "Automatically generated"
-    item.status_i     = status_id
+    item.status_id    = params[:status_id] || 1
 
     item.save
+  end
+
+  def order_items( contract_id = nil )
+    ordered_ind = -1
+    to_be_ordered_ind = -1
+    iss = ItemStatus.all
+    iss.each do |is|
+      if ( is.name == "To be ordered" )
+        to_be_ordered_ind = is.id
+      elsif ( is.name == "Ordered" )
+        ordered_ind = is.id
+      end
+    end
+    items = Item.where( part_id: self.id ).where( status_id: [ ordered_ind, to_be_ordered_ind ] )
+    if ( contract_id )
+      items = items.where( contract_id: contract_id )
+    end
+    return items
+  end
+
+  def ordered_cnt( contract_id = nil )
+    items = order_items( contract_id )
+    cnt = 0
+    items.each do |item|
+      cnt += item.cnt
+    end
+    return cnt, items
   end
 
   def boxes()

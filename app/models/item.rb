@@ -7,11 +7,11 @@
 #  internal_id        :string(255)
 #  desc               :text
 #  order_link         :string(255)
-#  contract_id        :string(255)
+#  contract_desc      :string(255)
 #  deliver_addr       :text
 #  status             :string(255)
-#  user_placed        :integer
-#  user_resp          :integer
+#  user_placed_id     :integer
+#  user_resp_id       :integer
 #  set_sz             :integer
 #  sets_cnt           :integer
 #  unit_price         :decimal(10, 4)
@@ -22,8 +22,10 @@
 #  image_content_type :string(255)
 #  image_file_size    :integer
 #  image_updated_at   :datetime
-#  status_i           :integer
+#  status_id          :integer
 #  part_id            :integer
+#  order_date         :date
+#  contract_id        :integer
 #
 
 class Item < ActiveRecord::Base
@@ -38,32 +40,34 @@ class Item < ActiveRecord::Base
   attr_accessible :internal_id
   attr_accessible :desc
   attr_accessible :order_link
-  attr_accessible :contract_id
+  attr_accessible :contract_desc
   attr_accessible :deliver_addr
   attr_accessible :status
-  attr_accessible :user_placed
-  attr_accessible :user_resp
+  attr_accessible :user_placed_id
+  attr_accessible :user_resp_id
   attr_accessible :set_sz
   attr_accessible :sets_cnt
   attr_accessible :unit_price
   attr_accessible :comment
-  attr_accessible :status_i
+  attr_accessible :status_id
   attr_accessible :part_id
+  attr_accessible :order_date
+  attr_accessible :contract_id
 
   def user_resp_name
-    if ( not User.exists?( self.user_resp ) ) then
+    if ( not User.exists?( self.user_resp_id ) ) then
       return "unspecified"
     end
-    user = User.find( self.user_resp )
+    user = User.find( self.user_resp_id )
     name = user.name + ' ' + user.surname
     return name
   end
 
   def user_placed_name
-    if ( not User.exists?( self.user_placed ) ) then
+    if ( not User.exists?( self.user_placed_id ) ) then
       return "unspecified"
     end
-    user = User.find( self.user_placed )
+    user = User.find( self.user_placed_id )
     name = user.name + ' ' + user.surname
     return name
   end
@@ -74,7 +78,7 @@ class Item < ActiveRecord::Base
   end
 
   def status_name
-    t = self.status_i
+    t = self.status_id
     if ( ItemStatus.exists?( t ) )
       name = ItemStatus.find( t ).name
       return name
@@ -104,4 +108,23 @@ class Item < ActiveRecord::Base
     return p.image if ( p )
     return nil
   end
+
+  def contract()
+    c = Contract.exists?( self.contract_id )
+    if ( not c )
+      return nil
+    end
+    c = Contract.find( self.contract_id )
+    return c
+  end
+
+  def contract_stri()
+    c = contract()
+    if ( not c )
+      return self.contract_desc || "Unspecified"
+    end
+    return c.name
+  end
 end
+
+

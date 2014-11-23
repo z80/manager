@@ -3,9 +3,9 @@
 <%= render( 'parts/show' ) %>
 
 <%= form_tag( add_subparts_path, method: :post ) do %>
-    <div class="field">
+    <div class="form-group">
         <%= label_tag 'Total subparts number' %><br>
-        <%= number_field_tag :cnt, 1 %>
+        <%= number_field_tag :cnt, 1, class: "form-control" %>
     </div>
 
     <p>
@@ -14,9 +14,9 @@
 
     <div class="parts_list">
         <%if @paginate then%>
-            <%=will_paginate%>
+            <%=will_paginate @parts, renderer: BootstrapPagination::Rails %>
         <%end%>
-        <table>
+        <table class="table table-bordered table-hover">
             <% @parts.each do |part| %>
                 <%if part.id != params[ :id ] then%>
                     <tr>
@@ -35,7 +35,7 @@
     </div>
 
   <div class="actions">
-    <%= submit_tag "Add subparts to current design" %>
+    <%= submit_tag "Add subparts to current design", class: "btn btn-warning" %>
   </div>
 
 <% end %>

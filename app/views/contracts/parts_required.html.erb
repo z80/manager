@@ -4,7 +4,7 @@
   	<h2>
     	The following product types are required by <%=@date.to_s%>
 	</h2>
-    <table>
+    <table class="table table-hover table-bordered">
       <thead>
         <tr>
           <td>
@@ -28,7 +28,11 @@
           </td>
 
           <td>
-          	Cnt in production
+          	Cnt in assembling
+          </td>
+
+          <td>
+            Ordered cnt
           </td>          
 
           <td>
@@ -69,6 +73,14 @@
 	        <td>
 	          <%=prod_type.cnt_for_import%>
 	        </td>
+
+          <td>
+            <%part = prod_type.part%>
+            <%if (part)%>
+              <%ordered_cnt, items = part.ordered_cnt%>
+              <%=ordered_cnt.to_s%>
+            <%end%>
+          </td>
 
           <%if missing_cnt > 0 then%>
             <td class="critical_cnt">

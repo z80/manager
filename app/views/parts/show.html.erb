@@ -6,11 +6,11 @@
   <%= link_to 'Expand subparts', part_path( @part, expand: true ) %> | 
 <%end%>
 <%= link_to 'Estimate assembly', estimate_path( @part ) %> | 
-<%= link_to 'Part production', show_production_path( @part ) %>
+<%= link_to 'Part ordering/estimation', show_production_path( @part ) %>
 </h3>
 
 <%=form_tag( copy_part_path( @part.id ), method: 'post' ) do%>
-  Make a copy of this part type <%=submit_tag( "Copy" )%>
+  Make a copy of this part type <%=submit_tag( "Copy", class: 'btn btn-warning', data: { confirm: 'Are you sure?' } )%>
 <%end%>
 <br>
 
@@ -18,13 +18,51 @@
 <%= render( 'parts/show' ) %>
 <br>
 
+<%ordered_cnt, items = @part.ordered_cnt%>
+<%if ordered_cnt && (ordered_cnt > 0) %>
+  <h2>
+    This part is in orderer. Order(s) are placed for <%=ordered_cnt.to_s%> pieces totally.
+  </h2>
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <td>
+          Cnt
+        </td>
+        <td>
+          Contract
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      <%items.each do |item|%>
+        <tr>
+          <td>
+            <%=link_to( item.cnt, item_path( item.id ) )%>
+          </td>
+          <td>
+            <%c = item.contract()%>
+            <%if c%>
+              <%=link_to( c.name, contract_path( c.id ) )%>
+            <%else%>
+              <%=item.contract_stri%>
+            <%end%>
+          </td>
+
+        </tr>
+      <%end%>
+    </tbody>
+  </table>
+  <br>
+<%end%>
+
 <%boxes = @part.boxes%>
 <%if boxes.size > 0%>
   <h2>
     Boxes list this part presents in
   </h2>
 
-  <table>
+  <table class="table table-bordered table-hover">
     <thead>
       <tr>
         <th>Box</th>
@@ -41,17 +79,17 @@
         <%cnt       = part_inst.cnt%>
         <tr>
           <td>
-            <%=link_to( box.box_id, box_path( box.id ) )%>
+            <%=link_to( box.box_id, box_path( box.id ), class: "btn btn-success" )%>
           </td>
           <td>
             <%=cnt.to_s%>
           </td>
 
           <td>
-            <%= link_to 'Add items', add_part_insts_path( box.id, part_inst.id ) %>
+            <%= link_to 'Add items', add_part_insts_path( box.id, part_inst.id ), class: "btn btn-success" %>
           </td>
           <td>
-            <%= link_to 'Take items', take_part_insts_path( box.id, part_inst.id ) %>
+            <%= link_to 'Take items', take_part_insts_path( box.id, part_inst.id ), class: "btn btn-warning" %>
           </td>
 
         </tr>
@@ -61,14 +99,13 @@
   <br>
 <%end%>
 
-
 <h2>Subparts list</h2>
 <%= render( 'parts/index' ) %>
 <br>
 
 <h2>Superparts list</h2>
 
-<table>
+<table class="table table-bordered table-hover">
   <thead>
     <tr>
       <th>How part look like (image)</th>
@@ -119,7 +156,7 @@
 <br>
 
 <h2>Images list</h2>
-<table>
+<table class="table table-bordered table-hover">
   <%@part.images.each do |image|%>
     <tr>
       <td>
@@ -144,7 +181,7 @@
 
 
 <h2>Attachments list</h2>
-<table>
+<table class="table table-bordered table-hover">
   <%@part.attachments.each do |att|%>
     <tr>
       <td>
@@ -164,13 +201,20 @@
   <%= submit_tag 'Append attachment and/or description', class: 'button large' %>
 <%end%>
 
+<br>
+<br>
+<%= link_to 'Add subparts',      add_subparts_path(@part), class: "btn btn-warning" %> 
+<br>
+<br>
+<%= link_to 'Remove subparts',   remove_subparts_path(@part), class: "btn btn-danger" %>
+<br>
+<br>
+
 
 <%= link_to 'Edit',              edit_part_path(@part) %> |
 <%= link_to 'Back',              parts_path %> | 
 <%= link_to 'Estimate assembly', estimate_path( @part ) %> | 
-<%= link_to 'Part production',   show_production_path( @part ) %> | 
-<%= link_to 'Add subparts',      add_subparts_path(@part) %> | 
-<%= link_to 'Remove subparts',   remove_subparts_path(@part) %>
+<%= link_to 'Part production',   show_production_path( @part ) %>
 
 
 

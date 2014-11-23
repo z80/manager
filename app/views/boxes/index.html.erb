@@ -1,10 +1,17 @@
 <h1>Listing boxes</h1>
 
+<%=link_to( "All warehousies list", warehouses_path, class: 'btn btn-info' )%>
+<br>
+<br>
+
+<%= link_to 'Add new box', new_box_path, class: "btn btn-warning" %>
+<br>
+
 <%if @paginate%>
-  <%=will_paginate( @boxes )%>
+  <%=will_paginate( @boxes, renderer: BootstrapPagination::Rails )%>
 <%end%>
 
-<table>
+<table class="table table-bordered table-hover">
   <thead>
     <tr>
       <th>Warehouse</th>
@@ -28,8 +35,8 @@
         </td>
         <td><%= box.box_id %></td>
         <td><%= box.desc %></td>
-        <td><%= link_to 'Show', box %></td>
-        <td><%= link_to 'Edit', edit_box_path(box) %></td>
+        <td><%= link_to 'Show', box, class: 'btn btn-success' %></td>
+        <td><%= link_to 'Edit', edit_box_path(box), class: 'btn btn-warning' %></td>
         <% if false then %>
             <td><%= link_to 'Destroy', box, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         <% end %>
@@ -40,4 +47,4 @@
 
 <br>
 
-<%= link_to 'New Box', new_box_path %>
+<%= link_to 'Add new box', new_box_path, class: "btn btn-warning" %>

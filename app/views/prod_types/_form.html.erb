@@ -13,19 +13,27 @@
 
 
   <div class="actions">
-    <%= f.submit "Create/update product type" %>
+    <%= f.submit "Create/update product type", class: 'btn btn-warning' %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label 'Product image (if left blank part image is taken instead)'%>
-    <%= f.file_field :image %>
+    <%= f.file_field :image, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label "Part catalog Id" %><br>
-    <%= f.text_field :own_id %>
+    <%= f.text_field :own_id, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label "Description" %><br>
-    <%= f.text_area :desc %>
+    <%= f.text_area :desc, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label "Visible in client packing list" %><br>
+    <%= f.check_box :client_visible, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label "Packing notes for client packing list" %><br>
+    <%= f.text_area :packing_details, class: "form-control" %>
   </div>
 <% end %>
 <br>
@@ -39,7 +47,7 @@
     <br>
 
     <%if @paginate then%>
-      <%=will_paginate @parts, param_name: :page %>
+      <%=will_paginate @parts, param_name: :page, renderer: BootstrapPagination::Rails %>
     <%end%>
     <table>
       <% @parts.each do |part| %>

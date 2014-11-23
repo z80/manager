@@ -2,9 +2,9 @@
 <%if @products.size > 0%>
 
   <%if @paginate%>
-    <%=will_paginate( @products )%>
+    <%=will_paginate( @products, renderer: BootstrapPagination::Rails )%>
   <%end%>
-  <table>
+  <table class="table table-bordered table-hover">
     <thead>
       <tr>
         <th>Image</th>
@@ -20,42 +20,44 @@
 
     <tbody>
       <% @products.each do |product| %>
-        <tr>
-          <td>
-            <a href="<%=product.prod_type.image_ex.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
-              <%=image_tag( product.prod_type.image_ex.url(:thumb) )%>
-            </a>
+        <%if ( ( not @only_unassigned ) || (not product.contract) ) then%>
+          <tr>
+            <td>
+              <a href="<%=product.prod_type.image_ex.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+                <%=image_tag( product.prod_type.image_ex.url(:thumb) )%>
+              </a>
 
-          </td>
-          <td><%= product.serial_number %></td>
-          <td><%= product.desc %></td>
-          <td><%= product.status_stri %></td>
-          <td>
-            <%box = product.box%>
-            <%if box%>
-              <%=link_to( box.box_id, box_path( box.id ) )%>
-            <%else%>
-              <%prod_type = product.prod_type%>
-              <%complex_product = (prod_type.subproducts.size() > 0)%>
-              <%if ( complex_product )%>
-                This is assembly
+            </td>
+            <td><%= product.serial_number %></td>
+            <td><%= product.desc %></td>
+            <td><%= product.status_stri %></td>
+            <td>
+              <%box = product.box%>
+              <%if box%>
+                <%=link_to( box.box_id, box_path( box.id ) )%>
               <%else%>
-                Not in a box
+                <%prod_type = product.prod_type%>
+                <%complex_product = (prod_type.subproducts.size() > 0)%>
+                <%if ( complex_product )%>
+                  This is assembly
+                <%else%>
+                  Not in a box
+                <%end%>
               <%end%>
+            </td>
+            <td>
+              <%c = product.contract%>
+              <%if c%>
+                <%=link_to( c.name, contract_path( c.id ) )%>
+              <%end%>
+            </td>
+            <td><%= link_to 'Show', product, class: "btn btn-success" %></td>
+            <td><%= link_to 'Edit', edit_product_path(product), class: "btn btn-warning" %></td>
+            <%if false%>
+              <td><%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
             <%end%>
-          </td>
-          <td>
-            <%c = product.contract%>
-            <%if c%>
-              <%=link_to( c.name, contract_path( c.id ) )%>
-            <%end%>
-          </td>
-          <td><%= link_to 'Show', product %></td>
-          <td><%= link_to 'Edit', edit_product_path(product) %></td>
-          <%if false%>
-            <td><%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-          <%end%>
-        </tr>
+          </tr>
+        <%end%>
       <% end %>
     </tbody>
   </table>

@@ -15,52 +15,52 @@
     <%= f.submit "Create/update part type" %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label 'Part type picture (like SolidWorks screenshot)'%>
-    <%= f.file_field :image %>
+    <%= f.file_field :image, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label "Aist-NT internal Id" %><br>
-    <%= f.text_field :own_id %>
+    <%= f.text_field :own_id, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label 'External supplier part Id' %><br>
-    <%= f.text_field :third_id %>
+    <%= f.text_field :third_id, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label 'description' %><br>
-    <%= f.text_area :desc %>
+    <%= f.text_area :desc, class: "form-control" %>
   </div>
 
-  <div>
+  <div class="from-group">
     <%= f.label 'Order link(s)' %><br>
-    <%= f.text_area :order_link %>
+    <%= f.text_area :order_link, class:"form-control" %>
   </div>
-  <div>
+  <div class="form-group">
     <%= f.label 'Approximate unit price in USD' %><br>
-    <%= f.number_field :order_price, :class => 'text_field', :step => 0.01 %>
+    <%= f.number_field :order_price, :class => 'text_field from-control', :step => 0.01 %>
   </div>
-  <div>
+  <div class="form-group">
     <%= f.label 'How to order description if there is any specifics.' %><br>
-    <%= f.text_area :order_desc %>
+    <%= f.text_area :order_desc, class: "form-control" %>
   </div>
-  <div>
+  <div class="form-group">
     <%= f.label 'Minimum number of this parts at warehouse. For lower numbers warning is displayed.' %><br>
-    <%= f.number_field :min_cnt %>
+    <%= f.number_field :min_cnt, class: "form-control" %>
   </div>
-  <div>
+  <div class="form-group">
     <%= f.label 'Part type' %><br>
-    <%= f.select( :part_type, @part_types, selected: @part.part_type ) %>
+    <%= f.select( :part_type, @part_types, selected: @part.part_type, class: "form-control" ) %>
   </div>
-  <div>
+  <div class="form-group">
     <%= f.label 'Ordering time in days.' %><br>
-    <%= f.number_field :order_time %>
+    <%= f.number_field :order_time, class: "form-control" %>
   </div>
     
 
 
   <% if false then%>
-      <div class="field">
+      <div class="form-group">
           <%= f.label :user_id %><br>
           <%= f.number_field :user_id %>
       </div>

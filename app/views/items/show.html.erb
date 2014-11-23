@@ -7,6 +7,13 @@
 </p>
 
 <p>
+  <strong>Ordering date</strong>
+  <br>
+  <%=@item.order_date.to_s%>
+</p>
+
+
+<p>
   <strong>Supplier Id:</strong>
   <br>
   <%= @item.supplier_id %>
@@ -31,9 +38,9 @@
 </p>
 
 <p>
-  <strong>Contract Id:</strong>
+  <strong>Contract</strong>
   <br>
-  <%= @item.contract_id %>
+  <%=@item.contract_stri%>
 </p>
 
 <p>
@@ -88,7 +95,7 @@
 <p>
   <strong>Part this purchase is based on:</strong>
   <br>
-    <a href="<%=@prod_type.part.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+    <a href="<%=@item.part.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
       <%=image_tag( @item.part.image.url(:thumb) )%>
     </a>
     <%= link_to( @item.part.own_id, part_path( @item.part_id ) ) %>
@@ -98,7 +105,9 @@
 
 <%= link_to 'Edit', edit_item_path(@item) %> |
 <%= link_to 'Back', items_path %> |
-<%= link_to 'Copy', copy_item_path(@item) %> |
-<%= link_to 'Convert to parts in a warehouse', convert_form_path(@item) %>
+<%= link_to 'Copy', copy_item_path(@item) %>
+<%if false%>
+  <%= link_to 'Convert to parts in a warehouse', convert_form_path(@item) %>
+<%end%>
 
 

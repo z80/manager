@@ -81,6 +81,7 @@ class Sample < ActiveRecord::Base
   @@STATUS_PENDING    = 0
   @@STATUS_IN_MEASURE = 1
   @@STATUS_COMPLETED  = 2
+  
   @@DEFAULT_WARN_DAYS = 7
 
   def Sample.status_list()

@@ -1,10 +1,10 @@
 
 
   <%if @paginate%>
-    <%=will_paginate( @products )%>
+    <%=will_paginate( @products, renderer: BootstrapPagination::Rails )%>
   <%end%>
 
-  <table>
+  <table class="table table-bordered table-hover">
     <thead>
       <tr>
         <th>Serial number</th>
@@ -27,7 +27,7 @@
           <td>
             <%if ( not product.assigned? )%>
               <%=form_tag( adjust_contract_path( @contract ), :method => "post" ) do%>
-                <%= submit_tag "Assign to contract" %>
+                <%= submit_tag "Assign to contract", class: "btn btn-warning" %>
                 <%=hidden_field_tag :contract_item_id, @contract_item.id %>
                 <%=hidden_field_tag :assign_product_id, product.id %>
               <%end%>
@@ -43,7 +43,7 @@
     </tbody>
   </table>
 
-<%= link_to 'Back to contract', edit_contract_path( @contract ) %>
+<%= link_to 'Back to contract', edit_contract_path( @contract ), class: "btn btn-success" %>
 
 
 

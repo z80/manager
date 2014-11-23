@@ -1,12 +1,14 @@
 <h1>Listing samples</h1>
 
-<%= link_to 'Add sample received', new_sample_path %>
+<%= link_to 'Add new sample', new_sample_path, class: "btn btn-warning" %>
+<br>
+<br>
 
 <% if (@paginate == nil) || @paginate %>
-  <%= will_paginate %>
+  <%= will_paginate @samples, renderer: BootstrapPagination::Rails %>
 <% end %>
 
-<table>
+<table class="table table-bordered table-hover">
   <thead>
     <tr>
       <th>Received from</th>
@@ -23,10 +25,10 @@
   <tbody>
     <% @samples.each do |sample| %>
       <%if not sample.still_valid? then%>
-        <%cl="critical_cnt"%>
+        <%cl="danger"%>
       <%else%>
         <%if sample.completed?%>
-          <%cl="completed"%>
+          <%cl="success"%>
         <%else%>
           <%cl=""%>
         <%end%>
@@ -37,12 +39,15 @@
         <td class="<%=cl%>"><%= sample.due %></td>
         <td class="<%=cl%>"><%= sample.user_resp_name %></td>
         <td class="<%=cl%>"><%= sample.status_stri %></td>
-        <td><%= link_to 'Show', sample %></td>
-        <td><%= link_to 'Edit', edit_sample_path(sample) %></td>
+        <td><%= link_to 'Show', sample, class: 'btn btn-success' %></td>
+        <td><%= link_to 'Edit', edit_sample_path(sample), class: 'btn btn-warning' %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <br>
+
+<%= link_to 'Add new sample', new_sample_path, class: "btn btn-warning" %>
+
 

@@ -4,13 +4,14 @@
 <%= form_tag estimate_path( @part.id ), :method => 'get' do %>
   <p>
     <%= number_field_tag :cnt, @cnt %>
-    <%= submit_tag "Estimate", :name => nil %>
+    <%= submit_tag "Estimate", :name => nil, class: "btn btn-info" %>
   </p>
 <% end %>
 
-<%if @needed then%>
+
+<%if @needed && false then%>
   <h2>Total subparts list needed to assemble <%= params[:cnt]%> part(s)</h2>
-  <table>
+  <table class="table table-hover table-bordered">
     <thead>
       <tr>
         <th>Image</th>
@@ -38,9 +39,9 @@
                   <%= part.own_id %>
               </td>
               <td><%= n[:cnt] %></td>
-              <td><%= link_to 'Show', part %></td>
-              <td><%= link_to 'Est.', estimate_path(part) %></td>
-              <td><%= link_to 'Edit', edit_part_path(part) %></td>
+              <td><%= link_to 'Show', part, class: "btn btn-success" %></td>
+              <td><%= link_to 'Est.', estimate_path(part), class: "btn btn-info" %></td>
+              <td><%= link_to 'Edit', edit_part_path(part), class: "btn btn-warning" %></td>
           <%end%>
         </tr>
       <% end %>
@@ -58,11 +59,13 @@
   <%= form_tag( estimate_path( @part.id ), method: :post ) do %>
     <%= hidden_field_tag :take_id, "all" %>
     <%= hidden_field_tag :cnt,  @cnt %>
-    <%= submit_tag 'Take all parts', class: 'button large'%>
+    <%= submit_tag 'Take all parts', class: "btn-lg btn-danger", data: { confirm: 'You are about to take all parts automatically! Are you sure?' } %>
   <%end%>
+  <br>
+  <br>
 
 
-  <table>
+  <table class="table table-hover table-bordered">
     <thead>
       <tr>
         <th>Image</th>
@@ -97,14 +100,14 @@
               </td>
               <td>
                 <%if box then%>
-                    <%= link_to( box.box_id, inspect_content_path( box.id ) ) %>
+                    <%= link_to( box.box_id, box_path( box.id ), class: "btn btn-success" ) %>
                 <%else%>
                     Unspecified
                 <%end%>
               </td>
               <td><%= pi_cnt[:pi].cnt %></td>
               <td><%= pi_cnt[:cnt] %></td>
-              <td><%= link_to 'Show', part_path(part) %></td>
+              <td><%= link_to 'Show', part_path(part), class: "btn btn-success" %></td>
               <% if false then %>
                   <td><%= link_to 'Edit', edit_part_inst_path(part_inst) %></td>
                   <td><%= link_to 'Destroy', part_inst, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -114,7 +117,7 @@
                   <%= hidden_field_tag :take_id, pi_cnt[:pi].id %>
                   <%= hidden_field_tag :take_cnt, pi_cnt[:cnt] %>
                   <%= hidden_field_tag :cnt,  @cnt %>
-                  <%= submit_tag 'Take these parts', class: 'button large'%>
+                  <%= submit_tag 'Take these parts', class: "btn btn-danger", data: { confirm: "Taking #{pi_cnt[:cnt]} \"#{part.own_id}\" from box \"#{box ? box.box_id : "---" }\"" }%>
                 <%end%>
               </td>
           <%end%>
@@ -128,7 +131,7 @@
 <%if @missing then%>
   <h2>There are subparts missing to assemble <%=params[:cnt]%> part(s)</h2>
   
-  <table>
+  <table class="table table-hover table-bordered">
     <thead>
       <tr>
         <th>Part image</th>
@@ -151,8 +154,8 @@
           </td>
           <td><%= part.own_id %></td>
           <td><h2><%= m[:cnt] %></h2></td>
-          <td><%= link_to 'Show', part %></td>
-          <td><%= link_to 'Edit', edit_part_path(part) %></td>
+          <td><%= link_to 'Show', part, class: "btn btn-success" %></td>
+          <td><%= link_to 'Edit', edit_part_path(part), class: "btn btn-warning" %></td>
         </tr>
         
       <% end %>

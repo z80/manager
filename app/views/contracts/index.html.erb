@@ -2,11 +2,11 @@
 <%=form_tag( date_parts_required_path(), method: 'get' ) do%>
     Get parts forecast for the date 
     <%= date_select( :date, 'date', default: 30.days.from_now ) %>
-    <%= submit_tag( "Products summary") %>
+    <%= submit_tag( "Products summary", class: "btn btn-info" ) %>
 <%end%>
 <%=form_tag( contracts_update_path(), method: 'post' ) do%>
     Recalculate statuses 
-    <%= submit_tag( "Recalculate") %>
+    <%= submit_tag( "Recalculate", class: "btn btn-info" ) %>
     (This procedure takes some time!!!)
 <%end%>
 
@@ -17,11 +17,15 @@
 <br>
 <br>
 
+<%= link_to 'Create new contract', new_contract_path, class: "btn btn-warning" %>
+<br>
+<br>
+
 <%if @paginate%>
-  <%=will_paginate( @contracts )%>
+  <%=will_paginate( @contracts, renderer: BootstrapPagination::Rails )%>
 <%end%>
 
-<table>
+<table class="table table-bordered table-hover">
   <thead>
     <tr>
       <th>Warning</th>
@@ -52,8 +56,8 @@
         <td class="contract_level_<%=level.to_s%>"><%= contract.desc %></td>
         <td class="contract_level_<%=level.to_s%>"><%= contract.ship_date %></td>
         <td class="contract_level_<%=level.to_s%>"><%= contract.shipped ? "yes" : "no" %></td>
-        <td class="contract_level_<%=level.to_s%>"><%= link_to 'Show', contract %></td>
-        <td class="contract_level_<%=level.to_s%>"><%= link_to 'Edit', edit_contract_path(contract) %></td>
+        <td class="contract_level_<%=level.to_s%>"><%= link_to 'Show', contract, class: 'btn btn-success' %></td>
+        <td class="contract_level_<%=level.to_s%>"><%= link_to 'Edit', edit_contract_path(contract), class: 'btn btn-warning' %></td>
         <%if false%>
           <td><%= link_to 'Destroy', contract, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         <%end%>
@@ -64,4 +68,4 @@
 
 <br>
 
-<%= link_to 'New Contract', new_contract_path %>
+<%= link_to 'Create new contract', new_contract_path, class: "btn btn-warning" %>

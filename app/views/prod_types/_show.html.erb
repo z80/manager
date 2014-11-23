@@ -3,7 +3,7 @@
 <%if assembly%>
   This is an assembly product type consisting of one or several subproducts.
 <%else%>
-  <%= link_to 'Add new product to the list', new_product_path( @prod_type, prod_type_id: @prod_type.id ) %>
+  <%= link_to 'Add new product to the list', new_product_path( @prod_type, prod_type_id: @prod_type.id ), class: "btn btn-warning" %>
 <%end%>
 <br>
 <br>
@@ -31,6 +31,19 @@
   <br>
   <%= @prod_type.desc %>
 </p>
+
+<p>
+  <strong>Product is visible in client's packing list:</strong>
+  <br>
+  <%= @prod_type.client_visible ? "yes" : "no" %>
+</p>
+
+<p>
+  <strong>Client's packing list details:</strong>
+  <br>
+  <%= (@prod_type.packing_details || '').tr!( '\n', '<br>' ) %>
+</p>
+
 
 <%if @prod_type.part%>
   <p>

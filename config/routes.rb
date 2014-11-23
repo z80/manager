@@ -1,5 +1,7 @@
 
 Train01::Application.routes.draw do
+  resources :shipments
+
   resources :prod_subtypes
 
   resources :logs
@@ -7,26 +9,33 @@ Train01::Application.routes.draw do
   resources :contract_items
 
   resources :contracts
-  match     '/contracts/:id/add_item',                to: 'contracts#add_item',       via: :get, as: :add_contract_item
+  match     '/contracts/:id/add_item',                to: 'contracts#add_item',            via: :get,  as: :add_contract_item
   # The rest of queries (ship, remove_item, add_item_apply, auto_assign_item) are made through forms and address the same function.
-  match     '/contracts/:id/assign_item/:item_id',    to: 'contracts#assign_item',    via: :get, as: :assign_contract_item_product
-  match     '/contracts/:id/adjust',                  to: 'contracts#adjust',         via: :post, as: :adjust_contract
-  match     '/date_parts_required',                   to: 'contracts#parts_required', via: :get, as: :date_parts_required
-  match     '/contracts_update',                      to: 'contracts#contracts_update', via: :post, as: :contracts_update
-  match     '/contracts/:id/copy',                    to: 'contracts#copy',             via: :post, as: :copy_contract
+  match     '/contracts/:id/assign_item/:item_id',    to: 'contracts#assign_item',         via: :get,  as: :assign_contract_item_product
+  match     '/contracts/:id/unassign_item',           to: 'contracts#unassign_item',       via: :post, as: :unassign_contract_item
+  match     '/contracts/:id/adjust',                  to: 'contracts#adjust',              via: :post, as: :adjust_contract
+  match     '/date_parts_required',                   to: 'contracts#parts_required',      via: :get,  as: :date_parts_required
+  match     '/contracts_update',                      to: 'contracts#contracts_update',    via: :post, as: :contracts_update
+  match     '/contracts/:id/copy',                    to: 'contracts#copy',                via: :post, as: :copy_contract
+  match     '/contracts/:id/packing_list',            to: 'contracts#packing_list',        via: :get,  as: :packing_list
+  match     '/contracts/:id/user_packing_list',       to: 'contracts#user_packing_list',   via: :get,  as: :user_packing_list
+  match     '/contracts/:id/ship_assigned_items',     to: 'contracts#ship_assigned_items', via: :post, as: :ship_assigned_items
+  match     '/contracts/:id/add_attachment',          to: 'contracts#add_attachment',      via: :post, as: :contract_add_attachment
 
 
   resources :product_statuses
 
   resources :products
-  match     'products/:id/change_box', to: 'products#change_box',          via: :get,  as: :change_product_box
-  match     'products/:id/change_box', to: 'products#change_box_apply',    via: :post, as: :change_product_box_apply
+  match     '/products/:id/change_box',     to: 'products#change_box',          via: :get,  as: :change_product_box
+  match     '/products/:id/change_box',     to: 'products#change_box_apply',    via: :post, as: :change_product_box_apply
+  match     '/products/:id/add_attachment', to: 'products#add_attachment',      via: :post, as: :product_add_attachment
   
   resources :prod_types
   match     '/prod_types/:id/add_subtype',    to: 'prod_types#add_subtype',          via: :get,  as: :add_prod_subtype
   match     '/prod_types/:id/add_subtype',    to: 'prod_types#add_subtype_apply',    via: :post
   match     '/prod_types/:id/remove_subtype', to: 'prod_types#remove_subtype_apply', via: :post, as: :remove_prod_subtype
   match     '/prod_types/:id/adjust',         to: 'prod_types#adjust',               via: :post, as: :adjust_prod_type
+  match     '/prod_types/:id/add_attachment', to: 'prod_types#add_attachment',       via: :post, as: :prod_type_add_attachment
 
   resources :image_to_parts
 

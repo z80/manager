@@ -13,7 +13,7 @@
 
   <div class="prod_subtypes_list">
     <%if @paginate then%>
-      <%=will_paginate%>
+      <%=will_paginate @prod_types, renderer: BootstrapPagination::Rails %>
     <%end%>
     <table>
       <% @prod_types.each do |pt| %>

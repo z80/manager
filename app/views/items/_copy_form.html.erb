@@ -12,63 +12,63 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
       <%= hidden_field_tag :orig_id, @item.id %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag 'Item picture (like from a website)'%>
     <a href="<%=@item.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
         <%=image_tag( @item.image.url(:thumb) )%>
     </a>
-    <%= file_field_tag :image %>
+    <%= file_field_tag :image, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag 'Product Id by supplier' %><br>
-    <%= text_field_tag :supplier_id, @item.supplier_id %>
+    <%= text_field_tag :supplier_id, @item.supplier_id, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag 'Our internal product Id' %><br>
-    <%= text_field_tag :internal_id, @item.internal_id %>
+    <%= text_field_tag :internal_id, @item.internal_id, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag 'Description' %><br>
-    <%= text_area_tag :desc, @item.desc %>
+    <%= text_area_tag :desc, @item.desc, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag 'Ordering link' %><br>
-    <%= text_field_tag :order_link, @item.order_link %>
+    <%= text_field_tag :order_link, @item.order_link, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag 'Contract Id' %><br>
-    <%= text_field_tag :contract_id, @item.contract_id %>
+    <%= text_field_tag :contract_id, @item.contract_id, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag 'Deliver address' %><br>
-    <%= text_field_tag :deliver_addr, @item.deliver_addr %>
+    <%= text_field_tag :deliver_addr, @item.deliver_addr, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag 'Current status' %><br>
-    <%= select_tag :status_i, options_for_select( @statuses, @item.status_i || 0 ) %>
+    <%= select_tag :status_id, options_for_select( @statuses, @item.status_id || 0 ), class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag 'Select person in charge for' %><br>
-    <%= select_tag( :user_resp, options_for_select( @users, @user ) ) %>
+    <%= select_tag( :user_resp, options_for_select( @users, @user ), class: "form-control" ) %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag 'Set size' %><br>
-    <%= number_field_tag :set_sz, @item.set_sz %>
+    <%= number_field_tag :set_sz, @item.set_sz, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag 'Number of sets' %><br>
-    <%= number_field_tag :sets_cnt, @item.sets_cnt %>
+    <%= number_field_tag :sets_cnt, @item.sets_cnt, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag 'Unit price' %><br>
-    <%= text_field_tag :unit_price, @item.unit_price %>
+    <%= text_field_tag :unit_price, @item.unit_price, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag 'Comment' %><br>
-    <%= text_area_tag :comment, @item.comment %>
+    <%= text_area_tag :comment, @item.comment, class: "form-control" %>
   </div>
 
   <div class="actions">

@@ -1,0 +1,39 @@
+
+
+rvm use 2.0.0@railstutorial_rails_4_0 --create --default
+
+
+
+source ~/.rvm/scripts/rvm
+type rvm | head -n 1
+
+bundle update
+bundle install
+
+bundle exec rake db:migrate
+rake db:rollback
+rake db:migrate VERSION=0
+
+
+rails generate scaffold User name:string email:string
+
+# all tasks related to database
+bundle exec rake -T db
+
+#all tasks
+bundle exec rake -T
+
+
+# Custom controller generation
+rails generate controller StaticPages home help
+
+
+rails generate controller FooBars baz quux
+rails destroy  controller FooBars baz quux
+
+# Enumerate all routes
+bundle exec rake routes
+
+rails server -e production -p 80
+
+

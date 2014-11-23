@@ -3,10 +3,11 @@ class StaticPagesController < ApplicationController
   include LogsHelper
 
   def index
-    @images = Image.all
-    @user   = current_user
-    @items = Item.paginate( page: params[:page], per_page: 10, order: "id DESC" )
-    @static_pages = @items
+    #@images = Image.all
+    #@user   = current_user
+    #@items = Item.paginate( page: params[:page], per_page: 10, order: "id DESC" )
+    #@static_pages = @items
+    redirect_to contracts_path
   end
 
   def submit

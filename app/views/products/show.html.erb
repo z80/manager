@@ -16,6 +16,11 @@
 </p>
 
 <p>
+  <strong>Recommended to pack to the following box:</strong>
+  <%= @product.pack_to_stri %>
+</p>
+
+<p>
   <strong>Status:</strong>
   <%= @product.status_stri %>
 </p>
@@ -32,8 +37,36 @@
 
 
 
+<h2>Attachments list</h2>
+<table class="table table-bordered table-hover">
+  <%@product.attachments.each do |att|%>
+    <tr>
+      <td>
+        <%=link_to att.file_file_name, att.file.url%>
+      </td>
+      <td>
+        <%= att.desc %>
+      </td>
+    </tr>
+  <%end%>
+</table>
+
+<h2>Add another attachment</h2>
+<%= form_tag( product_add_attachment_path( @product.id ), multipart: true ) do %>
+  <%= file_field_tag :file %>
+  <%= text_area_tag  :desc %>
+  <%= submit_tag 'Append attachment and/or description', class: 'btn btn-warning' %>
+<%end%>
+
+
+
+<br>
+<br>
+<%= link_to 'Change location', change_product_box_path( @product.id ), class: "btn btn-warning" %>
+<br>
+<br>
+
 <%= link_to 'Edit', edit_product_path(@product) %> |
-<%= link_to 'Back', prod_type_path( @product.prod_type_id ) %> | 
-<%= link_to 'Change location', change_product_box_path( @product.id )%>
+<%= link_to 'Back', prod_type_path( @product.prod_type_id ) %>
 
 

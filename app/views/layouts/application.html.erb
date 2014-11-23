@@ -1,72 +1,98 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Purchase management</title>
-    <%= stylesheet_link_tag "application", media: "all",
-                                           "data-turbolinks-track" => true %>
-    <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-    <%= csrf_meta_tags %>  
-  <script type="text/javascript" src="../tinymce/tinymce.min.js"></script>
-  <link href="../facebox/src/facebox.css" media="screen" rel="stylesheet" type="text/css"/>
-  <script type="text/javascript" src="../facebox/src/facebox.js"></script>
-  <script>
-      //tinymce.init( {selector:'textarea'} );
+<%if not content_for?( :printer_friendly )%>
+  <head>
+    <title>Purchase management</title>
+      <%= stylesheet_link_tag "application", media: "all",
+                                             "data-turbolinks-track" => true %>
+      <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+      <%= csrf_meta_tags %>  
+    <script type="text/javascript" src="../tinymce/tinymce.min.js"></script>
+    <link href="../facebox/src/facebox.css" media="screen" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="../facebox/src/facebox.js"></script>
+    <script>
+        //tinymce.init( {selector:'textarea'} );
 
-      $.facebox.settings.closeImage = '../facebox/src/closelabel.png';
-      $.facebox.settings.loadingImage = '..//facebox/src/loading.gif';
+        $.facebox.settings.closeImage = '../facebox/src/closelabel.png';
+        $.facebox.settings.loadingImage = '..//facebox/src/loading.gif';
 
-      jQuery(document).ready( function($) {
-                                     $('a[rel*=facebox]').facebox()
-                                          }
-                            );
+        jQuery(document).ready( function($) {
+                                       $('a[rel*=facebox]').facebox()
+                                            }
+                              );
 
-    $(document).bind('beforeReveal.facebox', function() {
-	    $('#facebox .body').width('800px');
-	});
+      $(document).bind('beforeReveal.facebox', function() {
+  	    $('#facebox .body').width('800px');
+  	});
 
-    $(document).bind('beforeReveal.facebox', function() {
-	    $('#facebox .body').height('600px');
-	});
+      $(document).bind('beforeReveal.facebox', function() {
+  	    $('#facebox .body').height('600px');
+  	});
 
-  </script>
-</head>
-<body>
-  <div id="main">
-    <%=render 'layouts/header'%>
-    
-    <div id="site_content">     
-        <%= render 'layouts/actions' %>
-        <%if true then%>
+    </script>
+  </head>
+  <body>
+    <div id="main-container" class="container">
+      <div class="row">
+        <%=render 'layouts/header'%>
+      </div>
+      <div class="row">      
+        <div id="content" class="col-xs-3">
+            <%= render 'layouts/actions' %>
+        </div>
+        <div class="col-xs-9">
+          <%if true then%>
             <%= yield %>
-        <%end%>
+          <%end%>
+        </div>
+      </div>
+      <div class="row">
+        <%= render 'layouts/footer' %>
+      </div>
     </div>
 
-    <%= render 'layouts/footer' %>
     <%if Rails.env.development? then%>
       <h3>
-          <p>Debug info:</p>
-          <%= debug(params) %>
+        <p>Debug info:</p>
+        <%= debug(params) %>
       </h3>
 
 
       <section class='debug'>
         <div id="flash_content">
-            <%=flash.each do |k, v|%>
-                <p>in</p>
-                <p><%= k %> = <%= v%></p>
-                <p>out</p>
-            <%end%>
+          <%=flash.each do |k, v|%>
+            <p>in</p>
+            <p><%= k %> = <%= v%></p>
+            <p>out</p>
+          <%end%>
         </div>
 
         <div id='params_content'>
-            <h3>Params content:</p>
-            <%=params.each do |k, v|%>
-              <p>[<%=k%>] = <%=v%></p> 
-            <%end%>
+          <h3>Params content:</p>
+          <%=params.each do |k, v|%>
+            <p>[<%=k%>] = <%=v%></p> 
+          <%end%>
         </div>
       </section>
-      
-    <%end%>
         
-</body>
+    <%end%>
+          
+  </body>
+<%else%>
+  <head>
+    <style>
+      table {
+        width: 17cm;
+        align: center;
+      }
+
+      table, th, td {
+          border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <%= yield %>
+  </body>
+<%end%>
 </html>

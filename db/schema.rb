@@ -11,11 +11,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141012164521) do
+ActiveRecord::Schema.define(version: 20141122002700) do
+
+  create_table "attachment_to_contracts", force: true do |t|
+    t.integer  "attachment_id"
+    t.integer  "contract_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "attachment_to_parts", force: true do |t|
     t.integer  "attachment_id"
     t.integer  "part_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "attachment_to_prod_types", force: true do |t|
+    t.integer  "attachment_id"
+    t.integer  "prod_type_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "attachment_to_products", force: true do |t|
+    t.integer  "attachment_id"
+    t.integer  "product_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -52,6 +73,7 @@ ActiveRecord::Schema.define(version: 20141012164521) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "superitem_id"
+    t.integer  "shipment_id"
   end
 
   create_table "contracts", force: true do |t|
@@ -106,11 +128,11 @@ ActiveRecord::Schema.define(version: 20141012164521) do
     t.string   "internal_id"
     t.text     "desc"
     t.string   "order_link"
-    t.string   "contract_id"
+    t.string   "contract_desc"
     t.text     "deliver_addr"
     t.string   "status"
-    t.integer  "user_placed"
-    t.integer  "user_resp"
+    t.integer  "user_placed_id"
+    t.integer  "user_resp_id"
     t.integer  "set_sz"
     t.integer  "sets_cnt"
     t.decimal  "unit_price",         precision: 10, scale: 4
@@ -121,8 +143,10 @@ ActiveRecord::Schema.define(version: 20141012164521) do
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
-    t.integer  "status_i"
+    t.integer  "status_id"
     t.integer  "part_id"
+    t.date     "order_date"
+    t.integer  "contract_id"
   end
 
   create_table "logs", force: true do |t|
@@ -196,6 +220,8 @@ ActiveRecord::Schema.define(version: 20141012164521) do
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.integer  "user_id"
+    t.text     "packing_details"
+    t.boolean  "client_visible"
   end
 
   create_table "product_statuses", force: true do |t|
@@ -213,6 +239,7 @@ ActiveRecord::Schema.define(version: 20141012164521) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "box_id"
+    t.text     "pack_to"
   end
 
   create_table "samples", force: true do |t|
@@ -228,6 +255,13 @@ ActiveRecord::Schema.define(version: 20141012164521) do
     t.integer  "status"
     t.integer  "warn_days"
     t.integer  "box_id"
+  end
+
+  create_table "shipments", force: true do |t|
+    t.integer  "contract_id"
+    t.string   "desc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "subparts", force: true do |t|

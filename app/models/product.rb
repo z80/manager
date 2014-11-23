@@ -10,6 +10,7 @@
 #  created_at    :datetime
 #  updated_at    :datetime
 #  box_id        :integer
+#  pack_to       :text
 #
 
 class Product < ActiveRecord::Base
@@ -85,6 +86,18 @@ class Product < ActiveRecord::Base
       return nil
     end
     ci = ContractItem.find_by_product_id( self.id )
+    if ( not Contract.exists?( ci.contract_id ) )
+      # May be shipment exists?
+      if ( not Shipment.exists?( ci.shipment_id ) )
+        return nil
+      end
+      sh = Shipment.find( ci.shipment_id )
+      if ( not Contract.exists?( sh.contract_id ) )
+        return nil
+      end
+      contract = Contract.find( sh.contract_id )
+      return contract
+    end
     contract = Contract.find( ci.contract_id )
     return contract
   end
@@ -97,4 +110,43 @@ class Product < ActiveRecord::Base
     res = Box.find( self.box_id )
     return res
   end
+
+  def pack_to_stri()
+    if ( not self.pack_to )
+      return "Unspecified"
+    end
+    return self.pack_to
+  end
+
+  def add_attachment( file, desc )
+    att = Attachment.new
+    att.file = file
+    att.desc = desc
+    if not att.save then
+      return nil
+    end
+
+    att2clazz = AttachmentToProduct.new
+    att2clazz.attachment_id = att.id
+    att2clazz.product_id    = self.id
+    if ( not att2clazz.save ) then
+      att.delete
+      return nil
+    end
+
+    return att
+  end
+
+
+  def attachments()
+    att2clazzs = AttachmentToProduct.where( product_id: self.id )
+    atts = []
+    att2clazzs.each do |att2clazz|
+      if ( Attachment.exists?( att2clazz.attachment_id ) ) then
+        atts.append( Attachment.find( att2clazz.attachment_id ) )
+      end
+    end
+    return atts
+  end
+
 end

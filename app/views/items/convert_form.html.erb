@@ -109,7 +109,7 @@
   <div class="convert_items_to_parts_list">
     <h1>parts cnt = <%= @parts.size %></h1>
     <%if @paginate_parts then%>
-        <%=will_paginate @parts, param_name: :part_page %>
+        <%=will_paginate @parts, param_name: :part_page, renderer: BootstrapPagination::Rails %>
     <%end%>
     <table>
         <% @parts.each do |part| %>
@@ -130,7 +130,7 @@
   <div class="convert_items_to_parts_list">
     <h1>boxes cnt = <%= @boxes.size %></h1>
     <%if @paginate_boxes then%>
-        <%will_paginate @boxes, param_name: :box_page %>
+        <%will_paginate @boxes, param_name: :box_page, renderer: BootstrapPagination::Rails %>
     <%end%>
     <table>
         <% @boxes.each do |box| %>
@@ -148,11 +148,11 @@
     </table>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= label_tag 'Total new parts number' %><br>
     <%= number_field_tag :cnt, @item.set_sz*@item.sets_cnt %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag 'Comment' %><br>
     <%= text_area_tag :comment, "Purchased items are converted into these part instances which are placed to warehouse in a specified box.." %>
   </div>

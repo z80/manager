@@ -3,20 +3,52 @@ class ItemsController < ApplicationController
   include UsersHelper
   include PartsHelper
   include ItemsHelper
+  include ContractsHelper
 
   before_action :set_item, only: [:show, :edit, :update, :destroy]
 
   # GET /items
   # GET /items.json
   def index
+    @user  = current_user
     if ( params[ :search ] ) then
       @paginate = false
       @items = search( Item, params[ :search ], [ 'supplier_id', 'internal_id', 'desc', 'order_link', 'contract_id', 'deliver_addr', 'comment' ] )
     else
       @paginate = true
-      @items = Item.paginate( page: params[:page], per_page: 10, order: "id DESC" )
+      if ( params[ :status_id ] && (params[ :status_id ].to_i > 0) )
+        @items = Item.where( status_id: params[ :status_id ] )
+      else
+        @items = Item.all
+      end
+      if ( params[ :user_resp_id ] && (params[ :user_resp_id ].to_i > 0) )
+        @items = @items.where( user_resp_id: params[ :user_resp_id ] )
+      end
+      if ( params[ :user_placed_id ] && (params[ :user_placed_id ].to_i > 0) )
+        @items = @items.where( user_placed_id: params[ :user_placed_id ] )
+      end
+      if ( params[ :contract_id ] && (params[ :contract_id ].to_i > 0) )
+        @items = @items.where( contract_id: params[ :contract_id ] )
+      end
+      if ( params[ :only_valid_today ] )
+        @items = @items.where( "order_date <= ?", Date.today )
+      end
+      @items = @items.page( params[:page] )
     end
-    @user  = current_user
+    @users = users
+    @users.prepend( [ "None", -1 ] )
+    @user_placed_id = params[ :user_placed_id ]
+    @user_resp_id = params[ :user_resp_id ]
+
+    @statuses = statuses
+    @statuses.prepend( [ "None", -1 ] )
+    @status_id = params[ :status_id ]
+
+    @contracts = active_contracts
+    @contracts.prepend( [ "None", -1 ] )
+    @contract_id = params[ :contract_id ]
+
+    @only_valid_today = ( params[ :only_valid_today ] ) ? "true" : "false"
   end
 
   def my
@@ -32,13 +64,13 @@ class ItemsController < ApplicationController
         ii = search( Item, params[ :search ], [ 'supplier_id', 'internal_id', 'desc', 'order_link', 'contract_id', 'deliver_addr', 'comment' ] )
         @items = []
         ii.each do |item|
-            if ( item.user_resp == @user.id ) then
+            if ( item.user_resp_id == @user.id ) then
                 @items.append( item )
             end
         end
     else
         @paginate = true
-        @items = Item.where( user_resp: @user.id )
+        @items = Item.where( user_resp_id: @user.id )
         @paginate = @items.respond_to?( :each )
         @items = @items.paginate( page: params[:page], per_page: 10 )
     end
@@ -47,20 +79,32 @@ class ItemsController < ApplicationController
   # GET /items/1
   # GET /items/1.json
   def show
+    @user = current_user
   end
 
   # GET /items/new
   def new
+    @user = current_user
     @item  = Item.new
-    @user  = current_user
+
     @users = users
+
     @statuses = statuses
+
+    @contracts = active_contracts()
+    @contracts.prepend( [ "None", -1 ] )
   end
 
   # GET /items/1/edit
   def edit
     @users = users
+
     @statuses = statuses
+
+    @contracts = active_contracts()
+    
+    @contracts.prepend( [ "None", -1 ] )
+    @contract_id = @item.contract_id || -1
   end
 
   def copy
@@ -71,6 +115,9 @@ class ItemsController < ApplicationController
     @users = users
     @item  = Item.find( params[ :id ] )
     @statuses = statuses
+    @contracts = active_contracts
+    @contracts.prepend( [ "None", -1 ] )
+    @contract_id = @item.contract_id
   end
 
   def copy_submit
@@ -143,18 +190,18 @@ class ItemsController < ApplicationController
 
   # DELETE /items/1
   # DELETE /items/1.json
-  def destroy
-    @user = current_user
-    if ( @user && @user.admin? ) then
-        @item.destroy
-        respond_to do |format|
-            format.html { redirect_to items_url }
-            format.json { head :no_content }
-        end
-    else
-        redirect_to root_path
-    end
-  end
+  #def destroy
+  #  @user = current_user
+  #  if ( @user && @user.admin? ) then
+  #      @item.destroy
+  #      respond_to do |format|
+  #          format.html { redirect_to items_url }
+  #          format.json { head :no_content }
+  #      end
+  #  else
+  #      redirect_to root_path
+  #  end
+  #end
 
   # GET /items/1
   def convert_form
@@ -200,17 +247,20 @@ class ItemsController < ApplicationController
                                    :internal_id, 
                                    :desc, 
                                    :order_link, 
-                                   :contract_id, 
+                                   :contract_desc, 
                                    :deliver_addr, 
                                    :status, 
-                                   :user_placed, 
-                                   :user_resp, 
+                                   :user_placed_id, 
+                                   :user_resp_id, 
                                    :set_sz, 
                                    :sets_cnt, 
                                    :unit_price, 
                                    :comment, 
                                    :image, 
-                                   :status_i )
+                                   :status_id, 
+                                   :order_date, 
+                                   :contract_id, 
+                                   :only_valid_today )
     end
 
 end

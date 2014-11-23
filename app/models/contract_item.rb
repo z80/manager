@@ -9,6 +9,7 @@
 #  created_at   :datetime
 #  updated_at   :datetime
 #  superitem_id :integer
+#  shipment_id  :integer
 #
 
 class ContractItem < ActiveRecord::Base

@@ -63,7 +63,7 @@
 </p>
 
 <%if @paginate%>
-  <%=will_paginate( @boxes )%>
+  <%=will_paginate( @boxes, renderer: BootstrapPagination::Rails )%>
 <%end%>
 
 <table>
@@ -85,7 +85,7 @@
       <td>-</td>
       <td>
         <%= form_tag( change_sample_box_apply_path( @sample.id ), method: 'post' ) do %>
-          <%=submit_tag 'Not in a box, somewhere in the office'%>
+          <%=submit_tag 'Not in a box, somewhere in the office', class: 'btn btn-warning'%>
           <%=hidden_field_tag( :box_id, -1 )%>
         <%end%>
       </td>
@@ -104,7 +104,7 @@
         <td><%= link_to 'Show', box %></td>
         <td>
           <%= form_tag( change_sample_box_apply_path( @sample.id ), method: 'post' ) do %>
-            <%=submit_tag 'Put it here'%>
+            <%=submit_tag 'Put it here', class: 'btn btn-warning'%>
             <%=hidden_field_tag( :box_id, box.id )%>
           <%end%>
         </td>

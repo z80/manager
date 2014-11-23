@@ -30,6 +30,13 @@ class SamplesController < ApplicationController
     @user = current_user
     @sample = Sample.new
     @users = users
+
+    @warn_days = 7
+
+    @status = []
+    Sample.status_list().each do |k, v|
+      @status.append( [v, k] )
+    end
   end
 
   # GET /samples/1/edit
@@ -37,7 +44,7 @@ class SamplesController < ApplicationController
     @user = current_user
     @users = users
 
-    params[ :warn_days ] = 7
+    @warn_days = 7
 
     @status = []
     Sample.status_list().each do |k, v|

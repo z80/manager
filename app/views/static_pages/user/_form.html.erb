@@ -15,37 +15,37 @@
       <id="error_explanation"><%= k %> = <%= v%></p>
   <%end%>
 
-  <div class="field">
+  <div class="form-group">
     <%= label_tag :email %><br>
-    <%= text_field_tag :email %>
+    <%= text_field_tag :email, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag :name %><br>
-    <%= text_field_tag :name %>
+    <%= text_field_tag :name, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag :surname %><br>
-    <%= text_field_tag :surname %>
+    <%= text_field_tag :surname, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag :password %><br>
-    <%= text_field_tag :password %>
+    <%= text_field_tag :password, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= label_tag :confirmation %><br>
-    <%= text_field_tag :password_confirmation %>
+    <%= text_field_tag :password_confirmation, class: "form-control" %>
   </div>
 
   <%if current_user && current_user.admin?%>
-    <div class="field">
+    <div class="form-group">
       <%= label_tag "Is new user admin?" %>
-      <%= check_box_tag :admin, "Yes/No?" %>
+      <%= check_box_tag :admin, "Yes/No?", class: "form-control" %>
     </div>
   <%end%>
 
-  <div class="field">
+  <div class="form-group">
     <%= label_tag :avatar %>
-    <%= file_field_tag :avatar %>
+    <%= file_field_tag :avatar, class: "form-control" %>
   </div>
   <div class="actions">
     <%= submit_tag "Register" %>

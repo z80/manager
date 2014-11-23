@@ -22,12 +22,13 @@ class ProdTypesController < ApplicationController
   # GET /prod_types/1
   # GET /prod_types/1.json
   def show
-    @user      = current_user
-    @prod_type = ProdType.find( params[ :id ] )
-    only_avail = ( params[ :only_avail ] == nil ) ? true : params[ :only_avail ].to_bool
-    search     = params[ :search ]
+    @user           = current_user
+    @prod_type      = ProdType.find( params[ :id ] )
+    only_avail      = ( params[ :only_avail ] == nil ) ? true : params[ :only_avail ].to_bool
+    @only_unassigned = ( params[ :only_unassigned ] == nil ) ? true : params[ :only_unassigned ].to_bool
+    search          = params[ :search ]
     @products, @paginate = @prod_type.products( only_avail, search, params[ :page ] )
-
+    
     @subproducts = @prod_type.subproducts
   end
 
@@ -159,6 +160,18 @@ class ProdTypesController < ApplicationController
     redirect_to( edit_prod_type_path( @prod_type.id ), notice: 'Removed product type internal part.' )
   end
 
+  def add_attachment
+    show()
+    file = params[ :file ]
+    desc = params[ :desc ]
+    if ( @prod_type.add_attachment( file, desc ) )
+      redirect_to( prod_type_path( @prod_type.id ), notice: "File has been added!" )
+    else
+      redirect_to( prod_type_path( @prod_type.id ), notice: "ERROR: Failed to add file!" )
+    end
+  end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_prod_type
@@ -167,6 +180,6 @@ class ProdTypesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def prod_type_params
-      params.require( :prod_type ).permit( :part_id, :own_id, :desc, :image )
+      params.require( :prod_type ).permit( :part_id, :own_id, :desc, :image, :client_visible, :packing_details )
     end
 end

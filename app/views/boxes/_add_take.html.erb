@@ -4,12 +4,12 @@
 <% func = ( @add ) ? add_part_insts_path : take_part_insts_path%>
 <%= form_tag( func ) do%>
     <%= render 'part_insts/show' %>
-	<div class="field">
+	<div class="form-group">
 	    <%= label_tag :cnt %><br>
-	    <%= number_field_tag :cnt, 1 %>
+	    <%= number_field_tag :cnt, 1, class: "form-control" %>
 	</div>
 	<div class="actions">
-	    <%= submit_tag "Submit" %>
+	    <%= submit_tag "Submit", class: "btn btn-danger" %>
 	</div>
 <% end %>
 

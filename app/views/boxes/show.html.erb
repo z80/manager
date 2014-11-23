@@ -4,7 +4,7 @@
 
 <%= render 'boxes/show' %>
 
-<table>
+<table class="table table-bordered table-hover">
   <thead>
     <tr>
       <th></th>
@@ -27,9 +27,9 @@
         <td><%= a[:part].own_id %></td>
         <td><%= a[:part].third_id %></td>
         <td><%= a[:inst].cnt %></td>
-        <td><%= link_to 'Show part', part_path( a[:part].id ) %>
-        <td><%= link_to 'Add items', add_part_insts_path( @box.id, a[:inst].id ) %></td>
-        <td><%= link_to 'Take items', take_part_insts_path( @box.id, a[:inst].id ) %></td>
+        <td><%= link_to 'Show part', part_path( a[:part].id ), class: "btn btn-success" %>
+        <td><%= link_to 'Add items', add_part_insts_path( @box.id, a[:inst].id ), class: "btn btn-success" %></td>
+        <td><%= link_to 'Take items', take_part_insts_path( @box.id, a[:inst].id ), class: "btn btn-warning" %></td>
       </tr>
     <% end %>
   </tbody>
@@ -39,7 +39,7 @@
 
 <%= form_tag( merge_identical_path( @box.id ), :method => 'post' ) do %>
   <div class="actions">
-    <%= submit_tag "Merge identical parts in this box" %>
+    <%= submit_tag "Merge identical parts in this box", class: "btn btn-danger" %>
   </div>
 <% end %>
 <br>
@@ -55,7 +55,7 @@
 <%@samples = @box.samples%>
 <%if @samples.size > 0%>
   <h2>Samples list</h2>
-  <table>
+  <table class="table table-bordered table-hover">
     <%@samples.each do |sample|%>
       <tr>
         <td>

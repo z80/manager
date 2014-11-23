@@ -11,18 +11,23 @@
 
 <%= form_tag show_production_path( @part.id ), :method => 'get' do %>
   <%=hidden_field_tag :only_missing, @only_missing || "false" %>
-  <table>
+  <table class="table table-bordered table-hover">
     <tr>
       <td>
         <%= label_tag "Parts cnt:" %>
         <%= number_field_tag :cnt, @cnt %><br>
 
         <%= label_tag "Only parts of type:" %>
-        <%= select_tag :type, options_for_select( @part_types, @type || -1 ) %>
+        <%= select_tag :type, options_for_select( @part_types, @type || -1 ) %><br>
+
+        <%if @only_missing%>
+          <%= label_tag "Exclude ordered items:" %>
+          <%= check_box_tag( :include_ordered, "true", @include_ordered )%>
+        <%end%>
       </td>
       <td>
-        <%= submit_tag "Estimate", name: 'todo' %>
-        <%= submit_tag "Order", name: 'todo' %>
+        <%= submit_tag "Estimate", name: 'todo', class: 'btn btn-success' %>
+        <%= submit_tag "Order", name: 'todo', class: 'btn btn-warning' %>
       </td>
     </tr>
     <tr>
@@ -38,7 +43,9 @@
         <%= label_tag 'Contract identifier' %>
       </td>
       <td>
-        <%= text_field_tag :contract_id, 'unspecified' %>
+        Select contract <%= select_tag :contract_id, options_for_select( @contracts, 1 ) %> or
+        <br>
+        describe purchase purpose <%= text_field_tag :contract_desc, 'unspecified' %>
       </td>
     </tr>
     <tr>
@@ -46,7 +53,7 @@
         <%= label_tag 'Default status' %>
       </td>
       <td>
-        <%= select_tag( :status_i, options_for_select( @statuses ) ) %>
+        <%= select_tag( :status_id, options_for_select( @statuses ) ) %>
       </td>
     </tr>
     <tr>
@@ -54,7 +61,7 @@
         <%= label_tag 'User responsible' %>
       </td>
       <td>
-        <%= select_tag :user_resp, options_for_select( @users ) %>
+        <%= select_tag :user_resp_id, options_for_select( @users ) %>
       </td>
     </tr>
   </table>
@@ -62,7 +69,7 @@
 
 <h2>Total order price is estimated as <h1><%=@price%>$</h1></h2>
 <h2>Subparts list needed to assemble <%= params[:cnt]%> part(s)</h2>
-<table>
+<table class="table table-bordered table-hover">
     <thead>
       <tr>
         <th>Image</th>
@@ -90,9 +97,8 @@
                   <%= part.own_id %>
               </td>
               <td><%= cnt %></td>
-              <td><%= link_to 'Show', part %></td>
-              <td><%= link_to 'Est.', estimate_path(part) %></td>
-              <td><%= link_to 'Edit', edit_part_path(part) %></td>
+              <td><%= link_to 'Show', part, class: "btn btn-success" %></td>
+              <td><%= link_to 'Edit', edit_part_path(part), class: "btn btn-warning" %></td>
           <%end%>
         </tr>
       <% end %>

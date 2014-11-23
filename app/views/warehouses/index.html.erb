@@ -1,6 +1,6 @@
 <h1>Listing warehouses</h1>
 
-<table>
+<table class="table table-bordered table-hover">
   <thead>
     <tr>
       <th>Image</th>
@@ -22,8 +22,8 @@
         </td>
         <td><%= warehouse.w_id %></td>
         <td><%= warehouse.w_desc %></td>
-        <td><%= link_to 'Show', warehouse %></td>
-        <td><%= link_to 'Edit', edit_warehouse_path(warehouse) %></td>
+        <td><%= link_to 'Show', warehouse, class: 'btn btn-success' %></td>
+        <td><%= link_to 'Edit', edit_warehouse_path(warehouse), class: 'btn btn-warning' %></td>
         <%if false then%>
             <td><%= link_to 'Destroy', warehouse, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         <%end%>

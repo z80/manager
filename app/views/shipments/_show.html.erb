@@ -1,0 +1,41 @@
+
+<h2><%=@shipment.desc%> shipped <%=@shipment.created_at%></h2>
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <td>
+      </td>
+      <td>
+        Part No
+      </td>
+      <td>
+        Serial No
+      </td>
+      <td>
+        Type
+      </td>
+      <td>
+        Description
+      </td>
+      <td>
+        Cnt
+      </td>
+      <td>
+        Cnt in assembling
+      </td>
+      <td>
+        Ordered cnt
+      </td>
+      <td>
+      </td>
+    </tr>
+  </thead>
+  <%contract_items = @shipment.contract_items%>
+  <tbody>
+    <%@editable = false%>
+    <%contract_items.each do |ci|%>
+      <%@contract_item = ci%>
+      <%=render 'contracts/show_contract_item'%>
+    <%end%>
+  </tbody>
+</table>

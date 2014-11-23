@@ -1,6 +1,7 @@
     
 
     <%prod_type = @contract_item.prod_type%>
+    <%part = prod_type.part%>
     <tr>
       <td>
         <a href="<%=prod_type.image_ex.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
@@ -22,16 +23,20 @@
             <td class="unassigned_item">
               Unassigned!
             </td>
+          <%else%>
+            <td>
+            </td>
           <%end%>
         <%end%>
       </td>
 
+      <%has_subitems = @contract_item.has_subitems?()%>
       <td>
         <%if @contract_item.superitem()%>
-          <%prod_type = @contract_item.superitem.prod_type%>
-          Part of <%=link_to( prod_type.own_id, prod_type_path( prod_type.id ) )%>
+          <%super_prod_type = @contract_item.superitem.prod_type%>
+          Part of <%=link_to( super_prod_type.own_id, prod_type_path( super_prod_type.id ) )%>
         <%else%>
-            <%if @contract_item.has_subitems?()%>
+            <%if has_subitems%>
               Root of an assembly, see subitems below
             <%else%>
               Standalone item
@@ -44,17 +49,39 @@
       </td>
 
       <td>
-        <%=prod_type.cnt%>
+        <%if not has_subitems%>
+          <%=prod_type.cnt%>
+        <%end%>
       </td>
 
       <td>
-        <%=prod_type.cnt_for_import%>
+        <%if not has_subitems%>
+          <%=prod_type.cnt_for_import%>
+        <%end%>
+      </td>
+
+      <td>
+        <%if (part)%>
+          <%ordered_cnt, items = part.ordered_cnt%>
+          <%if not part.has_subparts?%>
+            <%=ordered_cnt.to_s%>
+          <%else%>
+            This is an assembly
+          <%end%>
+        <%end%>
       </td>
 
       <% if ( (not @contract.shipped) && (@editable) ) %>
         <td>
           <%if ( not @contract_item.has_subitems?() )%>
-            <%= link_to "Assign product", assign_contract_item_product_path( @contract.id, @contract_item.id ) %>
+            <%if ( not @contract_item.product() )%>
+              <%= link_to "Assign product", assign_contract_item_product_path( @contract.id, @contract_item.id ), class: 'btn btn-success' %>
+            <%else%>
+              <%=form_tag( unassign_contract_item_path( @contract.id ), :method => 'post' ) do%>
+                <%= hidden_field_tag :contract_item_id, @contract_item.id %>
+                <%= submit_tag "Unassign product", class: 'btn btn-warning', data: { confirm: 'Are you sure?' }%>
+              <%end%>              
+            <%end%>
           <%end%>
         </td>
 
@@ -64,9 +91,15 @@
           <%end%>
           <%=form_tag( adjust_contract_path( @contract.id ), :method => 'post' ) do%>
             <%= hidden_field_tag :remove_item_id, @contract_item.id %>
-            <%= submit_tag "Remove this postion"%>
+            <%= submit_tag "Remove this postion", class: 'btn btn-danger', data: { confirm: 'Are you sure?' }%>
           <%end%>
         </td>
       <% end %>
+
+      <td>
+        <%if part%>
+          <%= link_to 'Order', show_production_path( part.id ), class: 'btn btn-warning' %>
+        <%end%>
+      </td>
     </tr>
 

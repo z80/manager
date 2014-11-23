@@ -11,19 +11,19 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label 'Warehouse image, how it looks like:'%>
-    <%= f.file_field :image %>
+    <%= f.file_field :image, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label 'Warehouse short id' %><br>
-    <%= f.text_field :w_id %>
+    <%= f.text_field :w_id, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label 'Warehouse throrough description' %><br>
-    <%= f.text_area :w_desc %>
+    <%= f.text_area :w_desc, class: "form-control" %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit  class: 'btn btn-warning' %>
   </div>
 <% end %>

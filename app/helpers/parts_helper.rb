@@ -33,12 +33,12 @@ module PartsHelper
         complex_parts = {}
 
         # If make new part or just see if there are enough parts in stock.
-        if ( not make_new_part )
-            if ( part.has_subparts? )
-                complex_parts[ part.id ] = cnt
-            else
-                parts[ part.id ] = cnt
-            end
+        has_subparts = part.has_subparts?
+        if ( ( not make_new_part ) && ( has_subparts ) )
+            complex_parts[ part.id ] = cnt
+        #elsif ( ( make_new_part ) && ( not has_subparts ) )
+        elsif ( not has_subparts )
+            parts[ part.id ] = cnt
         end
 
         # Iterate over all subparts.
@@ -76,15 +76,27 @@ module PartsHelper
         return parts, complex_parts
     end
 
-    def parts_missing( part, type, cnt )
+    def parts_missing( part, type, cnt, args={} )
+        include_ordered = args[ :include_ordered ] || false
         parts, complex_parts = parts_needed( part, type, cnt )
         
         exists = {}
         part_insts = PartInst.all
         part_insts.each do |pi|
-            exists[ pi.part_id ] = ( exists[ pi.part_id ] ) ? 
-                                        ( exists[ pi.part_id ] + pi.cnt ) : pi.cnt
+            exists[ pi.part_id ] ||= 0
+            exists[ pi.part_id ] = exists[ pi.part_id ] + pi.cnt
         end
+        if ( include_ordered )
+            pts = Part.all
+            pts.each do |pt|
+                ordered_cnt, items = pt.ordered_cnt
+                if ( ordered_cnt > 0 ) then
+                    exists[ pt.id ] ||= 0
+                    exists[ pt.id ] = exists[ pt.id ] + ordered_cnt
+                end
+            end
+        end
+
         # For each existing complex part subtract it's part amounts from needed amounts.
         improvements = 1
         while improvements > 0 do
@@ -180,20 +192,26 @@ private
     def order_part( part_id, cnt )
         part = Part.find( part_id )
         item = Item.new
+
+        item.part_id = part_id
+
         item.set_sz      = 1
         item.sets_cnt    = cnt
         item.internal_id = part.own_id
         item.supplier_id = part.third_id
         item.unit_price  = part.order_price || 0
-        item.desc        = part.order_desc || ""
+        item.desc        = ( part.order_desc || "" ) + "\n" + (part.desc || "")
         item.order_link  = part.order_link || ""
         item.image       = part.image
 
-        item.user_placed  = @user.id
-        item.user_resp    = params[ :user_resp ]
-        item.contract_id  = params[ :contract_id ]
-        item.deliver_addr = params[ :deliver_addr ]
-        item.status       = params[ :status ]
+        item.user_placed_id = @user.id
+        item.user_resp_id   = params[ :user_resp_id ]
+        item.contract_id    = params[ :contract_id ]
+        item.contract_desc  = params[ :contract_desc ]
+        item.deliver_addr   = params[ :deliver_addr ]
+        item.status_id      = params[ :status_id ]
+
+        item.order_date     = Date.today
 
         res = item.save
         return res

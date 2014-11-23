@@ -4,6 +4,7 @@ class PartsController < ApplicationController
   include ItemsHelper
   include PartTypesHelper
   include LogsHelper
+  include ContractsHelper
 
   before_action :set_part, only: [:show, :edit, :update, :destroy]
 
@@ -60,16 +61,19 @@ class PartsController < ApplicationController
     @cnt  = params[ :cnt ] || 1
     @cnt = @cnt.to_i
     @type = (params[ :type ]) ? params[ :type ].to_i : -1
+    @include_ordered = params[ :include_ordered ] ? true : false
 
     params[ :only_missing ] = ( params[ :only_missing ] ) ? params[ :only_missing ].to_bool : false
     @parts, cp = ( params[ :only_missing ] ) ? 
-                    parts_missing( @part, @type, @cnt ) : 
+                    parts_missing( @part, @type, @cnt, include_ordered: @include_ordered ) : 
                     parts_needed( @part, @type, @cnt )
     @price = total_price( @parts ).to_i
     users()
     @only_missing = params[ :only_missing ]
     @part_types = part_types
     @part_types.prepend( [ "Any", -1 ] )
+    @contracts = active_contracts
+    @contracts.prepend( [ "None", -1 ] )
     @statuses = statuses
     
     if ( params[ :todo ] == "Order" ) then
@@ -260,6 +264,7 @@ class PartsController < ApplicationController
           redirect_to estimate_path( params[ :id ], cnt: @cnt ), notice: "ERROR: Failed to take from a box!"
           return
         end
+        log( "Parts are taken from warehouse: " + cnt.to_s + ", part type: " + pi.part.own_id , @user )
       end
       redirect_to estimate_path( params[ :id ], cnt: @cnt ), notice: 'All available part(s) was/were successfully taken from a warehouse!'
       return
@@ -268,6 +273,7 @@ class PartsController < ApplicationController
       take_cnt = params[ :take_cnt ].to_i
       pi = PartInst.find( take_id )
       pi.cnt -= take_cnt
+      log( "Parts are taken from warehouse: " + take_cnt.to_s + ", part type: " + pi.part.own_id , @user )
       if ( pi.save ) then
         redirect_to estimate_path( params[ :id ], cnt: @cnt ), notice: 'Parts of selected type were successfully taken from a box!'
         return
@@ -314,6 +320,7 @@ class PartsController < ApplicationController
     dest.part_type   = src.part_type
     dest.order_time  = src.order_time
     if ( not dest.save )
+      log( "Part copy is created: " + part.own_id.to_s, @user )
       redirect_to( part_path( src.id ), notice: 'Error: failed to copy this part type!' )
       return
     end
@@ -345,7 +352,7 @@ class PartsController < ApplicationController
       params.require(:part).permit( :own_id, :third_id, :user_id, 
                                     :cnt, :image, :min_cnt, :order_link, 
                                     :order_desc, :order_price, :part_type, 
-                                    :file, :order_time )
+                                    :file, :order_time, :include_ordered )
     end
 end
 

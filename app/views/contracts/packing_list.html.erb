@@ -1,0 +1,113 @@
+
+<%if true%>
+  <%content_for( :printer_friendly, true )%>
+<%end%>
+
+<p>
+  <strong>
+    Contract: <%= @contract.name %>
+  </strong>
+</p>
+
+<p>
+  <strong>Details:</strong>
+  <br>
+  <%= @contract.desc %>
+</p>
+
+<p>
+  <strong>Ship date:</strong>
+  <br>
+  <%= @contract.ship_date %>
+</p>
+<br>
+
+<h2>Items in the contract:</h2>
+<table>
+
+  <thead>
+    <tr>
+      <td>
+      </td>
+      <td>
+        Part No
+      </td>
+      <td>
+        Serial No
+      </td>
+      <td>
+        Type
+      </td>
+      <td>
+        Brought
+      </td>
+      <td>
+        Packed
+      </td>
+      <td>
+        Box id
+      </td>
+      <td>
+        Box id
+      </td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%@contract_items.each do |ci|%>
+      <%@contract_item = ci%>
+      <%prod_type = @contract_item.prod_type%>
+      <%prod = @contract_item.product%>
+
+      <%if ((prod) || (@contract_item.superitem()) )%>
+        <tr>
+          <td>
+            <a href="<%=prod_type.image_ex.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+              <%=image_tag( prod_type.image_ex.url(:thumb) )%>
+            </a>
+          </td>
+
+          <td>
+            <%= prod_type.own_id.to_s %>
+          </td>
+
+          <td>
+            <%=prod.serial_number%>
+          </td>
+
+          <td>
+            <%if @contract_item.superitem()%>
+              <%prod_type = @contract_item.superitem.prod_type%>
+              Part of <%=prod_type.own_id%>
+            <%else%>
+                <%if @contract_item.has_subitems?()%>
+                  Root of an assembly, see subitems below
+                <%else%>
+                  Standalone item
+                <%end%>
+            <%end%>
+          </td>
+
+
+          <td>
+          </td>
+
+          <td>
+          </td>
+
+          <td>
+            <%if @contract_item.product()%>
+              <%=@contract_item.product.pack_to_stri%>
+            <%end%>
+          </td>
+
+          <td>
+          </td>
+        </tr>
+      <%end%>
+    <%end%>
+  </tbody>
+</table>
+
+
+

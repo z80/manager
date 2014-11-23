@@ -7,11 +7,11 @@
 #  internal_id        :string(255)
 #  desc               :text
 #  order_link         :string(255)
-#  contract_id        :string(255)
+#  contract_desc      :string(255)
 #  deliver_addr       :text
 #  status             :string(255)
-#  user_placed        :integer
-#  user_resp          :integer
+#  user_placed_id     :integer
+#  user_resp_id       :integer
 #  set_sz             :integer
 #  sets_cnt           :integer
 #  unit_price         :decimal(10, 4)
@@ -22,8 +22,10 @@
 #  image_content_type :string(255)
 #  image_file_size    :integer
 #  image_updated_at   :datetime
-#  status_i           :integer
+#  status_id          :integer
 #  part_id            :integer
+#  order_date         :date
+#  contract_id        :integer
 #
 
 require 'test_helper'

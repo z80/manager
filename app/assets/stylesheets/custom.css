@@ -1,0 +1,6 @@
+
+.container-wide{
+  max-width: 1980px;
+  min-width: 1024px;
+  margin: 0px 30px 0px 30px;
+}

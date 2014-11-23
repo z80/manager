@@ -14,7 +14,7 @@
 
 
   <%if @paginate%>
-    <%=will_paginate( @prod_types )%>
+    <%=will_paginate( @prod_types, renderer: BootstrapPagination::Rails )%>
   <%end%>
 
   <table>

@@ -1,9 +1,12 @@
 
 <%if @paginate then%>
-    <%= will_paginate %>
+    <%= will_paginate @parts, renderer: BootstrapPagination::Rails %>
 <%end%>
 
-<table>
+<table class="table table-bordered
+table-hover
+table-condensed
+table-responsive">
   <thead>
     <tr>
       <th>How part look like (image)</th>
@@ -11,7 +14,7 @@
       <th>Third party's part type Id</th>
       <th>User introduced this part type</th>
       <th>Total cnt</th>
-      <th></th>
+      <th>Ordered cnt</th>
       <th></th>
       <th></th>
       <%if @expand then%>
@@ -23,27 +26,34 @@
   <tbody>
     <% @parts.each do |part| %>
       <%if part.critical_cnt? then%>
-        <%cl="critical_cnt"%>
+        <%cl="danger"%>
       <%else%>
         <%cl=""%>
       <%end%>
-      <tr>
+      <tr class="<%=cl%>">
         <td>
             <a href="<%=part.image.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
               <%=image_tag( part.image.url(:thumb) )%>
             </a>
         </td>
-        <td class="<%=cl%>"><%= part.own_id %></td>
-        <td class="<%=cl%>"><%= part.third_id %></td>
+        <td><%= part.own_id %></td>
+        <td><%= part.third_id %></td>
         <%if part.user then%>
-            <td class="<%=cl%>"><%= part.user.name + ' ' + part.user.surname %></td>
+            <td><%= part.user.name + ' ' + part.user.surname %></td>
         <%else%>
-            <td class="<%=cl%>">Can't specify</td>
+            <td>Can't specify</td>
         <%end%>
-        <td class="<%=cl%>"><%= part.cnt %></td>
-        <td><%= link_to 'Show', part %></td>
-        <td><%= link_to 'Est.', estimate_path(part) %></td>
-        <td><%= link_to 'Edit', edit_part_path(part) %></td>
+        <td><%= part.cnt %></td>
+        <td>
+          <%if not part.has_subparts?%>
+            <%ordered_cnt, items = part.ordered_cnt%>
+            <%=ordered_cnt.to_s%>
+          <%else%>
+            This is an assembly
+          <%end%>
+        </td>
+        <td><%= link_to 'Show', part, class: 'btn btn-success' %></td>
+        <td><%= link_to 'Edit', edit_part_path(part), class: 'btn btn-warning' %></td>
         <%if false then%>
             <td><%= link_to 'Destroy', part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         <%end%>

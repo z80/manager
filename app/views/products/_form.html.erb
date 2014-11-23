@@ -13,19 +13,23 @@
 
   <%= hidden_field_tag "product[prod_type_id]".to_s, @prod_type_id %>
   <%= hidden_field_tag "prod_type_id".to_s, @prod_type_id %>
-  <div class="field">
-    <%= f.label "Serial number" %><br>
-    <%= f.text_field :serial_number %>
+  <div class="form-group">
+    <%= f.label "Serial number:" %><br>
+    <%= f.text_field :serial_number, class: "form-control" %>
   </div>
-  <div class="field">
-    <%= f.label "Description" %><br>
-    <%= f.text_area :desc %>
+  <div class="form-group">
+    <%= f.label "Description:" %><br>
+    <%= f.text_area :desc, class: "form-control" %>
   </div>
-  <div class="field">
-    <%= f.label "Product current status" %><br>
-    <%= f.select( :status, @statuses, selected: @current_status ) %>
+  <div class="form-group">
+    <%= f.label "Recommended to pack to the following box:" %><br>
+    <%= f.text_area :pack_to, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label "Product current status:" %><br>
+    <%= f.select( :status, @statuses, selected: @current_status, class: "form-control" ) %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit class: "btn btn-warning" %>
   </div>
 <% end %>

@@ -1,10 +1,10 @@
 <h1>Listing part_insts</h1>
 
 <% if @paginate || (@paginate == nil) then %>
-  <%= will_paginate %>
+  <%= will_paginate @part_insts, renderer: BootstrapPagination::Rails %>
 <% end %>
 
-<table>
+<table class="table table-bordered table-hover">
   <thead>
     <tr>
       <th>Image</th>
@@ -43,7 +43,7 @@
               <%end%>
             </td>
             <td><%= part_inst.cnt %></td>
-            <td><%= link_to 'Show', part_path(part) %></td>
+            <td><%= link_to 'Show', part_path(part), class: 'btn btn-success' %></td>
             <% if false then %>
                 <td><%= link_to 'Edit', edit_part_inst_path(part_inst) %></td>
                 <td><%= link_to 'Destroy', part_inst, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -56,7 +56,7 @@
 
 <br>
 
-<%= link_to 'New Part inst', new_part_inst_path %>
+<%= link_to 'New Part inst', new_part_inst_path, class: 'btn btn-warning' %>
 
 
 

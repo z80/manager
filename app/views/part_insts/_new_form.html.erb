@@ -11,9 +11,9 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= label_tag :cnt %><br>
-    <%= number_field_tag :cnt, value: 1 %>
+    <%= number_field_tag :cnt, value: 1, class="form-control" %>
   </div>
 
   <table>
@@ -28,7 +28,7 @@
       <tr>
         <td>
             <%if @paginate_parts then%>
-              <%=will_paginate @parts, param_name: :part_page %>
+              <%=will_paginate @parts, param_name: :part_page, renderer: BootstrapPagination::Rails %>
             <%end%>
             <ul>
                 <% @parts.each do |part| %>
@@ -42,7 +42,7 @@
         </td>
         <td>
             <%if @paginate_boxes then%>
-              <%= will_paginate @boxes, param_name: :box_page %>
+              <%= will_paginate @boxes, param_name: :box_page, renderer: BootstrapPagination::Rails %>
             <%end%>
             <ul>
               <% @boxes.each do |box| %>

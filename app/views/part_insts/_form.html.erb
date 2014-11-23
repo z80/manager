@@ -11,17 +11,17 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :part_id %><br>
-    <%= f.number_field :part_id %>
+    <%= f.number_field :part_id, class: "from-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label :box_id %><br>
-    <%= f.number_field :box_id %>
+    <%= f.number_field :box_id, class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label :cnt %><br>
-    <%= f.number_field :cnt %>
+    <%= f.number_field :cnt, class: "form-control" %>
   </div>
   <div class="actions">
     <%= f.submit %>

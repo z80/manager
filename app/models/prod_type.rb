@@ -13,6 +13,8 @@
 #  image_file_size    :integer
 #  image_updated_at   :datetime
 #  user_id            :integer
+#  packing_details    :text
+#  client_visible     :boolean
 #
 
 class ProdType < ActiveRecord::Base
@@ -91,7 +93,7 @@ class ProdType < ActiveRecord::Base
       if ( only_avail )
       	prods = []
       	pp.each do |prod|
-      	  prods.append( prod ) if ( prod.avail? && (prod.prod_type_id == self.id) )
+          prods.append( prod ) if ( prod.avail? && (prod.prod_type_id == self.id) )
       	end
       else
         pp.each do |prod|
@@ -150,9 +152,11 @@ class ProdType < ActiveRecord::Base
     cis = ContractItem.where( prod_type_id: self.id )
     res = {}
     cis.each do |ci|
-      c = Contract.find( ci.contract_id )
-      if ( not c.shipped )
-        res[ c ] = ( res[c] ) ? ( res[c] + 1 ) : 1;
+      if ( Contract.exists?( ci.contract_id ) )
+        c = Contract.find( ci.contract_id )
+        if ( not c.shipped )
+          res[ c ] = ( res[c] ) ? ( res[c] + 1 ) : 1;
+        end
       end
     end
     return res
@@ -164,6 +168,38 @@ class ProdType < ActiveRecord::Base
     end
     return false
   end
+
+  def add_attachment( file, desc )
+    att = Attachment.new
+    att.file = file
+    att.desc = desc
+    if not att.save then
+      return nil
+    end
+
+    att2clazz = AttachmentToProdType.new
+    att2clazz.attachment_id = att.id
+    att2clazz.prod_type_id  = self.id
+    if ( not att2clazz.save ) then
+      att.delete
+      return nil
+    end
+
+    return att
+  end
+
+
+  def attachments()
+    att2clazzs = AttachmentToProdType.where( prod_type_id: self.id )
+    atts = []
+    att2clazzs.each do |att2clazz|
+      if ( Attachment.exists?( att2clazz.attachment_id ) ) then
+        atts.append( Attachment.find( att2clazz.attachment_id ) )
+      end
+    end
+    return atts
+  end
+
 
 end
 

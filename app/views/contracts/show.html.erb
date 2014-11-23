@@ -1,15 +1,19 @@
 <p id="notice"><%= notice %></p>
 
 <%=form_tag( copy_contract_path( @contract.id ), method: 'post' ) do%>
-  Make a copy of this contract <%=submit_tag( "Copy" )%>
+  Make a copy of this contract <%=submit_tag( "Copy", class: 'btn btn-warning', data: { confirm: 'Are you sure?' } )%>
 <%end%>
 <br>
+
 
 <p>
   <strong class="contract_level_<%=@level.to_s%>">
     Contract: <%= @contract.name %>
   </strong>
 </p>
+
+<strong><%=link_to( "Packing list", packing_list_path( @contract.id ), class: "btn btn-success" )%></strong>
+<strong><%=link_to( "Packing list for customer", user_packing_list_path( @contract.id ), class: "btn btn-success" )%></strong>
 
 <p>
   <strong>Details provided</strong>
@@ -28,7 +32,7 @@
 <br>
 
 <h2>Items in this contract:</h2>
-<table>
+<table class="table table-bordered table-hover">
   <thead>
     <tr>
       <td>
@@ -49,7 +53,12 @@
         Cnt
       </td>
       <td>
-        Cnt in production
+        Cnt in assembling
+      </td>
+      <td>
+        Ordered cnt
+      </td>
+      <td>
       </td>
     </tr>
   </thead>
@@ -61,10 +70,23 @@
     <%end%>
   </tbody>
 </table>
+<br>
+
+
+
+<%shipments = @contract.shipments()%>
+<%if shipments.size > 0%>
+  <h2>Shipments list:</h2>
+  <%shipments.each do |shipment|%>
+    <%@shipment = shipment%>
+    <%=render( 'shipments/show' )%>
+  <%end%>
+<%end%>
+<br>
+
+
 
 <%if not @contract.shipped%>
-
-  <br>
   <h2 class="contract_level_<%=@level.to_s%>">Contract report</h2>
 
   <%if @level > 0%>
@@ -75,7 +97,7 @@
   <%if @could.size > 0%>
     The following positions for this project are unavailable in stock. But these 
     products can be assembled from parts available.
-    <table>
+    <table class="table table-bordered table-hover">
       <%@could.each do |part, cnt|%>
         <tr>
           <td>
@@ -99,7 +121,7 @@
 
   <%if @couldnt.size > 0%>
     The following position(s) for this project are unavailable and can <strong>not</strong> be assembled.
-    <table>
+    <table class="table table-bordered table-hover">
       <%@couldnt.each do |part, cnt|%>
         <tr>
           <td>
@@ -134,7 +156,7 @@
       <% end %>
       <br>
     <%end%>
-    <table>
+    <table class="table table-bordered table-hover">
       <%@parts_to_purchase.each do |part, cnt|%>
         <tr>
           <td>
@@ -157,6 +179,33 @@
   <%end%>
 
 <%end%>
+
+
+
+
+<h2>Attachments list</h2>
+<table class="table table-bordered table-hover">
+  <%@contract.attachments.each do |att|%>
+    <tr>
+      <td>
+        <%=link_to att.file_file_name, att.file.url%>
+      </td>
+      <td>
+        <%= att.desc %>
+      </td>
+    </tr>
+  <%end%>
+</table>
+
+<h2>Add another attachment</h2>
+<%= form_tag( contract_add_attachment_path( @contract.id ), multipart: true ) do %>
+  <%= file_field_tag :file %>
+  <%= text_area_tag  :desc %>
+  <%= submit_tag 'Append attachment and/or description', class: 'btn btn-warning' %>
+<%end%>
+
+
+
 
 <%if not @contract.shipped%>
   <%= link_to 'Edit contract date/details', edit_contract_path(@contract) %> |

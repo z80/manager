@@ -11,13 +11,13 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :image_id %><br>
-    <%= f.number_field :image_id %>
+    <%= f.number_field :image_id, class: "form-control", class: "form-control" %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label :part_id %><br>
-    <%= f.number_field :part_id %>
+    <%= f.number_field :part_id, class: "form-control" %>
   </div>
   <div class="actions">
     <%= f.submit %>

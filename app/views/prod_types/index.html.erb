@@ -1,10 +1,14 @@
 <h1>Product types</h1>
 
+<%= link_to 'Add new product type', new_prod_type_path, class: 'btn btn-warning' %>
+<br>
+<br>
+
 <%if @paginate%>
-  <%=will_paginate( @prod_types )%>
+  <%=will_paginate( @prod_types, renderer: BootstrapPagination::Rails  )%>
 <%end%>
 
-<table>
+<table class="table table-bordered table-hover">
   <thead>
     <tr>
       <th>Image</th>
@@ -12,6 +16,7 @@
       <th>Description</th>
       <th>Cnt in stock</th>
       <th>Cnt in production</th>
+      <th>Ordered cnt</th>
       <th></th>
       <th></th>
     </tr>
@@ -35,8 +40,19 @@
         <td class="<%=cl%>"><%= prod_type.desc %></td>
         <td class="<%=cl%>"><%= prod_type.cnt %></td>
         <td class="<%=cl%>"><%= prod_type.cnt_for_import %></td>
-        <td><%= link_to 'Show', prod_type %></td>
-        <td><%= link_to 'Edit', edit_prod_type_path(prod_type) %></td>
+        <td class="<%=cl%>">
+          <%part = prod_type.part%>
+          <%if part%>
+            <%ordered_cnt, items = part.ordered_cnt%>
+            <%if not part.has_subparts?%>
+              <%=ordered_cnt.to_s%>
+            <%else%>
+              This is an assembly
+            <%end%>
+          <%end%>
+        </td>
+        <td><%= link_to 'Show', prod_type, class: 'btn btn-success' %></td>
+        <td><%= link_to 'Edit', edit_prod_type_path(prod_type), class: 'btn btn-warning' %></td>
       </tr>
     <% end %>
   </tbody>
@@ -44,7 +60,7 @@
 
 <br>
 
-<%= link_to 'New Prod type', new_prod_type_path %>
+<%= link_to 'Add new product type', new_prod_type_path, class: 'btn btn-warning' %>
 
 
 

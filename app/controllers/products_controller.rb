@@ -122,14 +122,26 @@ class ProductsController < ApplicationController
     end
   end
 
+  def add_attachment
+    show()
+    file = params[ :file ]
+    desc = params[ :desc ]
+    if ( @product.add_attachment( file, desc ) )
+      redirect_to( product_path( @product.id ), notice: "File has been added!" )
+    else
+      redirect_to( product_path( @product.id ), notice: "ERROR: Failed to add file!" )
+    end
+  end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_product
-      @product = Product.find(params[:id])
+      @product = Product.find( params[ :id ] )
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
-      params.require(:product).permit(:prod_type_id, :serial_number, :desc, :status)
+      params.require( :product ).permit( :prod_type_id, :serial_number, :desc, :status, :pack_to )
     end
 end

@@ -19,7 +19,7 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= label_tag :cnt %><br>
     <%= number_field_tag :cnt, 1 %>
   </div>
@@ -36,7 +36,7 @@
       <tr>
         <td>
             <%if @paginate then%>
-                <%=will_paginate @parts %>
+                <%=will_paginate @parts, renderer: BootstrapPagination::Rails %>
             <%end%>
             <ul>
                 <% @parts.each do |part| %>

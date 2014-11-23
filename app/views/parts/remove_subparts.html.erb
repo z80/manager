@@ -9,7 +9,7 @@
     </p>
 
     <div class="parts_list">
-        <table>
+        <table class="table table-bordered table-hover">
             <% @subparts.each do |sp| %>
                 <% part = Part.find( sp.contains_id ) %>
                 <tr>
@@ -27,7 +27,7 @@
     </div>
 
   <div class="actions">
-    <%= submit_tag "Remove subpart from current design" %>
+    <%= submit_tag "Remove subpart from current design", class: "btn btn-warning" %>
   </div>
 
 

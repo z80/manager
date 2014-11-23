@@ -24,26 +24,26 @@
   </p>
 
   <%if false%>
-    <div class="field">
+    <div class="form-group">
       <%= label_tag :user_id %><br>
-      <%= text_field_tag :user_id %>
+      <%= text_field_tag :user_id, class: "form-control" %>
     </div>
   <%end%>
 
   <div class="fiels">
     <%= label_tag "Project file"%>
-    <%= file_field_tag :file %>
+    <%= file_field_tag :file, class: "form-control" %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= label_tag :desc %><br>
-    <%= text_area_tag :desc %>
+    <%= text_area_tag :desc, class: "form-control" %>
   </div>
 
   <%if false%>
-    <div class="field">
+    <div class="form-group">
       <%= label_tag :status %><br>
-      <%= text_field_tag :status %>
+      <%= text_field_tag :status, class: "form-control" %>
     </div>
   <%end%>
 

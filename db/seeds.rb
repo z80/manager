@@ -66,6 +66,11 @@ if ( ItemStatus.all.size < 1 )
   s = ItemStatus.new
   s.name = 'Complete'
   s.save!
+
+  s = ItemStatus.new
+  s.name = 'Don\'t order'
+  s.save!
+
 end
 
 if ( ProductStatus.all.size < 1 )
@@ -86,6 +91,11 @@ if ( ProductStatus.all.size < 1 )
 
   s = ProductStatus.new
   s.status = "Disassembled"
+  s.avail  = false
+  s.save!
+
+  s = ProductStatus.new
+  s.status = "Not for sale"
   s.avail  = false
   s.save!
 end
