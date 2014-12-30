@@ -48,7 +48,7 @@ class StaticPagesController < ApplicationController
     user = User.find_by_email( email )
     if ( user && user.authenticate( password ) )
       sign_in user
-      log( "User signed in", @user )
+      log( "User signed in", user )
 
       redirect_to root_path
     else

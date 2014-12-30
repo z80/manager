@@ -3,32 +3,43 @@
 <%if not content_for?( :printer_friendly )%>
   <head>
     <title>Purchase management</title>
-      <%= stylesheet_link_tag "application", media: "all",
-                                             "data-turbolinks-track" => true %>
-      <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
-      <%= csrf_meta_tags %>  
+    <%= stylesheet_link_tag "application", media: "all",
+                                           "data-turbolinks-track" => true %>
+    <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+    <%= csrf_meta_tags %>  
+    <script>
+      //window.alert( "hi!" );
+      var a = $('.box-select');
+      var b = $( '#box-select' )
+      //alert( a );
+      $('.box-select').change(function(){ 
+        //var value = $(this).val();
+        window.alert( "value" );
+        //$( '.box-label' )
+      });
+      //window.alert( "hi!" );
+    </script>
     <script type="text/javascript" src="../tinymce/tinymce.min.js"></script>
     <link href="../facebox/src/facebox.css" media="screen" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="../facebox/src/facebox.js"></script>
     <script>
-        //tinymce.init( {selector:'textarea'} );
+      //tinymce.init( {selector:'textarea'} );
 
-        $.facebox.settings.closeImage = '../facebox/src/closelabel.png';
-        $.facebox.settings.loadingImage = '..//facebox/src/loading.gif';
+      $.facebox.settings.closeImage = '../facebox/src/closelabel.png';
+      $.facebox.settings.loadingImage = '..//facebox/src/loading.gif';
 
-        jQuery(document).ready( function($) {
-                                       $('a[rel*=facebox]').facebox()
-                                            }
-                              );
+      jQuery(document).ready( function($) {
+                                     $('a[rel*=facebox]').facebox()
+                                          }
+                            );
 
       $(document).bind('beforeReveal.facebox', function() {
   	    $('#facebox .body').width('800px');
-  	});
+    	});
 
       $(document).bind('beforeReveal.facebox', function() {
   	    $('#facebox .body').height('600px');
-  	});
-
+      });
     </script>
   </head>
   <body>
@@ -37,10 +48,10 @@
         <%=render 'layouts/header'%>
       </div>
       <div class="row">      
-        <div id="content" class="col-xs-3">
+        <div id="content" class="col-xs-2">
             <%= render 'layouts/actions' %>
         </div>
-        <div class="col-xs-9">
+        <div class="col-xs-10">
           <%if true then%>
             <%= yield %>
           <%end%>

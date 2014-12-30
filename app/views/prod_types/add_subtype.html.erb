@@ -15,7 +15,7 @@
     <%if @paginate then%>
       <%=will_paginate @prod_types, renderer: BootstrapPagination::Rails %>
     <%end%>
-    <table>
+    <table class="table table-bordered table-hover">
       <% @prod_types.each do |pt| %>
         <%if pt.id != @prod_type.id then%>
           <tr>

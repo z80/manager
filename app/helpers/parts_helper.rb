@@ -43,50 +43,54 @@ module PartsHelper
 
         # Iterate over all subparts.
         sps = Subpart.where( belongs_id: part.id )
+
         sps.each do |sp|
             n = sp.cnt * cnt
-            subpart = Part.find( sp.contains_id )
-            # If part is complex add only subparts.
-            if ( subpart.has_subparts? )
-                #puts "#########"
-                #puts "has_subparts #{sp.contains_id}"
-                #puts "#########"
-                complex_parts[ subpart.id ] = ( complex_parts[ subpart.id ] ) ? 
-                                                ( complex_parts[ subpart.id ] + n)  : n
-                subparts, complex_subparts = parts_needed( subpart, type, n, true, level+1, max_level )
-                subparts.each do |sp_id, sp_cnt|
-                    parts[ sp_id ] = ( parts[ sp_id ] ) ? 
-                                            ( parts[ sp_id ] + sp_cnt ) : (sp_cnt || 0)
-                end
-                complex_subparts.each do |cp_id, cp_cnt|
-                    complex_parts[ cp_id ] = ( complex_parts[ cp_id ] ) ? 
-                                                    ( complex_parts[ cp_id ] + cp_cnt )  : cp_cnt
-                end
-            else
-                #puts "#########"
-                #puts "has_no_subparts #{sp.contains_id}"
-                #puts "#########"
-                # If part is simple just add itself.
-                if ( type < 0 ) || ( type == sp.contains.part_type )
-                    parts[ sp.contains_id ] = ( parts[ sp.contains_id ] ) ? 
-                                                    ( parts[ sp.contains_id ] + n ) : n
+            subpart = Part.exists?( sp.contains_id ) ? Part.find( sp.contains_id ) : nil
+            if ( subpart )
+                # If part is complex add only subparts.
+                if ( subpart.has_subparts? )
+                    #puts "#########"
+                    #puts "has_subparts #{sp.contains_id}"
+                    #puts "#########"
+                    complex_parts[ subpart.id ] = ( complex_parts[ subpart.id ] ) ? 
+                                                    ( complex_parts[ subpart.id ] + n)  : n
+                    subparts, complex_subparts = parts_needed( subpart, type, n, true, level+1, max_level )
+                    subparts.each do |sp_id, sp_cnt|
+                        parts[ sp_id ] = ( parts[ sp_id ] ) ? 
+                                                ( parts[ sp_id ] + sp_cnt ) : (sp_cnt || 0)
+                    end
+                    complex_subparts.each do |cp_id, cp_cnt|
+                        complex_parts[ cp_id ] = ( complex_parts[ cp_id ] ) ? 
+                                                        ( complex_parts[ cp_id ] + cp_cnt )  : cp_cnt
+                    end
+                else
+                    #puts "#########"
+                    #puts "has_no_subparts #{sp.contains_id}"
+                    #puts "#########"
+                    # If part is simple just add itself.
+                    if ( type < 0 ) || ( type == sp.contains.part_type )
+                        parts[ sp.contains_id ] = ( parts[ sp.contains_id ] ) ? 
+                                                        ( parts[ sp.contains_id ] + n ) : n
+                    end
                 end
             end
         end
+
         return parts, complex_parts
     end
 
     def parts_missing( part, type, cnt, args={} )
-        include_ordered = args[ :include_ordered ] || false
+        exclude_ordered = args[ :exclude_ordered ] || false
         parts, complex_parts = parts_needed( part, type, cnt )
-        
+
         exists = {}
         part_insts = PartInst.all
         part_insts.each do |pi|
             exists[ pi.part_id ] ||= 0
             exists[ pi.part_id ] = exists[ pi.part_id ] + pi.cnt
         end
-        if ( include_ordered )
+        if ( exclude_ordered )
             pts = Part.all
             pts.each do |pt|
                 ordered_cnt, items = pt.ordered_cnt
@@ -124,9 +128,11 @@ module PartsHelper
                     cp_parts, cp_complex_parts = parts_needed( c_part, max_cnt )
                     # Correct 'complex_parts' and 'parts'.
                     cp_complex_parts.each do |cp_id, cp_cnt|
-                        complex_parts[ cp_id ] -= cp_cnt
-                        if ( complex_parts[ cp_id ] <= 0 ) then
-                            complex_parts.delete( cp_id )
+                        if ( complex_parts[ cp_id ] )
+                            complex_parts[ cp_id ] -= cp_cnt
+                            if ( complex_parts[ cp_id ] <= 0 ) then
+                                complex_parts.delete( cp_id )
+                            end
                         end
                     end
                     cp_parts.each do |cp_id, cp_cnt|

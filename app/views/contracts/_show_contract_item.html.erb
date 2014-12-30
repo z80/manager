@@ -4,6 +4,13 @@
     <%part = prod_type.part%>
     <tr>
       <td>
+        <%=link_to( @contract_item.number || "---", change_number_path( @contract.id, @contract_item.id ),  class: "btn btn-warning" ) %>
+      </td>
+      <td>
+        <%=link_to( @contract_item.ship_date || "---", set_ship_date_path( @contract.id, @contract_item.id ),  class: "btn btn-warning" ) %>
+      </td>
+
+      <td>
         <a href="<%=prod_type.image_ex.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
           <%=image_tag( prod_type.image_ex.url(:thumb) )%>
         </a>

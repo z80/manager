@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141122002700) do
+ActiveRecord::Schema.define(version: 20141218064846) do
 
   create_table "attachment_to_contracts", force: true do |t|
     t.integer  "attachment_id"
@@ -74,6 +74,8 @@ ActiveRecord::Schema.define(version: 20141122002700) do
     t.datetime "updated_at"
     t.integer  "superitem_id"
     t.integer  "shipment_id"
+    t.string   "number"
+    t.integer  "ship_date_id"
   end
 
   create_table "contracts", force: true do |t|
@@ -84,6 +86,9 @@ ActiveRecord::Schema.define(version: 20141122002700) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "warning"
+    t.string   "number"
+    t.integer  "owner_id"
+    t.integer  "box_id"
   end
 
   create_table "image_to_parts", force: true do |t|
@@ -200,6 +205,7 @@ ActiveRecord::Schema.define(version: 20141122002700) do
     t.decimal  "order_price",        precision: 10, scale: 4
     t.integer  "part_type"
     t.integer  "order_time"
+    t.integer  "ordering_person_id"
   end
 
   create_table "prod_subtypes", force: true do |t|
@@ -222,6 +228,7 @@ ActiveRecord::Schema.define(version: 20141122002700) do
     t.integer  "user_id"
     t.text     "packing_details"
     t.boolean  "client_visible"
+    t.text     "pack_to"
   end
 
   create_table "product_statuses", force: true do |t|
@@ -239,7 +246,7 @@ ActiveRecord::Schema.define(version: 20141122002700) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "box_id"
-    t.text     "pack_to"
+    t.integer  "owner_id"
   end
 
   create_table "samples", force: true do |t|
@@ -255,6 +262,13 @@ ActiveRecord::Schema.define(version: 20141122002700) do
     t.integer  "status"
     t.integer  "warn_days"
     t.integer  "box_id"
+  end
+
+  create_table "ship_dates", force: true do |t|
+    t.integer  "contract_id"
+    t.date     "date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "shipments", force: true do |t|

@@ -1,0 +1,24 @@
+<%= form_tag( change_number_apply_path( @contract.id, @contract_item.id ), method: "post" ) do %>
+  <% if @contract.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@contract.errors.count, "error") %> prohibited this contract from being saved:</h2>
+
+      <ul>
+      <% @contract.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label_tag "Position number" %><br>
+    <%= text_field_tag( :number, @contract_item.number || "1", class: "form-control" )%>
+  </div>
+  <div class="actions">
+    <%= submit_tag "Apply", class: 'btn btn-warning' %>
+  </div>
+<% end %>
+<br>
+
+

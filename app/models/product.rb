@@ -10,7 +10,7 @@
 #  created_at    :datetime
 #  updated_at    :datetime
 #  box_id        :integer
-#  pack_to       :text
+#  owner_id      :integer
 #
 
 class Product < ActiveRecord::Base
@@ -19,6 +19,7 @@ class Product < ActiveRecord::Base
   attr_accessible :desc
   attr_accessible :status
   attr_accessible :box_id
+  attr_accessible :owner_id
 
   has_one :product_status, as: :status
 
@@ -43,7 +44,10 @@ class Product < ActiveRecord::Base
       return false
     end
     s = ProductStatus.find( self.status )
-    return s.avail
+    #return s.avail
+    # Make only "in stock" and "In the office" products available for contracts estimation.
+    a = s.for_sale?
+    return a
   end
 
   def prod_type()
@@ -109,13 +113,6 @@ class Product < ActiveRecord::Base
     end
     res = Box.find( self.box_id )
     return res
-  end
-
-  def pack_to_stri()
-    if ( not self.pack_to )
-      return "Unspecified"
-    end
-    return self.pack_to
   end
 
   def add_attachment( file, desc )

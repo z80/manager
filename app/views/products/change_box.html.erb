@@ -56,7 +56,7 @@
       <td>-</td>
       <td>-</td>
       <td>
-        <%= form_tag( change_product_box_apply_path( @product.id ), method: 'post' ) do %>
+        <%= form_tag( edit_product_path( @product.id ), method: 'get' ) do %>
           <%=submit_tag 'Not in a box, somewhere in the office', class: 'btn btn-warning'%>
           <%=hidden_field_tag( :box_id, -1 )%>
         <%end%>
@@ -75,7 +75,7 @@
         <td><%= box.desc %></td>
         <td><%= link_to 'Show', box %></td>
         <td>
-          <%= form_tag( change_product_box_apply_path( @product.id ), method: 'post' ) do %>
+          <%= form_tag( edit_product_path( @product.id ), method: 'get' ) do %>
             <%=submit_tag 'Put it here', class: 'btn btn-warning'%>
             <%=hidden_field_tag( :box_id, box.id )%>
           <%end%>
@@ -85,7 +85,8 @@
   </tbody>
 </table>
 
-<%= link_to 'Show', @product %> |
-<%= link_to 'Back', prod_type_path( @product.prod_type_id ) %>
+<%= link_to 'Show product', @product %> |
+<%= link_to 'Back to editing', edit_product_path( @product.id ) %>
+<%= link_to 'Back to products list', prod_type_path( @product.prod_type_id ) %>
 
 

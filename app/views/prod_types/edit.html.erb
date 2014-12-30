@@ -11,7 +11,7 @@
 
 <%if @subproducts && (@subproducts.size > 0)%>
   <strong>Subtypes list</strong>
-  <table>
+  <table class="table table-bordered table-hover">
     <%@subproducts.each do |pair|%>
       <%spt = pair[:type]%>
       <%pt  = pair[:subtype]%>

@@ -81,7 +81,7 @@ class User < ActiveRecord::Base
   end
 
   def name_stri
-    return self.name + ' ' + self.surname
+    return self.name.to_s + ' ' + self.surname.to_s
   end
 
 private

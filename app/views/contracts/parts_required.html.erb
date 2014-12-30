@@ -99,9 +99,11 @@
   <%end%>
 
   <%if @could.size > 0%>
-    The following positions for this project are unavailable in stock. But these 
-    products can be assembled from parts available.
-    <table>
+    <h2>
+      The following positions for this project are unavailable in stock. But these 
+      products can be assembled from parts available.
+    </h2>
+    <table class="table table-hover table-bordered">
       <%@could.each do |part, cnt|%>
         <tr>
           <td>
@@ -128,8 +130,10 @@
   <%end%>
 
   <%if @couldnt.size > 0%>
-    The following position(s) for this project are unavailable and can <strong>not</strong> be assembled.
-    <table>
+    <h2>
+      The following position(s) for this project are unavailable and can <strong>not</strong> be assembled.
+    </h2>
+    <table class="table table-hover table-bordered">
       <%@couldnt.each do |part, cnt|%>
         <tr>
           <td>
@@ -168,7 +172,7 @@
       <% end %>
       <br>
     <%end%>
-    <table>
+    <table class="table table-hover table-bordered">
       <%@parts_to_purchase.each do |part, cnt|%>
         <tr>
           <td>

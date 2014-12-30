@@ -1,20 +1,21 @@
 <p id="notice"><%= notice %></p>
-<%= link_to 'Only in stock',   prod_type_path( @prod_type.id, only_avail: true ), class: "btn btn-info" %>
-<%= link_to 'Only unassigned', prod_type_path( @prod_type.id, only_avail: true, only_unassigned: true ), class: "btn btn-info" %>
-<%= link_to 'All products',  prod_type_path( @prod_type.id, only_avail: false ), class: "btn btn-info" %>
-<br>
-<br>
 
 <%part = @prod_type.part%>
 <%if part%>
-  <%= link_to 'Part ordering', show_production_path( part.id ) %>
+  <%= link_to 'Part ordering', show_production_path( part.id ), class: "btn btn-info" %>
   <br>
   <br>
 <%end%>
 
 <%=render( 'prod_types/show' )%>
 
-<%= render( 'products/index' ) %>
+<%= link_to 'Only in stock',   prod_type_path( @prod_type.id, only_in_stock: true ),   class: "btn btn-info" %>
+<%= link_to 'Only available',  prod_type_path( @prod_type.id, only_available: true ),  class: "btn btn-info" %>
+<%= link_to 'Only unassigned', prod_type_path( @prod_type.id, only_unassigned: true ), class: "btn btn-info" %>
+<%= link_to 'All products',    prod_type_path( @prod_type.id, all_products: true ),    class: "btn btn-info" %>
+<br>
+
+<%=render( 'products/index' )%>
 <br>
 
 <%if part%>

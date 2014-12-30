@@ -15,6 +15,7 @@
 #  user_id            :integer
 #  packing_details    :text
 #  client_visible     :boolean
+#  pack_to            :text
 #
 
 require 'test_helper'

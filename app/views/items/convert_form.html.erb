@@ -111,7 +111,7 @@
     <%if @paginate_parts then%>
         <%=will_paginate @parts, param_name: :part_page, renderer: BootstrapPagination::Rails %>
     <%end%>
-    <table>
+    <table class="table table-bordered table-hover">
         <% @parts.each do |part| %>
             <tr>
               <td>
@@ -132,7 +132,7 @@
     <%if @paginate_boxes then%>
         <%will_paginate @boxes, param_name: :box_page, renderer: BootstrapPagination::Rails %>
     <%end%>
-    <table>
+    <table class="table table-bordered table-hover">
         <% @boxes.each do |box| %>
             <tr>
               <td>

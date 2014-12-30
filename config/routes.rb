@@ -19,9 +19,17 @@ Train01::Application.routes.draw do
   match     '/contracts/:id/copy',                    to: 'contracts#copy',                via: :post, as: :copy_contract
   match     '/contracts/:id/packing_list',            to: 'contracts#packing_list',        via: :get,  as: :packing_list
   match     '/contracts/:id/user_packing_list',       to: 'contracts#user_packing_list',   via: :get,  as: :user_packing_list
+  match     '/contracts/:id/followup_packing_list',   to: 'contracts#followup_packing_list',  via: :get,  as: :followup_packing_list
+  match     '/contracts/:id/inventory_packing_list',  to: 'contracts#inventory_packing_list', via: :get,  as: :inventory_packing_list
   match     '/contracts/:id/ship_assigned_items',     to: 'contracts#ship_assigned_items', via: :post, as: :ship_assigned_items
   match     '/contracts/:id/add_attachment',          to: 'contracts#add_attachment',      via: :post, as: :contract_add_attachment
-
+  match     '/contracts/:id/change_number/:item',     to: 'contracts#change_number',       via: :get,  as: :change_number
+  match     '/contracts/:id/change_number/:item',     to: 'contracts#change_number_apply', via: :post, as: :change_number_apply
+  match     '/contracts/:id/add_ship_date',           to: 'contracts#add_ship_date',       via: :post, as: :add_ship_date
+  match     '/contracts/:id/set_ship_date/:item',     to: 'contracts#set_ship_date',       via: :get,  as: :set_ship_date
+  match     '/contracts/:id/set_ship_date/:item',     to: 'contracts#set_ship_date_apply', via: :post, as: :set_ship_date_apply
+  match     '/contracts/:id/change_box',              to: 'contracts#change_box',          via: :get,  as: :change_contract_box
+  match     '/contracts/:id/change_box',              to: 'contracts#change_box_apply',    via: :post, as: :change_contract_box_apply
 
   resources :product_statuses
 
@@ -78,9 +86,10 @@ Train01::Application.routes.draw do
   match      'parts/:id/estimate',         to: 'parts#estimate_take',         via: :post
   match      'parts/:id/show_production',  to: 'parts#show_production',       via: :get,  as: :show_production
   match      'parts/:id/show_production_apply', to: 'parts#show_production_apply', via: :post
-  match      'parts/:id/add_image',        to: 'parts#add_image', via: :post, as: :part_add_image
-  match      'parts/:id/add_attachment',   to: 'parts#add_attachment', via: :post, as: :part_add_attachment
-  match      'parts/:id/copy',             to: 'parts#copy',             via: :post, as: :copy_part
+  match      'parts/:id/add_image',        to: 'parts#add_image',             via: :post, as: :part_add_image
+  match      'parts/:id/add_attachment',   to: 'parts#add_attachment',        via: :post, as: :part_add_attachment
+  match      'parts/:id/copy',             to: 'parts#copy',                  via: :post, as: :copy_part
+  match      'parts/:id/bom',              to: 'parts#bom',                   via: :get,  as: :part_bom
   
   resources :items
   match     '/items/:id/convert_form',     to: 'items#convert_form', via: :get,  as: :convert_form

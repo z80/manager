@@ -89,7 +89,10 @@ class Item < ActiveRecord::Base
   end
 
   def cnt
-    return self.set_sz * self.sets_cnt
+    if (not self.set_sz) || (not self.sets_cnt)
+      return "Undefined"
+    end
+    return (self.set_sz || 0) * (self.sets_cnt || 0)
   end
 
   def part

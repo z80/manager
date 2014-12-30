@@ -10,7 +10,7 @@
 #  created_at    :datetime
 #  updated_at    :datetime
 #  box_id        :integer
-#  pack_to       :text
+#  owner_id      :integer
 #
 
 require 'test_helper'

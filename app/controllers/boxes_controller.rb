@@ -121,8 +121,8 @@ class BoxesController < ApplicationController
           insts.each do |a|
               insts.each do |b|
                   if ((a != b) && ( a[:part_id] == b[:part_id] )) then
-                      pi_a = PartInst.find( a.id )
-                      pi_b = PartInst.find( b.id )
+                      pi_a = PartInst.find( a[:id] )
+                      pi_b = PartInst.find( b[:id] )
                       pi_a.cnt = a[:cnt] + b[:cnt]
                       pi_a.save
                       pi_b.delete
@@ -159,7 +159,7 @@ class BoxesController < ApplicationController
       old_cnt = @part_inst.cnt
       @part_inst.cnt = @part_inst.cnt + cnt
       if ( @part_inst.save ) then
-          log( "Parts cnt is changed from " + old_cnt.to_s + " to " + cnt.to_s + " in box " + @box.box_id, @user )
+          log( "Parts cnt is changed from " + old_cnt.to_s + " to " + @part_inst.cnt.to_s + " in box " + @box.box_id, @user )
           redirect_to inspect_content_path( @box.id ), notice: "#{cnt} parts\'ve been added sucessfully!"
       else
           render take_part_insts_path, notice: "Failed to add #{cnt} items to this box!"
@@ -190,7 +190,7 @@ class BoxesController < ApplicationController
       old_cnt = @part_inst.cnt
       @part_inst.cnt = @part_inst.cnt - cnt
       if ( @part_inst.save ) then
-          log( "Parts cnt is changed from " + old_cnt.to_s + " to " + cnt.to_s + " in box " + @box.box_id, @user )
+          log( "Parts cnt is changed from " + old_cnt.to_s + " to " + @part_inst.cnt.to_s + " in box " + @box.box_id, @user )
 
           redirect_to inspect_content_path( @box.id ), notice: "#{cnt} parts\'ve been taken sucessfully!"
       else

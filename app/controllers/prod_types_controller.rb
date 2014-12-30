@@ -24,10 +24,8 @@ class ProdTypesController < ApplicationController
   def show
     @user           = current_user
     @prod_type      = ProdType.find( params[ :id ] )
-    only_avail      = ( params[ :only_avail ] == nil ) ? true : params[ :only_avail ].to_bool
-    @only_unassigned = ( params[ :only_unassigned ] == nil ) ? true : params[ :only_unassigned ].to_bool
     search          = params[ :search ]
-    @products, @paginate = @prod_type.products( only_avail, search, params[ :page ] )
+    @products, @paginate = @prod_type.products( params.to_hash, search, params[ :page ] )
     
     @subproducts = @prod_type.subproducts
   end
@@ -70,6 +68,7 @@ class ProdTypesController < ApplicationController
     @prod_type.user_id = @user.id
     @prod_type.part_id = params[ :part_id ] || -1
     @prod_type.image   = params[ :prod_type ][ :image ]
+    @prod_type.packing_details = params[ :prod_type ][ :packing_details ]
 
     respond_to do |format|
       if @prod_type.save
@@ -87,9 +86,10 @@ class ProdTypesController < ApplicationController
   # PATCH/PUT /prod_types/1
   # PATCH/PUT /prod_types/1.json
   def update
-    @user              = current_user
-    @prod_type.part_id =   params[ :part_id ] || -1
-    @prod_type.image   ||= params[ :prod_type ][ :image ]
+    @user                      =   current_user
+    @prod_type.part_id         = params[ :part_id ]  || @prod_type.part_id || -1
+    @prod_type.image           = params[ :prod_type ][ :image ] || @prod_type.image
+    @prod_type.packing_details = params[ :prod_type ][ :packing_details ] || @prod_type.packing_details
     respond_to do |format|
       if @prod_type.update(prod_type_params)
         log( "Product type is adjusted: " + @prod_type.own_id, @user )
@@ -180,6 +180,7 @@ class ProdTypesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def prod_type_params
-      params.require( :prod_type ).permit( :part_id, :own_id, :desc, :image, :client_visible, :packing_details )
+      params.require( :prod_type ).permit( :part_id, :own_id, :desc, :image, 
+                                           :client_visible, :packing_details, :pack_to )
     end
 end

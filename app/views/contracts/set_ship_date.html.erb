@@ -1,0 +1,12 @@
+
+
+  <%= form_tag set_ship_date_path( @contract.id, @contract_item.id ), :method => 'post' do %>
+    <p  class="form-group">
+      <%= label_tag "Select ship date for the item:" %>
+      <%= select_tag :date, options_for_select( @ship_dates, @contract_item.ship_date_id ), class: "form-control" %>
+    </p>
+    <p class="form-group">
+      <%= submit_tag "Submit", class: 'btn btn-success' %>
+    </p>
+  <% end %>              
+

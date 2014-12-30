@@ -1,5 +1,6 @@
 class LogsController < ApplicationController
   include UsersHelper
+  include PartsHelper
   before_action :set_log, only: [:show, :edit, :update, :destroy]
 
   # GET /logs

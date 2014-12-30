@@ -10,6 +10,9 @@
 #  created_at :datetime
 #  updated_at :datetime
 #  warning    :integer
+#  number     :string(255)
+#  owner_id   :integer
+#  box_id     :integer
 #
 
 class Contract < ActiveRecord::Base
@@ -18,6 +21,9 @@ class Contract < ActiveRecord::Base
   attr_accessible :ship_date
   attr_accessible :shipped
   attr_accessible :warning
+  attr_accessible :number
+  attr_accessible :owner_id
+  attr_accessible :box_id
 
   def assigned?
     items = ContractItem.where( contract_id: self.id )
@@ -341,5 +347,24 @@ class Contract < ActiveRecord::Base
     end
     return atts
   end
+
+  def ship_dates
+    sds = ShipDate.where( contract_id: self.id )
+    ship_dates = []
+    sds.each do |sd|
+      ship_dates.append( [ sd.date.to_s, sd.id ] )
+    end
+    return ship_dates
+  end
+
+  def box()
+    res = Box.exists?( self.box_id )
+    if ( not res )
+      return nil
+    end
+    res = Box.find( self.box_id )
+    return res
+  end
+
 
 end

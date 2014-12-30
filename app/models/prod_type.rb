@@ -15,6 +15,7 @@
 #  user_id            :integer
 #  packing_details    :text
 #  client_visible     :boolean
+#  pack_to            :text
 #
 
 class ProdType < ActiveRecord::Base
@@ -25,6 +26,8 @@ class ProdType < ActiveRecord::Base
   attr_accessible :desc
   attr_accessible :user_id
   attr_accessible :image
+  attr_accessible :pack_to
+  attr_accessible :client_visible
 
   has_attached_file :image, :styles => { :medium => "512x512>", :thumb => "128x128>" }, :default_url => "/images/:style/missing.png"
   validates_attachment :image, #:presence => true,  
@@ -90,27 +93,84 @@ class ProdType < ActiveRecord::Base
     if ( search ) then
       paginate = false
       pp = search( Product, search, [ 'serial_number', 'desc' ] )
-      if ( only_avail )
-      	prods = []
-      	pp.each do |prod|
-          prods.append( prod ) if ( prod.avail? && (prod.prod_type_id == self.id) )
-      	end
+      if ( only_avail.class != Hash )
+        if ( only_avail )
+        	prods = []
+        	pp.each do |prod|
+            prods.append( prod ) if ( prod.avail? && (prod.prod_type_id == self.id) )
+        	end
+        else
+          pp.each do |prod|
+            prods.append( prod ) if (prod.prod_type_id == self.id)
+          end
+        end
       else
-        pp.each do |prod|
-          prods.append( prod ) if (prod.prod_type_id == self.id)
+        prods = []
+        if only_avail[ "only_in_stock" ]
+          st = ProductStatus.status_in_stock
+          pp.each do |prod|
+            prods.append( prod ) if ( prod.status == st )
+          end
+        elsif only_avail[ "only_available" ]
+          st_s = ProductStatus.status_in_stock
+          st_o = ProductStatus.status_in_office
+          pp.each do |prod|
+            prods.append( prod ) if ( ( prod.status == st_s ) || ( prod.status == st_o ) )
+          end
+        elsif only_avail[ "only_unassigned" ]
+          st_s = ProductStatus.status_in_stock
+          st_o = ProductStatus.status_in_office
+          pp.each do |prod|
+            prods.append( prod ) if ( ( ( prod.status == st_s ) || ( prod.status == st_o ) ) && 
+                                    ( not prod.contract() ) )
+          end
+        elsif only_avail[ "all_products" ]
+          pp.each do |prod|
+            prods.append( prod )
+          end
         end
       end
     else
-      paginate = true
-      if ( only_avail )
-      	statuses = ProductStatus.where( avail: true )
-      	st = []
-      	statuses.each do |a|
-      	  st.append( a.id ) if ( a.avail? )
-      	end
-      	prods = Product.where( prod_type_id: self.id ).where( status: st ).order( "id desc" ).page( page )
+      if ( only_avail.class != Hash )
+        paginate = true
+        if ( only_avail )
+        	statuses = ProductStatus.where( avail: true )
+        	st = []
+        	statuses.each do |a|
+        	  st.append( a.id ) if ( a.avail? )
+        	end
+        	prods = Product.where( prod_type_id: self.id ).where( status: st ).order( "id desc" ).page( page )
+        else
+        	prods = Product.order( "id DESC" ).where( prod_type_id: self.id ).page( page )
+        end
       else
-      	prods = Product.order( "id DESC" ).where( prod_type_id: self.id ).page( page )
+        if only_avail[ "only_in_stock" ]
+          paginate = true
+          st_s = ProductStatus.status_in_stock
+          prods = Product.where( prod_type_id: self.id ).where( status: st_s ).order( "id desc" ).page( page )
+        elsif only_avail[ "only_available" ]
+          paginate = true
+          st_s = ProductStatus.status_in_stock
+          st_o = ProductStatus.status_in_office
+          prods = Product.where( prod_type_id: self.id ).where( status: [ st_s, st_o ] ).order( "id desc" ).page( page )
+        elsif only_avail[ "only_unassigned" ]
+          paginate = false
+          st_s = ProductStatus.status_in_stock
+          st_o = ProductStatus.status_in_office
+          pp = Product.where( prod_type_id: self.id ).where( status: [ st_s, st_o ] ).order( "id desc" ).page( page )
+          prods = []
+          pp.each do |prod|
+            prods.append( prod ) if ( not prod.contract )
+          end
+        elsif only_avail[ "all_products" ]
+          paginate = true
+          prods = Product.order( "id DESC" ).where( prod_type_id: self.id ).page( page )
+        else
+          # Let it be "only in stock"
+          paginate = true
+          st_s = ProductStatus.status_in_stock
+          prods = Product.where( prod_type_id: self.id ).where( status: st_s ).order( "id desc" ).page( page )
+        end
       end
     end
   	return prods, paginate
@@ -131,6 +191,41 @@ class ProdType < ActiveRecord::Base
     end
     part = Part.find( self.part_id )
     return part.cnt
+  end
+
+  # This is with "in stock" status.
+  def cnt_in_stock()
+    status = ProductStatus.status_in_stock()
+    prods = Product.where( prod_type_id: self.id ).where( status: status )
+    cnt = prods.size()
+    return cnt
+  end
+
+  # This is with "in stock" or "in the office" status.
+  def cnt_ready_for_sale()
+    in_stock = ProductStatus.status_in_stock()
+    in_office = ProductStatus.status_in_office()
+    prods = Product.where( prod_type_id: self.id ).where( status: [in_stock, in_office] )
+    cnt = prods.size()
+    return cnt
+  end
+
+  def cnt_unassigned()
+    in_stock = ProductStatus.status_in_stock()
+    in_office = ProductStatus.status_in_office()
+    prods = Product.where( prod_type_id: self.id ).where( status: [in_stock, in_office] )
+    cnt = 0
+    prods.each do |prod|
+      if not prod.contract then
+        cnt += 1
+      end
+    end
+    return cnt
+  end
+
+  def cnt_total()
+    cnt = Product.where( prod_type_id: self.id ).size
+    return cnt
   end
 
   def subproducts()
@@ -200,6 +295,12 @@ class ProdType < ActiveRecord::Base
     return atts
   end
 
+  def pack_to_stri()
+    if ( not self.pack_to )
+      return "Unspecified"
+    end
+    return self.pack_to
+  end
 
 end
 

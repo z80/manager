@@ -28,12 +28,16 @@
     <%= f.text_area :desc, class: "form-control" %>
   </div>
   <div class="form-group">
-    <%= f.label "Visible in client packing list" %><br>
+    <%= f.label "Invisible in client packing list" %><br>
     <%= f.check_box :client_visible, class: "form-control" %>
   </div>
   <div class="form-group">
     <%= f.label "Packing notes for client packing list" %><br>
     <%= f.text_area :packing_details, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label "Recommended to pack to the following box:" %><br>
+    <%= f.text_field :pack_to, class: "form-control" %>
   </div>
 <% end %>
 <br>
@@ -49,7 +53,7 @@
     <%if @paginate then%>
       <%=will_paginate @parts, param_name: :page, renderer: BootstrapPagination::Rails %>
     <%end%>
-    <table>
+    <table class="table table-bordered table-hover">
       <% @parts.each do |part| %>
         <tr>
           <td>

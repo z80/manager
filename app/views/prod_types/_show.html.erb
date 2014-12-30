@@ -21,9 +21,27 @@
 </p>
 
 <p>
-  <strong>Total cnt in stock:</strong>
+  <strong>Quantity in stock:</strong>
   <br>
-  <%= @prod_type.cnt %>
+  <%= @prod_type.cnt_in_stock %>
+</p>
+
+<p>
+  <strong>Quantity available:</strong>
+  <br>
+  <%= @prod_type.cnt_ready_for_sale %>
+</p>
+
+<p>
+  <strong>Quantity unassigned:</strong>
+  <br>
+  <%= @prod_type.cnt_unassigned %>
+</p>
+
+<p>
+  <strong>Quantity total:</strong>
+  <br>
+  <%= @prod_type.cnt_total %>
 </p>
 
 <p>
@@ -33,15 +51,20 @@
 </p>
 
 <p>
-  <strong>Product is visible in client's packing list:</strong>
+  <strong>Product is invisible in client's packing list:</strong>
   <br>
-  <%= @prod_type.client_visible ? "yes" : "no" %>
+  <%= @prod_type.client_visible ? "invisible" : "visible" %>
+</p>
+
+<p>
+  <strong>Recommended to pack to the following box:</strong>
+  <%= @prod_type.pack_to_stri %>
 </p>
 
 <p>
   <strong>Client's packing list details:</strong>
   <br>
-  <%= (@prod_type.packing_details || '').tr!( '\n', '<br>' ) %>
+  <%= @prod_type.packing_details.to_s %>
 </p>
 
 
@@ -75,7 +98,7 @@
 
 <%if @subproducts && (@subproducts.size > 0)%>
   <strong>Subtypes list</strong>
-  <table>
+  <table class="table table-bordered table-hover">
     <%@subproducts.each do |pair|%>
       <%spt = pair[:type]%>
       <%pt  = pair[:subtype]%>

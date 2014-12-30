@@ -2,27 +2,27 @@
 
 <h2>Filtering</h2>
   <%= form_tag request.env['PATH_INFO'], :method => 'get' do %>
-    <p>
+    <p  class="form-group">
       <%= label_tag "Contract:" %>
-      <%= select_tag :contract_id, options_for_select( @contracts, @contract_id ) %>
+      <%= select_tag :contract_id, options_for_select( @contracts, @contract_id ), class: "form-control" %>
     </p>
-    <p>
+    <p class="form-group">
       <%= label_tag "User responsible:" %>
-      <%= select_tag :user_resp_id, options_for_select( @users, @user_resp_id ) %>
+      <%= select_tag :user_resp_id, options_for_select( @users, @user_resp_id ), class: "form-control" %>
     </p>
-    <p>
+    <p class="form-group">
       <%= label_tag "User placed:" %>
-      <%= select_tag :user_placed_id, options_for_select( @users, @user_placed_id ) %>
+      <%= select_tag :user_placed_id, options_for_select( @users, @user_placed_id ), class: "form-control" %>
     </p>
-    <p>
+    <p class="form-group">
       <%= label_tag "Status:" %>
-      <%= select_tag :status_id, options_for_select( @statuses, @status_id ) %>
+      <%= select_tag :status_id, options_for_select( @statuses, @status_id ), class: "form-control" %>
     </p>
-    <p>
+    <p class="form-group">
       <%= label_tag "Only valid today:" %>
-      <%= check_box_tag( :only_valid_today, 0, (@only_valid_today=="true") )%>
+      <%= check_box_tag( :only_valid_today, 0, (@only_valid_today=="true"), class: "form-control" )%>
     </p>
-    <p>
+    <p class="form-group">
       <%= submit_tag "Filter", :name => nil, class: 'btn btn-success' %>
     </p>
   <% end %>              
@@ -48,6 +48,7 @@
       <th>Deliver address</th>
       <th>Status</th>
       <th>User responsible</th>
+      <th>Cnt</th>
       <th>Total price</th>
     </tr>
   </thead>
@@ -65,6 +66,7 @@
         <td><%= item.deliver_addr %></td>
         <td><%= item.status_name %></td>
         <td><%= item.user_resp_name %></td>
+        <td><%= item.cnt.to_s %></td>
         <td><%= item.total_price %></td>
         <td><%= link_to 'View', item, class: 'btn btn-success' %></td>
         <td><%= link_to 'Edit', edit_item_path( item ), class: 'btn btn-warning' %></td>

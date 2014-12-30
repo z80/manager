@@ -97,6 +97,8 @@ class ItemsController < ApplicationController
 
   # GET /items/1/edit
   def edit
+    @user  = current_user
+
     @users = users
 
     @statuses = statuses
@@ -174,6 +176,8 @@ class ItemsController < ApplicationController
   # PATCH/PUT /items/1
   # PATCH/PUT /items/1.json
   def update
+    @user  = current_user
+
     if ( params[ :item ][ :image ] ) then
         @item.image = params[ :item ][ :image ]
     end
@@ -205,8 +209,9 @@ class ItemsController < ApplicationController
 
   # GET /items/1
   def convert_form
-    @item = Item.find_by_id( params[ :id ] )
     @user  = current_user
+
+    @item = Item.find_by_id( params[ :id ] )
     if ( params[ :search ] ) then
         @parts = search( Part, params[:search], [ 'own_id', 'third_id', 'desc' ] )
         @paginate_parts = false
@@ -221,6 +226,7 @@ class ItemsController < ApplicationController
   # POST /items/1
   def convert
     @user = current_user
+    
     @item = Item.find_by_id( params[ :id ] )
     @item.status = 'converted'
     inst = PartInst.new

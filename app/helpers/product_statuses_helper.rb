@@ -1,5 +1,5 @@
 module ProductStatusesHelper
-  def statuses
+  def product_statuses
     all = ProductStatus.all
     res = []
     all.each do |ps|

@@ -16,11 +16,6 @@
 </p>
 
 <p>
-  <strong>Recommended to pack to the following box:</strong>
-  <%= @product.pack_to_stri %>
-</p>
-
-<p>
   <strong>Status:</strong>
   <%= @product.status_stri %>
 </p>
@@ -33,6 +28,15 @@
 	<%else%>
 	  This product is not in a box.
 	<%end%>
+</p>
+
+<p>
+  <strong>Responsible user:</strong>
+  <%if @owner%>
+    <%= @owner.name_stri %>
+  <%else%>
+    Unspecified
+  <%end%>
 </p>
 
 

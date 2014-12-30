@@ -12,15 +12,16 @@ class UsersController < ApplicationController
     #else
     #  @users = nil
     #end
-      puts '#########################################'
-      puts 'here!'
-      puts @user
-      puts '+++++++++++++++++++++++++++++++++++++++++'
+      #puts '#########################################'
+      #puts 'here!'
+      #puts @user
+      #puts '+++++++++++++++++++++++++++++++++++++++++'
 
     @users = User.all
   end
 
   def index
+    @user = current_user
     all
   end
 

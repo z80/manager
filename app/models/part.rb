@@ -19,6 +19,7 @@
 #  order_price        :decimal(10, 4)
 #  part_type          :integer
 #  order_time         :integer
+#  ordering_person_id :integer
 #
 
 class Part < ActiveRecord::Base
@@ -50,6 +51,7 @@ class Part < ActiveRecord::Base
   attr_accessible :order_desc
   attr_accessible :part_type
   attr_accessible :order_time
+  attr_accessible :ordering_person_id
 
   def cnt()
     insts = PartInst.where( part_id: self.id )
@@ -84,8 +86,10 @@ class Part < ActiveRecord::Base
       sps = Subpart.where( belongs_id: self.id )
       parts = []
       sps.each do |sp|
-        part = Part.find( sp.contains_id )
-        parts.append( part )
+        part = Part.exists?( sp.contains_id ) ? Part.find( sp.contains_id ) : nil
+        if ( part )
+          parts.append( part )
+        end
       end
       return parts
   end
@@ -94,10 +98,12 @@ class Part < ActiveRecord::Base
     sps = Subpart.where( contains_id: self.id )
     pp = {}
     sps.each do |sp|
-      part = Part.find( sp.belongs_id )
-      pp[ part.id ] = ( pp[ part.id ] ) ? 
-                            ( pp[ part.id ] + sp.cnt ) : 
-                            sp.cnt
+      part = Part.exists?( sp.belongs_id ) ? Part.find( sp.belongs_id ) : nil
+      if part
+        pp[ part.id ] = ( pp[ part.id ] ) ? 
+                              ( pp[ part.id ] + sp.cnt ) : 
+                              sp.cnt
+      end
     end
 
     parts = []
@@ -262,15 +268,18 @@ class Part < ActiveRecord::Base
   def order_items( contract_id = nil )
     ordered_ind = -1
     to_be_ordered_ind = -1
+    delivered_ind = -1
     iss = ItemStatus.all
     iss.each do |is|
       if ( is.name == "To be ordered" )
         to_be_ordered_ind = is.id
       elsif ( is.name == "Ordered" )
         ordered_ind = is.id
+      elsif ( is.name == "Delivered" )
+        delivered_ind = is.id
       end
     end
-    items = Item.where( part_id: self.id ).where( status_id: [ ordered_ind, to_be_ordered_ind ] )
+    items = Item.where( part_id: self.id ).where( status_id: [ ordered_ind, to_be_ordered_ind, delivered_ind ] )
     if ( contract_id )
       items = items.where( contract_id: contract_id )
     end
@@ -294,6 +303,20 @@ class Part < ActiveRecord::Base
       boxes.append( {box: box, inst: pi} )
     end
     return boxes
+  end
+
+  def order_price_stri()
+    a = self.order_price || 0.0
+    a = "%6.3f" % a
+    return a
+  end
+
+  def ordering_person_stri
+    p = User.exists?( self.ordering_person_id ) ? User.find( self.ordering_person_id ) : nil
+    if p
+      return p.name + ' ' + p.surname
+    end
+    return 'Unspecified'
   end
 
 private

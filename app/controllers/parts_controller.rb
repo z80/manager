@@ -61,11 +61,11 @@ class PartsController < ApplicationController
     @cnt  = params[ :cnt ] || 1
     @cnt = @cnt.to_i
     @type = (params[ :type ]) ? params[ :type ].to_i : -1
-    @include_ordered = params[ :include_ordered ] ? true : false
+    @exclude_ordered = params[ :exclude_ordered ] ? true : false
 
     params[ :only_missing ] = ( params[ :only_missing ] ) ? params[ :only_missing ].to_bool : false
     @parts, cp = ( params[ :only_missing ] ) ? 
-                    parts_missing( @part, @type, @cnt, include_ordered: @include_ordered ) : 
+                    parts_missing( @part, @type, @cnt, exclude_ordered: @exclude_ordered ) : 
                     parts_needed( @part, @type, @cnt )
     @price = total_price( @parts ).to_i
     users()
@@ -85,6 +85,13 @@ class PartsController < ApplicationController
     end
   end
 
+  def bom
+    @user = current_user
+    @part = Part.find( params[ :id ] )
+    @parts, cp = parts_needed( @part, -1, 1 )
+  end
+
+
   def show_production_submit
 
   end
@@ -96,6 +103,9 @@ class PartsController < ApplicationController
     @part = Part.new
     @part.user_id = @user.id
     @part_types = part_types
+    @ordering_person_id = @user.id
+    @users = users
+    @users.prepend( [ 'None', -1 ] )
   end
 
   # GET /parts/1/edit
@@ -103,6 +113,9 @@ class PartsController < ApplicationController
     @user  = current_user
     @users = User.all
     @part_types = part_types
+    @ordering_person_id = @part.ordering_person_id || @user.id
+    @users = users
+    @users.prepend( [ 'None', -1 ] )
   end
 
   # POST /parts
@@ -112,6 +125,7 @@ class PartsController < ApplicationController
     @users = User.all
     @part  = Part.new(part_params)
     @part.user_id  = @user.id
+    @part_types = part_types
     if ( params[ :part ] ) then
         @part.own_id   = params[ :part ][ :own_id ]
         @part.third_id = params[ :part ][ :third_id ]
@@ -154,6 +168,7 @@ class PartsController < ApplicationController
     if params[ :part ][ :image ] then
       @part.image = params[ :part ][ :image ]
     end
+    @part_types = part_types
     @part.part_type  = params[ :part ][ :part_type ]
     @part.order_time = params[ :part ][ :order_time ]
     respond_to do |format|
@@ -225,7 +240,8 @@ class PartsController < ApplicationController
 
   def remove_subparts_apply
       @user  = current_user
-      sp = Subpart.find( params[ :subpart_id ] )      
+      @part  = Part.find( params[ :id ] )
+      sp = Subpart.find( params[ :subpart_id ] )
       if ( sp.delete ) then
           log( "Subpart is removed from part " + @part.own_id, @user )
 
@@ -312,7 +328,7 @@ class PartsController < ApplicationController
     dest.third_id    = src.third_id + " (copy)"
     dest.user_id     = @user.id
     dest.image       = src.image
-    dest.desc        = src.desc
+    dest.desc        = src.desc     + " (copy)"
     dest.min_cnt     = src.min_cnt
     dest.order_link  = src.order_link
     dest.order_desc  = src.order_desc
@@ -352,7 +368,8 @@ class PartsController < ApplicationController
       params.require(:part).permit( :own_id, :third_id, :user_id, 
                                     :cnt, :image, :min_cnt, :order_link, 
                                     :order_desc, :order_price, :part_type, 
-                                    :file, :order_time, :include_ordered )
+                                    :file, :order_time, :exclude_ordered, 
+                                    :ordering_person_id )
     end
 end
 

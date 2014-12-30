@@ -22,7 +22,7 @@
 
         <%if @only_missing%>
           <%= label_tag "Exclude ordered items:" %>
-          <%= check_box_tag( :include_ordered, "true", @include_ordered )%>
+          <%= check_box_tag( :exclude_ordered, "true", @exclude_ordered )%>
         <%end%>
       </td>
       <td>
@@ -73,7 +73,8 @@
     <thead>
       <tr>
         <th>Image</th>
-        <th>Part</th>
+        <th>Part number</th>
+        <th>Unit price (USD)</th>
         <th>Cnt</th>
         <th></th>
         <th></th>
@@ -96,6 +97,7 @@
               <td>
                   <%= part.own_id %>
               </td>
+              <td><%= part.order_price_stri%></td>
               <td><%= cnt %></td>
               <td><%= link_to 'Show', part, class: "btn btn-success" %></td>
               <td><%= link_to 'Edit', edit_part_path(part), class: "btn btn-warning" %></td>

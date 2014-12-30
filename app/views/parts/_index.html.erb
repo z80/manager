@@ -12,7 +12,7 @@ table-responsive">
       <th>How part look like (image)</th>
       <th>Aist-NT internal Id</th>
       <th>Third party's part type Id</th>
-      <th>User introduced this part type</th>
+      <th>Unit price (USD)</th>
       <th>Total cnt</th>
       <th>Ordered cnt</th>
       <th></th>
@@ -38,11 +38,7 @@ table-responsive">
         </td>
         <td><%= part.own_id %></td>
         <td><%= part.third_id %></td>
-        <%if part.user then%>
-            <td><%= part.user.name + ' ' + part.user.surname %></td>
-        <%else%>
-            <td>Can't specify</td>
-        <%end%>
+        <td><%= part.order_price_stri %></td>
         <td><%= part.cnt %></td>
         <td>
           <%if not part.has_subparts?%>

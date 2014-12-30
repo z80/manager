@@ -1,0 +1,81 @@
+
+<h2>Select default location for items in the contract</h2>
+
+<% if @contract.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@contract.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+    <ul>
+    <% @contract.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+
+<p>
+  <strong>Number:</strong>
+  <%= @contract.number %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @contract.name %>
+</p>
+
+<%if @paginate%>
+  <%=will_paginate( @boxes, renderer: BootstrapPagination::Rails )%>
+<%end%>
+
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th>Warehouse</th>
+      <th>Box</th>
+      <th>Desc</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<tr>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>
+        <%= form_tag( change_contract_box_apply_path( @contract.id ), method: 'post' ) do %>
+          <%=submit_tag 'Not in a box, somewhere in the office', class: 'btn btn-warning'%>
+          <%=hidden_field_tag( :box_id, -1 )%>
+        <%end%>
+      </td>
+  	</tr>
+    <% @boxes.each do |box| %>
+      <tr>
+        <td>
+            <%if box.warehouse then %>
+              <%=box.warehouse.w_id%>
+            <%else%>
+              Unspecified
+            <%end%>
+        </td>
+        <td><%= box.box_id %></td>
+        <td><%= box.desc %></td>
+        <td><%= link_to 'Show', box %></td>
+        <td>
+          <%= form_tag( change_contract_box_apply_path( @contract.id ), method: 'post' ) do %>
+            <%=submit_tag 'Put it here', class: 'btn btn-warning'%>
+            <%=hidden_field_tag( :box_id, box.id )%>
+          <%end%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Back to show', @contract, class: " btn btn-success" %> |
+<%= link_to 'Back to edit', contract_path( @contract.id ), class: " btn btn-success" %>
+
+

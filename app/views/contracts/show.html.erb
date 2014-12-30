@@ -1,7 +1,14 @@
 <p id="notice"><%= notice %></p>
 
+<%if not @contract.shipped%>
+  <%= link_to 'Edit contract date/details', edit_contract_path(@contract, date: @ship_date_id || -1 ), class: "btn btn-warning" %> |
+<%end%>
+<%= link_to 'All contracts', contracts_path, class: "btn btn-info" %>
+<br>
+<br>
+
 <%=form_tag( copy_contract_path( @contract.id ), method: 'post' ) do%>
-  Make a copy of this contract <%=submit_tag( "Copy", class: 'btn btn-warning', data: { confirm: 'Are you sure?' } )%>
+  Make a copy of this contract <%=submit_tag( "Copy", class: 'btn btn-danger', data: { confirm: 'Are you sure?' } )%>
 <%end%>
 <br>
 
@@ -12,12 +19,28 @@
   </strong>
 </p>
 
-<strong><%=link_to( "Packing list", packing_list_path( @contract.id ), class: "btn btn-success" )%></strong>
-<strong><%=link_to( "Packing list for customer", user_packing_list_path( @contract.id ), class: "btn btn-success" )%></strong>
+  <%= form_tag request.env['PATH_INFO'], :method => 'get' do %>
+    <p  class="form-group">
+      <%= label_tag "Filter contract items by ship date:" %>
+      <%= select_tag :date, options_for_select( @ship_dates, @ship_date_id || -1 ), class: "form-control" %>
+    </p>
+    <p class="form-group">
+      <%= submit_tag "Show items by ship date", class: 'btn btn-success' %>
+    </p>
+  <% end %>              
+
+<strong><%=link_to( "Packing list (internal use only!!!)", packing_list_path( @contract.id ), class: "btn btn-info" )%></strong>
+<strong><%=link_to( "Contract packing list",  user_packing_list_path( @contract.id ), class: "btn btn-success" )%></strong>
+<strong><%=link_to( "Backordered items list", followup_packing_list_path( @contract.id ), class: "btn btn-success" )%></strong>
+<strong><%=link_to( "Inventory packing list", inventory_packing_list_path( @contract.id ), class: "btn btn-success" )%></strong>
 
 <p>
   <strong>Details provided</strong>
-  <%= @contract.desc %>
+    <%if @contract.number%>
+      <%= @contract.number.to_s + ". " + @contract.desc %>
+    <%else%>
+      <%= @contract.desc %>
+    <%end%>
 </p>
 
 <p>
@@ -29,6 +52,26 @@
   <strong>Shipped:</strong>
   <%= @contract.shipped %>
 </p>
+
+<p>
+  <strong>Responsible user:</strong>
+  <%if @owner%>
+    <%= @owner.name_stri %>
+  <%else%>
+    Unspecified
+  <%end%>
+</p>
+
+<p>
+  <%@box = @contract.box()%>
+  <%if @box%>
+    <strong>Contract items are put to <%=link_to( @box.box_id.to_s, box_path( @box.id ) )%> box by default</strong>
+    <%=render( 'boxes/show' )%>
+  <%else%>
+    Default place for contract items is not specified.
+  <%end%>
+</p>
+
 <br>
 
 <h2>Items in this contract:</h2>
@@ -36,6 +79,12 @@
   <thead>
     <tr>
       <td>
+        Sort by:<br>
+        <%= link_to( "Number",   contract_path( @contract.id, sort_by: "number" ), class: "btn" ) %><br>
+        <%= link_to( "As added", contract_path( @contract.id, sort_by: "id" ),     class: "btn" ) %>
+      </td>
+      <td>
+        Ship date
       </td>
       <td>
         Part No
@@ -203,13 +252,13 @@
   <%= text_area_tag  :desc %>
   <%= submit_tag 'Append attachment and/or description', class: 'btn btn-warning' %>
 <%end%>
-
+<br>
 
 
 
 <%if not @contract.shipped%>
-  <%= link_to 'Edit contract date/details', edit_contract_path(@contract) %> |
+  <%= link_to 'Edit contract date/details', edit_contract_path(@contract, date: @ship_date_id || -1 ), class: "btn btn-warning" %> |
 <%end%>
-<%= link_to 'All contracts', contracts_path %>
+<%= link_to 'All contracts', contracts_path, class: "btn btn-info" %>
 
 

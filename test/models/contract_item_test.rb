@@ -10,6 +10,8 @@
 #  updated_at   :datetime
 #  superitem_id :integer
 #  shipment_id  :integer
+#  number       :string(255)
+#  ship_date_id :integer
 #
 
 require 'test_helper'

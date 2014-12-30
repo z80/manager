@@ -19,6 +19,7 @@
 #  order_price        :decimal(10, 4)
 #  part_type          :integer
 #  order_time         :integer
+#  ordering_person_id :integer
 #
 
 require 'test_helper'

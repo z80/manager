@@ -12,7 +12,7 @@
   <% end %>
 
   <div class="actions">
-    <%= f.submit "Create/update part type" %>
+    <%= f.submit "Create/update part type", class: "btn btn-warning" %>
   </div>
 
   <div class="form-group">
@@ -55,6 +55,10 @@
   <div class="form-group">
     <%= f.label 'Ordering time in days.' %><br>
     <%= f.number_field :order_time, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label 'Choose a person who is supposed to order this part' %><br>
+    <%= f.select( :ordering_person_id, @users, selected: @ordering_person_id, class: "form-control" )%>
   </div>
     
 

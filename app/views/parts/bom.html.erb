@@ -1,0 +1,57 @@
+<p id="notice"><%= notice %></p>
+
+<%= link_to 'Back', part_path( @part.id), class: "btn btn-info" %>
+<br>
+<br>
+
+<div class="panel panel-info">
+  <div class="panel-heading">
+    Part info
+  </div>
+  <div class="panel-body">
+    <%=render 'parts/show' %>
+  </div>
+</div>
+
+<h2><strong>BOM</strong></h2>
+<table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Part number</th>
+        <th>Description / comments / notes</th>
+        <th>Ordering / production time (days)</th>
+        <th>Ordering person</th>
+        <th>Unit price (USD)</th>
+        <th>Order link</th>
+        <th>Ordering info</th>
+        <th>Quantity per one assembly</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @parts.each do | id, cnt| %>
+        <tr>
+          <%if Part.exists?( id ) then%>
+              <%part = Part.find( id )%>
+          <%end%>
+          <%if part then%>
+              <td><%= link_to( part.own_id, part_path( part.id ), class: "btn btn-info" )%></td>
+              <td><%= part.desc %></td>
+              <td><%= (part.order_time || 0).to_s%></td>
+              <td><%= part.ordering_person_stri %></td>
+              <td><%= part.order_price_stri%></td>
+              <td><%= part.order_link%></td>
+              <td><%= part.order_desc%></td>
+              <td><%= cnt %></td>
+          <%end%>
+        </tr>
+      <% end %>
+    </tbody>
+</table>
+
+
+
+
+<%= link_to 'Back', part_path( @part.id), class: "btn btn-info" %>
+
+

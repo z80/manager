@@ -1,0 +1,72 @@
+
+<%if true%>
+  <%content_for( :printer_friendly, true )%>
+<%end%>
+
+<p>
+  <h2>
+    Contract: <%= @contract.name %>
+  </h2>
+</p>
+
+<p>
+  <strong>Ship date:</strong>
+</p>
+
+<strong>Inventory list:</strong>
+<table>
+
+  <thead>
+    <tr>
+      <td>
+        Number
+      </td>
+      <td>
+      </td>
+      <td>
+        Part No
+      </td>
+      <td>
+        Details
+      </td>
+      <td>
+        Box id
+      </td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%@contract_items.each do |ci|%>
+      <%@contract_item = ci%>
+      <%prod_type = @contract_item.prod_type%>
+      <%prod = @contract_item.product%>
+
+      <%if ( (@contract_item.client_visible?( true ) ) && ((prod) || (@contract_item.has_subitems?()) ) )%>
+        <tr>
+          <td>
+            <%=@contract_item.number.to_s%>
+          </td>
+          <td>
+            <a href="<%=prod_type.image_ex.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
+              <%=image_tag( prod_type.image_ex.url(:thumb) )%>
+            </a>
+          </td>
+
+          <td>
+            <%= prod_type.own_id.to_s %>
+          </td>
+
+          <td>
+            <%= prod_type.packing_details.to_s %>
+          </td>
+
+          <td>
+          </td>
+        </tr>
+      <%end%>
+    <%end%>
+  </tbody>
+</table>
+
+
+

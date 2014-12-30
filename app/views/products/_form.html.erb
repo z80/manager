@@ -11,24 +11,50 @@
     </div>
   <% end %>
 
+  <% if notice %>
+    <div id="error_explanation">
+      <strong><%=notice%></strong>
+    </div>
+  <% end %>
+
   <%= hidden_field_tag "product[prod_type_id]".to_s, @prod_type_id %>
   <%= hidden_field_tag "prod_type_id".to_s, @prod_type_id %>
+
+  <%if @create_new%>
+    <div class="form-group">
+      <%= f.label "To create a new product instance select a box appropriate part should be taken from, if no box is selected parts number in the system remains the same!:", id: "box-label" %><br>
+      <%= f.select :box_id, @boxes, {}, { class: "form-control box-select" } %>
+    </div>
+  <%end%>
+
   <div class="form-group">
     <%= f.label "Serial number:" %><br>
-    <%= f.text_field :serial_number, class: "form-control" %>
+    <%if @make_new || (@user && @user.admin)%>
+      <%= f.text_field( :serial_number, class: "form-control" ) %>
+    <%else%>
+      <%= f.label( @product ? @product.serial_number : "Unspecified" ) %>
+    <%end%>
   </div>
   <div class="form-group">
     <%= f.label "Description:" %><br>
     <%= f.text_area :desc, class: "form-control" %>
   </div>
   <div class="form-group">
-    <%= f.label "Recommended to pack to the following box:" %><br>
-    <%= f.text_area :pack_to, class: "form-control" %>
+    <%= f.label "Product current status:" %><br>
+    <%= f.select( :status, @statuses, {selected: @current_status}, {class: "form-control"} ) %>
   </div>
   <div class="form-group">
-    <%= f.label "Product current status:" %><br>
-    <%= f.select( :status, @statuses, selected: @current_status, class: "form-control" ) %>
+    <%= f.label( "User responsible *:" ) %>
+    <%= f.select( :owner_id, @users, { selected: @owner_id }, {class: "form-control"} ) %>
   </div>
+  <%if @box %>
+    <div class="form-group">
+      <%= f.label( "Box selected:" ) %>
+      <%= link_to( "#{@box.box_id}", box_path( @box.id ) ) %>
+      <%= f.hidden_field( :box_id, value: @box.id ) %>
+    </div>
+  <%end%>
+
   <div class="actions">
     <%= f.submit class: "btn btn-warning" %>
   </div>

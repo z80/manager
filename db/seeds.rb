@@ -98,6 +98,16 @@ if ( ProductStatus.all.size < 1 )
   s.status = "Not for sale"
   s.avail  = false
   s.save!
+
+  s = ProductStatus.new
+  s.status = "In the office"
+  s.avail  = true
+  s.save!
+
+  s = ProductStatus.new
+  s.status = "Broken"
+  s.avail  = false
+  s.save!  
 end
 
 

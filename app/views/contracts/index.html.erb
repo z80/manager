@@ -29,9 +29,9 @@
   <thead>
     <tr>
       <th>Warning</th>
-      <th>Name</th>
+      <th>Sort by<br> <%=link_to "Number", contracts_path( sort_by: "number" ) %></th>
       <th>Description</th>
-      <th>Ship date</th>
+      <th>Sort by<br> <%=link_to "Ship date", contracts_path( sort_by: "date" ) %></th>
       <th>Shipped</th>
       <th></th>
       <th></th>
@@ -52,7 +52,12 @@
             Level <%=level.to_s%>
           <%end%>
         </td>
-        <td class="contract_level_<%=level.to_s%>"><%= contract.name %></td>
+        <td class="contract_level_<%=level.to_s%>">
+          <%if contract.number%>
+            <b><%=contract.number.to_s%></b><%= ". " + contract.name %></td>
+          <%else%>
+            <%=contract.name%>
+          <%end%>
         <td class="contract_level_<%=level.to_s%>"><%= contract.desc %></td>
         <td class="contract_level_<%=level.to_s%>"><%= contract.ship_date %></td>
         <td class="contract_level_<%=level.to_s%>"><%= contract.shipped ? "yes" : "no" %></td>

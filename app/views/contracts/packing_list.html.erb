@@ -4,29 +4,23 @@
 <%end%>
 
 <p>
-  <strong>
+  <h2>
     Contract: <%= @contract.name %>
-  </strong>
-</p>
-
-<p>
-  <strong>Details:</strong>
-  <br>
-  <%= @contract.desc %>
+  </h2>
 </p>
 
 <p>
   <strong>Ship date:</strong>
-  <br>
-  <%= @contract.ship_date %>
 </p>
-<br>
 
-<h2>Items in the contract:</h2>
+<strong>Items in the contract:</strong>
 <table>
 
   <thead>
     <tr>
+      <td>
+        Number
+      </td>
       <td>
       </td>
       <td>
@@ -59,8 +53,12 @@
       <%prod_type = @contract_item.prod_type%>
       <%prod = @contract_item.product%>
 
-      <%if ((prod) || (@contract_item.superitem()) )%>
+      <%if ( (@contract_item.client_visible?( true ) ) && ((prod) || (@contract_item.has_subitems?()) ) )%>
         <tr>
+          <td>
+            <%=@contract_item.number.to_s%>
+          </td>
+
           <td>
             <a href="<%=prod_type.image_ex.url(:original).sub( /\?\d+/i, "" )%>" rel="facebox" >
               <%=image_tag( prod_type.image_ex.url(:thumb) )%>
@@ -72,7 +70,11 @@
           </td>
 
           <td>
-            <%=prod.serial_number%>
+            <%if prod%>
+              <%=prod.serial_number%>
+            <%else%>
+              None
+            <%end%>
           </td>
 
           <td>
@@ -97,7 +99,7 @@
 
           <td>
             <%if @contract_item.product()%>
-              <%=@contract_item.product.pack_to_stri%>
+              <%=@contract_item.prod_type.pack_to_stri%>
             <%end%>
           </td>
 

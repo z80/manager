@@ -1,10 +1,48 @@
-<h1>Editing contract</h1>
+<br>
+<%= link_to 'Show contract', contract_path( @contract, date: @ship_date_id || -1 ), class: "btn btn-info" %> |
+<%= link_to 'All contracts', contracts_path, class: "btn btn-info" %>
 
-<%= render 'form' %>
+<h1>Edit contract</h1>
+
+<div class="panel panel-default panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Manage ship dates</h3>
+  </div>
+  <div class="panel-body">
+    <%=form_tag( add_ship_date_path( @contract.id ), method: 'post' ) do%>
+        Add ship date
+        <%= date_select( :date, 'date', default: 30.days.from_now ) %>
+        <%= submit_tag( "Add ship date", class: "btn btn-info" ) %>
+    <%end%>
+  </div>
+</div>
+
+
+<div class="panel panel-default panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Contract details</h3>
+  </div>
+  <div class="panel-body">
+    <%= render 'form' %>
+    <%= link_to "Set default place for assigned contract items", change_contract_box_path( @contract.id ), class: "btn btn-warning" %>
+  </div>
+
+  </div>
+</div>
 <br>
 
-<%= form_tag( ship_assigned_items_path( @contract.id ) ) do %>
-  <%= submit_tag( "Ship assigned items", class: 'btn btn-warning' )%>
+<%= form_tag request.env['PATH_INFO'], :method => 'get' do %>
+  <p  class="form-group">
+    <%= label_tag "Filter contract items by ship date:" %>
+    <%= select_tag :date, options_for_select( @ship_dates, @ship_date_id || -1 ), class: "form-control" %>
+  </p>
+  <p class="form-group">
+    <%= submit_tag "Show items for date chosen", class: 'btn btn-success' %>
+  </p>
+<% end %>              
+
+<%= form_tag( ship_assigned_items_path( @contract.id, date: @ship_date_id ) ) do %>
+  <%= submit_tag( "Ship assigned items", class: 'btn btn-danger', data: { confirm: 'You are about to ship all assigned items with ship date less or equal to selected shipment date. Are you sure?' } )%>
 <%end%>
 <br>
 
@@ -22,5 +60,5 @@
   <%end%>
 </table>
 
-<%= link_to 'Show contract', @contract %> |
-<%= link_to 'All contracts', contracts_path %>
+<%= link_to 'Show contract', contract_path( @contract, date: @ship_date_id || -1 ), class: "btn btn-info" %> |
+<%= link_to 'All contracts', contracts_path, class: "btn btn-info" %>

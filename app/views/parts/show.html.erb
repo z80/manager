@@ -6,7 +6,8 @@
   <%= link_to 'Expand subparts', part_path( @part, expand: true ) %> | 
 <%end%>
 <%= link_to 'Estimate assembly', estimate_path( @part ) %> | 
-<%= link_to 'Part ordering/estimation', show_production_path( @part ) %>
+<%= link_to 'Part ordering/estimation', show_production_path( @part ) %> | 
+<%= link_to 'BOM', part_bom_path( @part ) %>
 </h3>
 
 <%=form_tag( copy_part_path( @part.id ), method: 'post' ) do%>
